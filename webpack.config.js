@@ -4,7 +4,7 @@ module.exports = {
         extensions: ['.ts', '.js', '.json', '.vue'],
         root: path.resolve(__dirname),
         alias: {
-            '@': path.join(__dirname, './src')
+            '@': path.resolve(__dirname, 'src')
         }
     }
 }

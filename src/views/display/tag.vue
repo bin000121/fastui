@@ -16,13 +16,13 @@
             <MnTag type="black">black</MnTag>
             <div v-highlight>
                 <pre><code>
-                    {{` <f-tag>default</f-tag>
-                     <f-tag type="primary">primary</f-tag>
-                     <f-tag type="success">success</f-tag>
-                     <f-tag type="warning">warning</f-tag>
-                     <f-tag type="danger">danger</f-tag>
-                     <f-tag type="info">info</f-tag>
-                     <f-tag type="black">black</f-tag>`}}
+    {{` <f-tag>default</f-tag>
+     <f-tag type="primary">primary</f-tag>
+     <f-tag type="success">success</f-tag>
+     <f-tag type="warning">warning</f-tag>
+     <f-tag type="danger">danger</f-tag>
+     <f-tag type="info">info</f-tag>
+     <f-tag type="black">black</f-tag>`}}
                 </code></pre>
             </div>
      </div>
@@ -37,10 +37,10 @@
             <MnTag size="large">大号（lager）</MnTag>
             <div v-highlight>
                 <pre><code>
-                    {{` <f-tag size="mini">迷你（mini）</f-tag>
-                     <f-tag size="small">小号（small）</f-tag>
-                     <f-tag size="normal">正常（normal）</f-tag>
-                     <f-tag size="lager">大号（lager）</f-tag>`}}
+    {{` <f-tag size="mini">迷你（mini）</f-tag>
+     <f-tag size="small">小号（small）</f-tag>
+     <f-tag size="normal">正常（normal）</f-tag>
+     <f-tag size="lager">大号（lager）</f-tag>`}}
                 </code></pre>
             </div>
         </div>

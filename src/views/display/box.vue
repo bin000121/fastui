@@ -65,33 +65,33 @@
 
             <div v-highlight>
                 <pre><code>
-                    {{`<div class="flexBox">
-                        <f-box
-                            :box-style="{ width: '200px'}">
-                            默认展示
-                        </f-box>
+    {{`<div class="flexBox">
+        <f-box
+            :box-style="{ width: '200px'}">
+            默认展示
+        </f-box>
 
-                        <f-box
-                            :box-style="{ width: '200px'}"
-                            shadow="hover">
-                            hover时展示
-                        </f-box>
+        <f-box
+            :box-style="{ width: '200px'}"
+            shadow="hover">
+            hover时展示
+        </f-box>
 
-                        <f-box
-                            :box-style="{ width: '200px'}"
-                            shadow="none">
-                            不展示
-                        </f-box>
-                    </div>
+        <f-box
+            :box-style="{ width: '200px'}"
+            shadow="none">
+            不展示
+        </f-box>
+    </div>
 
 
 
-                    <style>
-                        .flexBox{
-                            display: flex;
-                            justify-content: space-between;
-                        }
-                    </style>`}}
+    <style>
+        .flexBox{
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>`}}
                 </code></pre>
             </div>
         </div>

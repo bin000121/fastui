@@ -42,6 +42,9 @@ ul{
     a{
         color: #999;
         transition: color .2s;
+        width: 100%;
+        height: 100%;
+        display: inline-block;
         &:hover{
             color: #58a397;
         }
@@ -49,6 +52,7 @@ ul{
 }
 .aside{
     width: 200px;
+    min-width: 160px;
     box-sizing: border-box;
     border-right: 1px solid #eee;
     padding: 5px;
