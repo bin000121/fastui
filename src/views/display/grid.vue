@@ -15,106 +15,167 @@
             </div>
             <div>
                 <MnRow>
-                    <MnCol :span="24"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                    <MnCol :span="24"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
 
                 <MnRow>
-                    <MnCol :span="12"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="12"><div class="demo-col-content demo-row-light"></div></MnCol>
+                    <MnCol :span="12"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="12"><div class="demo-col-content demo-col-light"></div></MnCol>
                 </MnRow>
 
                 <MnRow>
-                    <MnCol :span="8"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="8"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="8"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                    <MnCol :span="8"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="8"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="8"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
 
                 <MnRow>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6" ><div class="demo-col-content demo-row-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6" ><div class="demo-col-content demo-col-light"></div></MnCol>
                 </MnRow>
 
                 <MnRow>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4"><div class="demo-col-content demo-row-light"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4"><div class="demo-col-content demo-col-light"></div></MnCol>
                 </MnRow>
 
                 <MnRow>
-                    <MnCol :span="4.1"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4.2"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="4.3"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4.4"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="4.5"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="4.6"><div class="demo-col-content demo-row-light"></div></MnCol>
+                    <MnCol :span="4.1"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4.2"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="4.3"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4.4"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="4.5"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="4.6"><div class="demo-col-content demo-col-light"></div></MnCol>
                 </MnRow>
 
                 <div v-highlight>
                     <pre><code>
     {{`<f-row>
-        <f-col></f-col>
+        <f-col :span="24"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
 
     <f-row>
-        <f-col :span="12"></f-col>
-        <f-col :span="12"></f-col>
+        <f-col :span="12"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="12"><div class="demo-col-content demo-col-light"></div></f-col>
     </f-row>
 
     <f-row>
-        <f-col :span="8"></f-col>
-        <f-col :span="8"></f-col>
-        <f-col :span="8"></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
 
     <f-row>
-        <f-col :span="6"></f-col>
-        <f-col :span="6"></f-col>
-        <f-col :span="6"></f-col>
-        <f-col :span="6"></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6" ><div class="demo-col-content demo-col-light"></div></f-col>
     </f-row>
 
     <f-row>
-        <f-col :span="4"></f-col>
-        <f-col :span="4"></f-col>
-        <f-col :span="4"></f-col>
-        <f-col :span="4"></f-col>
-        <f-col :span="4"></f-col>
-        <f-col :span="4"></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4"><div class="demo-col-content demo-col-light"></div></f-col>
     </f-row>
 
     <!-- 如果传入 span 的值是一个小数，将会取整当作列宽-->
     <f-row>
-        <f-col :span="4.1"></f-col>
-        <f-col :span="4.2"></f-col>
-        <f-col :span="4.3"></f-col>
-        <f-col :span="4.4"></f-col>
-        <f-col :span="4.5"></f-col>
-        <f-col :span="4.6"></f-col>
+        <f-col :span="4.1"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4.2"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="4.3"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4.4"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="4.5"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="4.6"><div class="demo-col-content demo-col-light"></div></f-col>
     </f-row>
 
 
-
     <style>
-        .demo-row .f-row{
-            margin-bottom: 15px;
-        }
-        .demo-row .demo-row-dark{
+        .demo-col-dark{
             background-color: #2b73af;
         }
-        .demo-row .demo-row-light{
+        .demo-col-light{
             background-color: #9fc7e8;
         }
-        .demo-row .demo-col-content{
+        .demo-col-content{
             min-height: 40px;
         }
     </style> `}}
                     </code></pre>
                 </div>
+            </div>
+        </div>
+
+
+        <div>
+            <h3>栅格换行</h3>
+            <p>让栅格进行换行展示。</p>
+
+            <div class="desc">
+                你可以对 <b>f-row</b> 设置属性 <b>warp</b> 来换行。
+            </div>
+
+            <div class="desc">
+                <b>f-row</b> 是默认换行的。
+            </div>
+
+            <div>
+                <MnRow>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                </MnRow>
+
+                <MnRow :wrap="false">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                </MnRow>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-row>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+    </f-row>
+
+    <f-row :wrap="false">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+    </f-row>
+
+
+    <style>
+        .demo-col-dark{
+            background-color: #2b73af;
+        }
+        .demo-col-light{
+            background-color: #9fc7e8;
+        }
+        .demo-col-content{
+            min-height: 40px;
+        }
+    </style>`}}
+                </code></pre>
             </div>
         </div>
 
@@ -127,33 +188,33 @@
             </div>
 
             <div>
-                <MnRow :gutter="20">
-                    <MnCol :span="8"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="8"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="8"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow :gutter="20" :wrap="false">
+                    <MnCol :span="8"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="8"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="8"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
 
-                <MnRow :gutter="30">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow :gutter="30" :wrap="false">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
                 </MnRow>
             </div>
 
             <div v-highlight>
                 <pre><code>
     {{`<f-row :gutter="20">
-        <f-col :span="8"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="8"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="8"><div class="demo-col-content demo-row-dark"></div></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="8"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
 
     <f-row :gutter="30">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>`}}
                 </code></pre>
             </div>
@@ -166,10 +227,54 @@
             <div class="desc">
                 通过对 <b>f-col</b> 配置属性 <b>offset</b> 来达到栅格偏移效果。
             </div>
+
+            <div>
+                <MnRow>
+                    <MnCol :span="6" :offset="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6" :offset="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                </MnRow>
+
+                <MnRow>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6" :offset="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                </MnRow>
+                <MnRow>
+                    <MnCol :span="12" :offset="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                </MnRow>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-row>
+        <f-col :span="6" :offset="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6" :offset="6"><div class="demo-col-content demo-col-light"></div></f-col>
+    </f-row>
+
+    <f-row>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6" :offset="6"><div class="demo-col-content demo-col-light"></div></f-col>
+    </f-row>
+
+    <f-row>
+        <f-col :span="12" :offset="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+    </f-row>
+
+
+
+    <style>
+        .demo-col-dark{
+            background-color: #2b73af;
+        }
+        .demo-col-light{
+            background-color: #9fc7e8;
+        }
+    </style>`}}
+                </code></pre>
+            </div>
         </div>
 
         <div>
-            <h3>对齐方式</h3>
+            <h3>横向对齐方式</h3>
             <p>栅格在横向方向的排版方式。</p>
 
             <div class="desc">
@@ -177,78 +282,187 @@
             </div>
 
             <div>
-                <MnRow :gutter="20">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow class="bgc-dark">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
-                <MnRow :gutter="20" justify-content="center">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow justify-content="center" class="bgc-dark">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
-                <MnRow :gutter="20" justify-content="end">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow justify-content="end" class="bgc-dark">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
-                <MnRow :gutter="20" justify-content="space-between">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow justify-content="space-between" class="bgc-dark">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
-                <MnRow :gutter="20" justify-content="space-around">
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-light"></div></MnCol>
-                    <MnCol :span="6"><div class="demo-col-content demo-row-dark"></div></MnCol>
+                <MnRow justify-content="space-around" class="bgc-dark">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
                 </MnRow>
             </div>
-        </div>
 
-        <div v-highlight>
+            <div v-highlight>
             <pre><code>
-    {{`<f-row :gutter="20">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-light"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+    {{`<f-row class="bgc-dark">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
-    <f-row :gutter="20" justify-content="center">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-light"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+    <f-row justify-content="center" class="bgc-dark">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
-    <f-row :gutter="20" justify-content="end">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-light"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+    <f-row justify-content="end" class="bgc-dark">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
-    <f-row :gutter="20" justify-content="space-between">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-light"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+    <f-row justify-content="space-between" class="bgc-dark">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
-    <f-row :gutter="20" justify-content="space-around">
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-light"></div></f-col>
-        <f-col :span="6"><div class="demo-col-content demo-row-dark"></div></f-col>
+    <f-row justify-content="space-around" class="bgc-dark">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
     </f-row>
 
 
     <style>
-        .f-row{
-            margin-bottom: 15px;
-        }
-        .demo-row-dark{
+        .demo-col-dark{
             background-color: #2b73af;
         }
-        .demo-row-light{
+        .demo-col-light{
             background-color: #9fc7e8;
         }
         .demo-col-content{
             min-height: 40px;
         }
+        .bgc-dark{
+            padding: 8px 0;
+            background-color: #eee;
+        }
     </style>`}}
             </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3>竖向对齐方式</h3>
+            <p>栅格在竖向方向的排版方式。</p>
+
+            <div>
+                <div class="desc">
+                    通过对 <b>f-row</b> 配置属性 <b>align-items</b> 来控制竖向排版，默认start。
+                </div>
+            </div>
+            <div>
+                <MnRow class="bgc-dark-align-items">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                </MnRow>
+                <MnRow class="bgc-dark-align-items" align-items="stretch">
+                    <MnCol :span="6"><div class="demo-col-content-stretch demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content-stretch demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content-stretch demo-col-dark"></div></MnCol>
+                </MnRow>
+                <MnRow class="bgc-dark-align-items" align-items="center">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                </MnRow>
+                <MnRow class="bgc-dark-align-items" align-items="end">
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-light"></div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content demo-col-dark"></div></MnCol>
+                </MnRow>
+                <MnRow class="bgc-dark-align-items" align-items="baseline">
+                    <MnCol :span="6"><div class="demo-col-content-align-items-1 demo-col-dark">baseline</div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content-align-items-2 demo-col-light">baseline</div></MnCol>
+                    <MnCol :span="6"><div class="demo-col-content-align-items-3 demo-col-dark">baseline</div></MnCol>
+                </MnRow>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-row class="bgc-dark-align-items">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+    </f-row>
+
+    <f-row class="bgc-dark-align-items" align-items="stretch">
+        <f-col :span="6"><div class="demo-col-content-stretch demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content-stretch demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content-stretch demo-col-dark"></div></f-col>
+    </f-row>
+
+    <f-row class="bgc-dark-align-items" align-items="center">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+    </f-row>
+
+    <f-row class="bgc-dark-align-items" align-items="end">
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-light"></div></f-col>
+        <f-col :span="6"><div class="demo-col-content demo-col-dark"></div></f-col>
+    </f-row>
+
+    <f-row class="bgc-dark-align-items" align-items="baseline">
+        <f-col :span="6">
+            <div class="demo-col-content-align-items-1 demo-col-dark">baseline</div>
+        </f-col>
+        <f-col :span="6">
+            <div class="demo-col-content-align-items-2 demo-col-light">baseline</div>
+        </f-col>
+        <f-col :span="6">
+            <div class="demo-col-content-align-items-3 demo-col-dark">baseline</div>
+        </f-col>
+    </f-row>
+
+
+    <style>
+        .demo-col-dark{
+            background-color: #2b73af;
+        }
+        .demo-col-light{
+            background-color: #9fc7e8;
+        }
+        .bgc-dark-align-items{
+            height: 80px;
+            background-color: #eee;
+        }
+        .demo-col-content-stretch{
+            height: 100%;
+        }
+        .demo-col-content-align-items-1{
+            box-sizing: border-box;
+            padding-top: 15px;
+            height: 45px;
+        }
+        .demo-col-content-align-items-2{
+            height: 55px;
+        }
+        .demo-col-content-align-items-3{
+            box-sizing: border-box;
+            padding-top: 15px;
+            height: 65px;
+        }
+    </style>`}}
+                </code></pre>
+            </div>
         </div>
     </div>
 </template>
@@ -275,15 +489,39 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-row{
-    margin-bottom: 15px;
+    margin-bottom: 15px
 }
-.demo-row-dark{
+.demo-col-dark{
     background-color: #2b73af;
 }
-.demo-row-light{
+.demo-col-light{
     background-color: #9fc7e8;
 }
 .demo-col-content{
     min-height: 40px;
+}
+.bgc-dark{
+    padding: 8px 0;
+    background-color: #eee;
+}
+.bgc-dark-align-items{
+    height: 80px;
+    background-color: #eee;
+}
+.demo-col-content-stretch{
+    height: 100%;
+}
+.demo-col-content-align-items-1{
+    box-sizing: border-box;
+    padding-top: 15px;
+    height: 45px;
+}
+.demo-col-content-align-items-2{
+    height: 55px;
+}
+.demo-col-content-align-items-3{
+    box-sizing: border-box;
+    padding-top: 15px;
+    height: 65px;
 }
 </style>

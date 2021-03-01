@@ -28,6 +28,9 @@ h2{
 h3{
   margin: 60px 0 15px;
 }
+ul > li{
+  list-style: none;
+}
 code{
   line-height: 20px;
   font-size: 13px;
@@ -47,5 +50,12 @@ div.desc b{
   border: 1px solid #bbb;
   vertical-align: baseline;
   border-radius: 5px;
+}
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
 }
 </style>

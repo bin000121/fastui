@@ -41,5 +41,6 @@ export default defineComponent( {
     flex-basis: 768px;
     padding: 20px 25px 200px;
     box-sizing: border-box;
+    overflow: auto;
 }
 </style>

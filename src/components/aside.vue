@@ -22,7 +22,9 @@ export default defineComponent( {
             '/doc/tag': 'Tag 标签',
             '/doc/switch': 'Switch 开关',
             '/doc/box': 'Box 盒子',
-            '/doc/grid': 'Grid 栅格'
+            '/doc/grid': 'Grid 栅格',
+            '/doc/breadcrumb': 'Breadcrumb 面包屑',
+            '/doc/dropdowns': 'Dropdowns 下拉菜单',
         })
         return {
             element
@@ -51,8 +53,8 @@ ul{
     }
 }
 .aside{
-    width: 200px;
-    min-width: 160px;
+    width: 260px;
+    min-width: 200px;
     box-sizing: border-box;
     border-right: 1px solid #eee;
     padding: 5px;

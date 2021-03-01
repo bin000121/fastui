@@ -18,12 +18,12 @@
             </div>
             <div v-highlight>
                 <pre><code>
-        {{`<f-button>默认样式（default）</f-button>
-        <f-button type="primary">主题（primary）</f-button>
-        <f-button type="success">成功（success）</f-button>
-        <f-button type="warning">警告（warning）</f-button>
-        <f-button type="danger">危险（danger）</f-button>
-        <f-button type="info">一般消息（info）</f-button>`}}
+    {{`<f-button>默认样式（default）</f-button>
+    <f-button type="primary">主题（primary）</f-button>
+    <f-button type="success">成功（success）</f-button>
+    <f-button type="warning">警告（warning）</f-button>
+    <f-button type="danger">危险（danger）</f-button>
+    <f-button type="info">一般消息（info）</f-button>`}}
                 </code></pre>
             </div>
         </div>
@@ -42,12 +42,11 @@
             </div>
             <div v-highlight>
                 <pre><code>
-    {{`
-        <f-button type="primary" outline>主题（primary）</f-button>
-        <f-button type="success" outline>成功（success）</f-button>
-        <f-button type="warning" outline>警告（warning）</f-button>
-        <f-button type="danger" outline>危险（danger）</f-button>
-        <f-button type="info" outline>一般消息（info）</f-button>`}}
+    {{`<f-button type="primary" outline>主题（primary）</f-button>
+    <f-button type="success" outline>成功（success）</f-button>
+    <f-button type="warning" outline>警告（warning）</f-button>
+    <f-button type="danger" outline>危险（danger）</f-button>
+    <f-button type="info" outline>一般消息（info）</f-button>`}}
                 </code></pre>
             </div>
         </div>

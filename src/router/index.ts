@@ -35,6 +35,16 @@ const routes: RouteRecordRaw[] = [
                 path: '/doc/grid',
                 name: 'grid',
                 component: () => import('../views/display/grid.vue')
+            },
+            {
+                path: '/doc/breadcrumb',
+                name: 'breadcrumb',
+                component: () => import('../views/display/breadcrumb.vue')
+            },
+            {
+                path: '/doc/dropdowns',
+                name: 'dropdowns',
+                component: () => import('../views/display/dropdowns.vue')
             }
         ]
     },

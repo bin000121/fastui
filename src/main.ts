@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import 'highlight.js/styles/solarized-light.css'
 import hljs from 'highlight.js'
+import './assets/font/iconfont'
 
 const app = createApp(App)
 

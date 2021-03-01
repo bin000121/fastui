@@ -1,5 +1,5 @@
 <template>
-    <div :class="[getCol]" ref="colDom">
+    <div :class="[getCol, getOffset]" ref="colDom">
         <slot></slot>
     </div>
 </template>
@@ -8,9 +8,9 @@
 import {
     defineComponent,
     computed,
-    getCurrentInstance,
     nextTick,
-    ref
+    ref,
+    inject
 } from 'vue'
 
 
@@ -33,14 +33,20 @@ export default defineComponent({
             if (spanNum >= 24 || spanNum < 1) return 'f-col--24'
             return `f-col--${spanNum}`
         })
-        const gutter = (getCurrentInstance() as any).parent.props.gutter
-        const gutterNum = parseInt(gutter)
+        const getOffset = computed(() => {
+            const offsetNum = parseInt(offset as string)
+            if (offsetNum >= 24 || offsetNum < 1) return ''
+            return `f-col--offset-${offsetNum}`
+        })
+        const gutter: any = inject('gutter')
+        const gutterNum = gutter.value
         nextTick(() => {
             colDom.value.style.padding = `0 ${gutterNum / 2 || 0}px`
         })
         return{
             getCol,
-            colDom
+            colDom,
+            getOffset
         }
     }
 })
@@ -50,6 +56,11 @@ export default defineComponent({
 @for $i from 1 through 24 {
     .f-col--#{$i} {
         width: 100% / 24 * $i;
+    }
+}
+@for $i from 1 through 24 {
+    .f-col--offset-#{$i} {
+        margin-left: 100% / 24 * $i;
     }
 }
 </style>
