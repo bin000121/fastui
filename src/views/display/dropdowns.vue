@@ -8,26 +8,26 @@
             <p>基础示例。</p>
 
             <div>
-                <f-dropdown>
+                <f-dropdowns @action="c" trigger="click">
                     <span>下拉菜单</span>
                     <template #dropdown>
-                        <f-dropdown-item><span>111</span></f-dropdown-item>
-                        <f-dropdown-item>222</f-dropdown-item>
-                        <f-dropdown-item>333</f-dropdown-item>
+                        <f-dropdowns-item action="delete" @click="aaa"><span>1115666</span></f-dropdowns-item>
+                        <f-dropdowns-item divided>222</f-dropdowns-item>
+                        <f-dropdowns-item disabled>333</f-dropdowns-item>
                     </template>
-                </f-dropdown>
+                </f-dropdowns>
             </div>
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-dropdown>
+    {{`<f-dropdowns>
         <button>666</button>
         <template #dropdown>
-            <f-dropdown-item>111</f-dropdown-item>
-            <f-dropdown-item>222</f-dropdown-item>
-            <f-dropdown-item>333</f-dropdown-item>
+            <f-dropdowns-item>111</f-dropdowns-item>
+            <f-dropdowns-item>222</f-dropdowns-item>
+            <f-dropdowns-item>333</f-dropdowns-item>
         </template>
-    </f-dropdown>`}}
+    </f-dropdowns>`}}
                 </code></pre>
             </div>
         </div>
@@ -38,16 +38,25 @@
 import {
     defineComponent
 } from 'vue'
-import FDropdown from '../components/dropdowns/Dropdowns.vue'
-import FDropdownItem from '../components/dropdowns/Dropdowns-item.vue'
+import FDropdowns from '../components/dropdowns/Dropdowns.vue'
+import FDropdownsItem from '../components/dropdowns/Dropdowns-item.vue'
 
 export default defineComponent({
     components: {
-        FDropdown,
-        FDropdownItem
+        FDropdowns,
+        FDropdownsItem
     },
     setup () {
-
+        const c = (a: any) => {
+            console.log(a)
+        }
+        const aaa = () => {
+            console.log(222222)
+        }
+        return{
+            c,
+            aaa
+        }
     }
 })
 </script>

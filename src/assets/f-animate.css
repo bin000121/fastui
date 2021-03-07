@@ -1,0 +1,19 @@
+.fade-enter-from,
+.fade-leave-to{
+    transform: translate3d(-50%, 12px, 0);
+    opacity: 0;
+}
+.fade-enter-active,
+.fade-leave-active{
+    transition: all .15s;
+}
+
+.f-select-fade-enter-from,
+.f-select-fade-leave-to{
+    transform: translateY(15px);
+    opacity: 0;
+}
+.f-select-fade-enter-active,
+.f-select-fade-leave-active{
+    transition: all .2s;
+}

@@ -47,7 +47,7 @@ export default defineComponent( {
     border-bottom: 1px solid #eee;
 }
 .title{
-    color: #58a397;
+    color: #3cd0be;
     font-size: 20px;
     font-family: "Microsoft YaHei UI";
 }

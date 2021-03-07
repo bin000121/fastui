@@ -17,22 +17,12 @@
 import Header from '../components/header.vue'
 
 import {
-    defineComponent,
-    ref,
-    reactive
+    defineComponent
 } from 'vue'
 
 export default defineComponent( {
     components: {
         Header
-    },
-    setup () {
-
-        const a = ref(10)
-
-        return {
-            a
-        }
     }
 })
 </script>
@@ -47,7 +37,7 @@ export default defineComponent( {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #58a397;
+    background-color: #3cd0be;
     h1{
         letter-spacing: 1px;
         font-size: 60px;
@@ -77,7 +67,7 @@ export default defineComponent( {
         transition: all .2s;
         &:hover{
             background-color: #fff;
-            color: #58a397;
+            color: #3cd0be;
         }
     }
 }

@@ -9,6 +9,10 @@ export default {
 }
 </script>
 <style>
+:root{
+  --primary: #1661ab;
+  --primary-disabled: #9fc7e8;
+}
 html, body{
   margin: 0;
   padding: 0;
@@ -32,7 +36,7 @@ ul > li{
   list-style: none;
 }
 code{
-  line-height: 20px;
+  line-height: 1.5;
   font-size: 13px;
   background-color: #fafafa!important;
   border: 1px solid #eee;
@@ -40,7 +44,8 @@ code{
 }
 div.desc{
   color: #999;
-  margin: 15px 0;
+  margin: 30px 0;
+  line-height: 1.2;
 }
 div.desc b{
   display: inline-block;
@@ -57,5 +62,21 @@ div.desc b{
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+[class^='f-icon'] {
+  font-family: "fast-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[class='f-icon-anchor'] {
+  font-size: 20px;
+  vertical-align: bottom;
+  color: #1661abb3;
+  display: none;
+}
+[class='f-icon-anchor']:hover{
+  color: #1661ab;
 }
 </style>

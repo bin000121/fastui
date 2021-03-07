@@ -10,7 +10,8 @@ import {
     computed,
     nextTick,
     ref,
-    inject
+    inject,
+    onMounted
 } from 'vue'
 
 
@@ -40,7 +41,7 @@ export default defineComponent({
         })
         const gutter: any = inject('gutter')
         const gutterNum = gutter.value
-        nextTick(() => {
+        onMounted(() => {
             colDom.value.style.padding = `0 ${gutterNum / 2 || 0}px`
         })
         return{

@@ -2,9 +2,15 @@
     <button
         :class="['f-btn', ...getClassName, ...isRounded, ...btnSize, ...isOutline]"
         type="button"
-        :disabled="isDisabled"
+        :disabled="disabled ? 'disabled' : ''"
         ref="buttonDom"
     >
+        <i
+            v-if="icon"
+            :class="icon"
+            class="f-btn-icon"
+            :style="`margin-right: ${$slots.default ? '5px': ''};`"
+        ></i>
         <slot></slot>
     </button>
 </template>
@@ -14,12 +20,13 @@ import {
     defineComponent,
     ref,
     computed,
-    nextTick
+    onMounted
 } from 'vue'
 
 export default defineComponent( {
     props: {
         type: String,
+        icon: String,
         disabled: Boolean,
         rounded: Boolean,
         outline: Boolean,
@@ -45,14 +52,6 @@ export default defineComponent( {
             return [color[type]]
         })
 
-        const isDisabled = computed(() => {
-            if (disabled) return 'disabled'
-            else nextTick(() => {
-                const dom = buttonDom as any
-                dom.value.getAttribute('disabled') && dom.value.removeAttribute('disabled')
-                return false
-            })
-        })
 
         const isOutline = computed(() => {
             return outline ? ['f-btn--outline'] : []
@@ -72,9 +71,12 @@ export default defineComponent( {
             return [sizeObj[size]]
         })
 
+        onMounted(() => {
+            const dom: HTMLElement = buttonDom.value as any
+            !disabled && dom.removeAttribute('disabled')
+        })
         return {
             getClassName,
-            isDisabled,
             buttonDom,
             isRounded,
             btnSize,
@@ -101,8 +103,9 @@ export default defineComponent( {
     transition: all .1s;
     box-sizing: border-box;
 }
-.f-btn + .f-btn{
-    margin-left: 15px;
+.f-btn-icon{
+    font-size: 14px;
+    color: inherit;
 }
 .f-btn--default{
     background-color: #fff;

@@ -3,8 +3,10 @@
         <h2>Button 按钮</h2>
         <p>网页中经常使用到的按钮。</p>
 
-        <div>
-            <h3>基本用法</h3>
+        <div class="demo-button">
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>常见的一些按钮样式。</p>
             <div class="row">
                 <MnButton>默认样式（default）</MnButton>
@@ -29,7 +31,9 @@
         </div>
 
         <div>
-            <h3>幽灵按钮</h3>
+            <h3 id="you_ling_an_niu">幽灵按钮
+                <a href="#you_ling_an_niu" class="f-icon-anchor"></a>
+            </h3>
             <p>背景镂空的样式。</p>
             <div class="row">
                 <MnButton type="primary" outline>主题（primary）</MnButton>
@@ -52,7 +56,9 @@
         </div>
 
         <div>
-            <h3>按钮圆角</h3>
+            <h3 id="yuan_jiao">按钮圆角
+                <a href="#yuan_jiao" class="f-icon-anchor"></a>
+            </h3>
             <p>为按钮添加一个圆角。</p>
             <div class="row">
                 <MnButton rounded>默认样式（default）</MnButton>
@@ -77,7 +83,9 @@
         </div>
 
         <div>
-            <h3>禁用按钮</h3>
+            <h3 id="jin_yong">禁用按钮
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
             <p>为按钮添加disable属性变为不可用状态。</p>
             <div class="row">
                 <MnButton disabled>默认样式（default）</MnButton>
@@ -102,7 +110,9 @@
         </div>
 
         <div>
-            <h3>文本按钮</h3>
+            <h3 id="wen_ben">文本按钮
+                <a href="#wen_ben" class="f-icon-anchor"></a>
+            </h3>
             <p>没有边框的按钮。</p>
             <MnButton type="text">文本样式（text）</MnButton>
             <MnButton type="text" disabled>文本禁用（text）</MnButton>
@@ -116,7 +126,9 @@
         </div>
 
         <div>
-            <h3>尺寸</h3>
+            <h3 id="chi_cun">尺寸
+                <a href="#chi_cun" class="f-icon-anchor"></a>
+            </h3>
             <p>不同的按钮尺寸。</p>
             <div class="row">
                 <MnButton size="mini">迷你（mini）</MnButton>
@@ -159,5 +171,11 @@ export default defineComponent( {
 .row{
     margin-bottom: 15px;
 }
+.button{
+    .f-btn + .f-btn{
+        margin-left: 15px;
+    }
+}
+
 
 </style>
