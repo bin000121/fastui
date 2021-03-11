@@ -7,7 +7,7 @@
             <h3 id="ji_ben_yong_fa">基本用法
                 <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
             </h3>
-            <p>该元素会使用固定定位，请注意页面的右下角处，另外。</p>
+            <p>该元素会使用固定定位，请注意页面的右下角处。</p>
 
             <div class="desc">
                 该元素会默认插入到 id= 'app' 的元素内作为其子元素，您可以通过设置 <b>id</b> 属性指定父亲元素。

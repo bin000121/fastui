@@ -3,7 +3,7 @@
         <div :id="getDropdownId" class="f-dropdowns-control">
             <slot></slot>
         </div>
-        <transition :name="animate ? 'fade' : ''" mode="out-in">
+        <transition :name="animate ? 'f-dropdowns-fade' : ''" mode="out-in">
             <ul
                 :style="`text-align: ${textAlign || 'left'}`"
                 class="f-dropdowns-menu"

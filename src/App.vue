@@ -71,8 +71,9 @@ div.desc b{
   -moz-osx-font-smoothing: grayscale;
 }
 [class='f-icon-anchor'] {
-  font-size: 20px;
+  font-size: 19px;
   vertical-align: bottom;
+  font-weight: 700;
   color: #1661abb3;
   display: none;
 }

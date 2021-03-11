@@ -67,6 +67,16 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/pagination.vue')
             },
             {
+                path: '/doc/radio',
+                name: 'radio',
+                component: () => import('/@/views/display/radio.vue')
+            },
+            {
+                path: '/doc/checkbox',
+                name: 'checkbox',
+                component: () => import('/@/views/display/checkbox.vue')
+            },
+            {
                 path: '/doc/toTop',
                 name: 'toTop',
                 component: () => import('/@/views/display/toTop.vue')

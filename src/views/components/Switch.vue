@@ -1,8 +1,10 @@
 <template>
-    <div :class="{
-        'f-switch-box': true,
-        'f-switch-box--disabled': disabled
-    }">
+    <div
+        :class="{
+            'f-switch-box': true,
+            'f-switch-box--disabled': disabled
+        }"
+    >
         <input
             type="checkbox"
             ref="switchRef"

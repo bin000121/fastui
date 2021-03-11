@@ -4,13 +4,18 @@
         <Aside></Aside>
         <div class="content">
             <router-view v-slot="{ Component }">
-                <transition mode="out-in" name="sliderTo">
+                <transition mode="out-in" name="doc-sliderTo">
                     <keep-alive>
                         <component :is="Component" />
                     </keep-alive>
                 </transition>
             </router-view>
-            <div class="anchor">
+            <div
+                :class="{
+                    'anchor': true,
+                    'anchor__hide': isAnchorHide,
+                }"
+            >
                 <h4>索引锚点</h4>
             </div>
         </div>
@@ -18,12 +23,14 @@
 </template>
 
 <script lang="ts">
-import Header from '../components/header.vue'
-import Aside from '../components/aside.vue'
+import Header from '/@/components/header.vue'
+import Aside from '/@/components/aside.vue'
+import { debounce } from '/@/utils/debounce'
 
 import {
     defineComponent,
-    onMounted
+    onMounted,
+    ref
 } from 'vue'
 
 export default defineComponent( {
@@ -32,16 +39,19 @@ export default defineComponent( {
         Aside
     },
     setup () {
-        // onMounted(() => {
-        //     window.addEventListener('resize', debounce((e: Event) => {
-        //         let pageWidth = e.target.innerWidth
-        //         if (pageWidth < 1200) {
-        //
-        //         }
-        //         console.log()
-        //     }, 150))
-        // })
+        const isAnchorHide = ref(false)
+
+        const onResize = debounce(() => {
+            let pageWidth = document.body.offsetWidth
+            isAnchorHide.value = pageWidth < 1400
+        }, 100)
+
+        onMounted(() => {
+            onResize()
+            window.addEventListener('resize', onResize)
+        })
         return {
+            isAnchorHide
         }
     }
 })
@@ -70,27 +80,36 @@ export default defineComponent( {
 .anchor{
     padding: 10px;
     font-family: Helvetica;
-    width: 200px;
+    width: 160px;
     max-height: 75vh;
     min-height: 40vh;
-    background-color: pink;
+    background-color: #fff;
+    border: 1px solid #3cd0be;
+    border-radius: 10px;
     position: fixed;
-    right: 2vw;
-    top: 60px;
+    right: 40px;
+    top: 100px;
+    transition: right .15s;
     backdrop-filter: blur(5px);
     z-index: 100;
+    color: #3cd0be;
+    h4{
+        text-align: center;
+        margin: 0;
+        margin-bottom: 10px;
+    }
 }
-.anchor h4{
-    text-align: center;
-    margin: 0;
-    margin-bottom: 10px;
+.anchor__hide{
+    right: -145px;
+    h4{
+        display: none;
+    }
+    &:hover{
+        right: 0;
+        h4{
+          display: block;
+        }
+    }
 }
-.sliderTo-enter-from,
-.sliderTo-leave-to{
-    transform: translateX(25px);
-    opacity: 0;
-}
-.sliderTo-leave-active, .sliderTo-enter-active{
-    transition: all .15s;
-}
+
 </style>

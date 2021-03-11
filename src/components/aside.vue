@@ -1,5 +1,5 @@
 <template>
-    <div class="aside">
+    <div class="aside" ref="Aside">
         <ul>
             <li v-for="([k, v]) in Object.entries(element)" :key="k">
                 <router-link :to="k" active-class="active">{{v}}</router-link>
@@ -11,8 +11,12 @@
 <script lang="ts">
 import {
     defineComponent,
-    reactive
+    reactive,
+    onMounted,
+    onUnmounted,
+    ref
 } from 'vue'
+import { throttle } from '/@/utils/throttle'
 
 export default defineComponent( {
     setup () {
@@ -27,10 +31,30 @@ export default defineComponent( {
             '/doc/slider': 'Slider 滑块',
             '/doc/input': 'Input 输入框',
             '/doc/select': 'Select 下拉框',
-            '/doc/pagination': 'Pagination 分页',
+            '/doc/pagination': 'Pagination 分页器',
+            '/doc/radio': 'Radio 单选按钮',
+            '/doc/checkbox': 'Checkbox 多选按钮',
             '/doc/toTop': 'ToTop 返回顶部',
         })
+
+        const Aside = ref(null)
+        let asideDom: HTMLElement | any
+
+        // const onScroll = throttle(() => {
+        //     let scrollTop = document.documentElement.scrollTop
+        //     scrollTop > 60 ? asideDom.classList.add('aside__sticky') : asideDom.classList.remove('aside__sticky')
+        // }, 25)
+
+        // onMounted(() => {
+        //     asideDom = Aside.value as any
+        //     window.addEventListener('scroll', onScroll)
+        // })
+        //
+        // onUnmounted(() => {
+        //     window.removeEventListener('scroll', onScroll)
+        // })
         return {
+            Aside,
             element
         }
     }
@@ -38,12 +62,33 @@ export default defineComponent( {
 </script>
 
 <style scoped lang="scss">
+.aside{
+    min-height: calc(100vh - 60px);
+    width: 248px;
+    min-width: 200px;
+    box-sizing: border-box;
+    border-right: 1px solid #eee;
+    padding: 5px 2px 5px 5px;
+
+    ul{
+        padding: 0;
+    }
+    .active{
+        color: #3cd0be;
+        background-color: #3cd0be1a;
+        border-right: 3px solid #3cd0be;
+    }
+}
+.aside__sticky{
+    position: absolute!important;
+    top: 0;
+}
 ul{
     margin: 0;
     list-style: none;
     li{
-        height: 40px;
-        line-height: 40px;
+        height: 45px;
+        line-height: 45px;
     }
     a{
         color: #999;
@@ -55,22 +100,6 @@ ul{
             /*color: #58a397;*/
             color: #3cd0be;
         }
-    }
-}
-.aside{
-    min-height: calc(100vh - 60px);
-    width: 248px;
-    min-width: 200px;
-    box-sizing: border-box;
-    border-right: 1px solid #eee;
-    padding: 5px 2px 5px 5px;
-    ul{
-        padding: 0;
-    }
-    .active{
-        color: #3cd0be;
-        background-color: #3cd0be1a;
-        border-right: 3px solid #3cd0be;
     }
 }
 </style>

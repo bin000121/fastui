@@ -1,13 +1,27 @@
-.fade-enter-from,
-.fade-leave-to{
-    transform: translate3d(-50%, 12px, 0);
+/*doc.vue*/
+.doc-sliderTo-enter-from,
+.doc-sliderTo-leave-to{
+    transform: translateX(25px);
     opacity: 0;
 }
-.fade-enter-active,
-.fade-leave-active{
+.doc-sliderTo-leave-active,
+.sliderTo-enter-active{
     transition: all .15s;
 }
 
+
+/*f-dropdowns*/
+.f-dropdowns-fade-enter-from,
+.f-dropdowns-fade-leave-to{
+    transform: translate3d(-50%, 12px, 0);
+    opacity: 0;
+}
+.f-dropdowns-fade-enter-active,
+.f-dropdowns-fade-leave-active{
+    transition: all .15s;
+}
+
+/*f-select*/
 .f-select-fade-enter-from,
 .f-select-fade-leave-to{
     transform: translateY(15px);
@@ -15,5 +29,42 @@
 }
 .f-select-fade-enter-active,
 .f-select-fade-leave-active{
+    transition: all .25s;
+}
+
+/*toTop*/
+/*.f-toTop-zoom-in-enter-from{*/
+/*    transform: scale(1);*/
+/*    opacity: 0;*/
+/*}*/
+.f-toTop-zoom-in-enter-from,
+.f-toTop-zoom-in-leave-to{
+    transform: scale(0);
+}
+.f-toTop-zoom-in-enter-active,
+.f-toTop-zoom-in-leave-active{
+    transform-origin: center;
+    transition: all .25s;
+}
+
+/*f-checkbox*/
+.f-checkbox-zoom-in-enter-from,
+.f-checkbox-zoom-in-leave-to{
+    transform: scale(0);
+}
+.f-checkbox-zoom-in-enter-active,
+.f-checkbox-zoom-in-leave-active{
+    transform-origin: center;
+    transition: all .16s;
+}
+
+/*f-message*/
+.f-message-slider-in-enter-from,
+.f-message-slider-in-leave-to{
+    opacity: 0;
+}
+.f-message-slider-in-enter-active,
+.f-message-slider-in-leave-active{
     transition: all .2s;
 }
+

@@ -1,12 +1,14 @@
 <template>
-    <div class="f-select-option">
+    <div class="f-select-option" @click.stop="handleClickOption">
         {{label || ''}}
     </div>
 </template>
 
 <script lang="ts">
 import {
-    defineComponent
+    defineComponent,
+    onMounted,
+    getCurrentInstance
 } from 'vue'
 
 export default defineComponent({
@@ -15,8 +17,21 @@ export default defineComponent({
       label: [String, Number],
       value: [String, Number]
     },
-    setup () {
+    setup ({ label }) {
+        let root: any
+        const handleClickOption = (e: Event | any) => {
+            console.log(root)
+            if (!root.multiple) root.handleClick()
+            root.getChose(label)
+        }
 
+        onMounted(() => {
+            const instance: any = getCurrentInstance()
+            root = instance.ctx.$parent.$parent
+        })
+        return{
+            handleClickOption
+        }
     }
 })
 </script>

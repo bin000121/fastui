@@ -17,6 +17,73 @@
                     <f-option label="444" value="444"></f-option>
                 </f-select>
             </div>
+
+            <div class="demo-select">
+                <f-select>
+                    <f-option label="111" value="222"></f-option>
+                    <f-option label="222" value="222"></f-option>
+                    <f-option label="333" value="333"></f-option>
+                    <f-option label="444" value="444"></f-option>
+                </f-select>
+            </div>
+            <div class="demo-select">
+                <f-select>
+                    <f-option label="111" value="222"></f-option>
+                    <f-option label="222" value="222"></f-option>
+                    <f-option label="333" value="333"></f-option>
+                    <f-option label="444" value="444"></f-option>
+                </f-select>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="zhi_du">只读
+                <a href="#zhi_du" class="f-icon-anchor"></a>
+            </h3>
+            <p>下拉框无法与您进行交互，他看起来和正常的模样一致。</p>
+
+            <div class="demo-select">
+                <f-select readonly>
+                    <f-option label="111" value="222"></f-option>
+                    <f-option label="222" value="222"></f-option>
+                    <f-option label="333" value="333"></f-option>
+                </f-select>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-select readonly>
+        <f-option label="111" value="222"></f-option>
+        <f-option label="222" value="222"></f-option>
+        <f-option label="333" value="333"></f-option>
+    </f-select>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="jin_yong">禁用
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
+            <p>下拉框无法与您进行交互，并添加禁用样式。</p>
+
+            <div class="demo-select">
+                <f-select disabled>
+                    <f-option label="111" value="222"></f-option>
+                    <f-option label="222" value="222"></f-option>
+                    <f-option label="333" value="333"></f-option>
+                </f-select>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-select disabled>
+        <f-option label="111" value="222"></f-option>
+        <f-option label="222" value="222"></f-option>
+        <f-option label="333" value="333"></f-option>
+    </f-select>`}}
+                </code></pre>
+            </div>
         </div>
     </div>
 </template>
@@ -36,13 +103,20 @@ export default defineComponent({
         FOption
     },
     setup () {
-
+        const select = ref('')
+        return {
+            select
+        }
     }
 })
 </script>
 
 <style scoped lang="scss">
 .demo-select{
+    margin-bottom: 30px;
+    &:last-child{
+        margin-bottom: 0;
+    }
     .f-select{
         width: 200px;
     }

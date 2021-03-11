@@ -2,9 +2,12 @@
     <div
         :class="{
         'f-select': true,
+        // 'f-select--focus': focusOrBlur === 'focus',
         'f-select--disabled': disabled,
         }"
-        @click="handleClick"
+        ref="selectRoot"
+        @click.stop="handleClick"
+        v-clickOutside="handleClick"
     >
         <input
             class="f-select-input"
@@ -14,9 +17,18 @@
             :placeholder="placeholder"
             autocomplete="off"
         >
-        <span class="f-icon-arrow-down-bold f-select-arrow"></span>
-        <transition name="f-select-fade" mode="out-in">
-            <div v-if="$slots.default && showOptionList" class="f-option-list">
+        <span
+            :class="{
+                'f-icon-arrow-down-bold': true,
+                'f-select-arrow': true,
+                'f-icon-rotate': showOptionList,
+            }"
+        ></span>
+        <transition :name="animate ? 'f-select-fade' : ''" mode="out-in">
+            <div
+                v-if="$slots.default && showOptionList"
+                class="f-option-list"
+            >
                 <slot></slot>
             </div>
         </transition>
@@ -38,6 +50,7 @@ interface Options {
 }
 export default defineComponent({
     name: 'FSelect',
+    emits: ['change', 'update:value'],
     props: {
         placeholder: {
             type: String,
@@ -48,24 +61,52 @@ export default defineComponent({
             default: false
         },
         disabled: Boolean,
-        options: Object as PropType<Options>,
+        readonly: Boolean,
+        animate: {
+            type: Boolean,
+            default: true
+        },
+        options: Object as PropType<Options>
     },
-    setup () {
+    setup ({ disabled, readonly }, { emit }) {
+        const selectRoot = ref(null)
         const selectIpt = ref(null)
         const showOptionList = ref(false)
+        const focusOrBlur = ref('blur')
+        let oldData = ''
 
         const handleClick = () => {
+            if (disabled || readonly) return
+            // changeFocusOrBlur('focus')
+            console.log('开')
             showOptionList.value = !showOptionList.value
-            console.log(111)
+            console.log('关')
         }
+
+        const getChose = (data: number | string) => {
+            if (oldData === data) return
+            (selectIpt.value as any).value = data
+            emit('change', data)
+            emit('update:value', data)
+        }
+
+
+        const changeFocusOrBlur = (type: string) => {
+            focusOrBlur.value = type
+        }
+
 
         onMounted(() => {
 
         })
         return{
+            selectRoot,
             selectIpt,
             showOptionList,
-            handleClick
+            handleClick,
+            getChose,
+            focusOrBlur,
+            changeFocusOrBlur
         }
     }
 })
@@ -104,12 +145,17 @@ export default defineComponent({
         top: 0;
         left: 0;
         background-color: #f2f2f2;
-        opacity: .45;
+        opacity: .65;
         width: 100%;
         height: 100%;
         z-index: 100;
     }
 }
+/*.f-select--focus{*/
+/*    border-color: var(--primary);*/
+/*    box-shadow: 0 0 0 .2em #1661ab33;*/
+/*    transition: box-shadow .2s;*/
+/*}*/
 .f-select-arrow{
     display: inline-flex;
     color: #666;
@@ -117,13 +163,20 @@ export default defineComponent({
     justify-content: center;
     font-size: 14px;
     width: calc(2.5em);
+    transition: transform .25s;
+}
+.f-icon-rotate{
+    transform: rotate(180deg);
 }
 .f-option-list{
+    box-sizing: border-box;
     position: absolute;
     left: 0;
     top: 45px;
-    width: 200px;
+    min-width: 200px;
+    max-height: 260px;
     z-index: 100;
+    background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px 0;
@@ -146,7 +199,7 @@ export default defineComponent({
         width: 0;
         height: 0;
         border: 6px solid transparent;
-        border-bottom-color: #ccc;
+        border-bottom-color: #ddd;
         left: 12px;
         top: -13px;
         z-index: 1;

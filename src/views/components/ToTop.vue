@@ -1,18 +1,20 @@
 <template>
     <teleport :to="id">
-        <div
-            :class="{
-                'f-toTop': true,
-                'f-toTop--circle': circle,
-                'f-toTop--rounded': rounded,
-            }"
-            :title="title"
-            :style="`right: ${getRight};bottom: ${getBottom}`"
-            ref="fTop"
-            @click="gotoTop"
-        >
-            <slot></slot>
-        </div>
+        <transition :name="animate ? 'f-toTop-zoom-in' : '' " mode="out-in">
+            <div
+                :class="{
+                    'f-toTop': true,
+                    'f-toTop--circle': circle
+                }"
+                    :title="title"
+                    :style="`right: ${getRight};bottom: ${getBottom};border-radius: ${rounded}px`"
+                    ref="fTop"
+                    v-if="isShow"
+                    @click="gotoTop"
+            >
+                <slot></slot>
+            </div>
+        </transition>
     </teleport>
 </template>
 
@@ -22,12 +24,16 @@ import {
     ref,
     computed,
     PropType,
-    onMounted
+    onMounted,
+    onUnmounted,
+    onActivated,
+    onDeactivated
 } from 'vue'
 import { throttle } from '/@/utils/throttle'
 
 export default defineComponent({
     inheritAttrs: false,
+    emits: ['click'],
     props: {
         id:{
           type: String,
@@ -58,12 +64,17 @@ export default defineComponent({
         scrollTop: {
             type: Number,
             default: 300
+        },
+        animate: {
+            type: Boolean,
+            default: true
         }
     },
     name: 'FTop',
-    setup ({ bottom, right, behavior, rounded, scrollTop }) {
+    setup ({ bottom, right, behavior, rounded, scrollTop }, { emit }) {
         const fTop = ref(null)
-        let fTopDom: HTMLElement
+        const isShow = ref(false)
+        let fTopDom: HTMLElement | any
         const getBottom = computed(() => {
             if (typeof bottom === 'number') return bottom + 'px'
             return bottom
@@ -78,32 +89,39 @@ export default defineComponent({
                 top: 0,
                 behavior
             })
+            emit('click')
         }
 
-        // 监听滚动事件
-        const onScrolling = () => {
-            if (scrollTop <= 0) {
-                fTopDom.style.display = 'inline-flex'
-                return
-            }
-            window.addEventListener('scroll', throttle(() => {
-                const body = document.documentElement || document.body as HTMLElement
-                fTopDom.style.display = body.scrollTop >= scrollTop ? 'inline-flex' : 'none'
-            }, 50))
-        }
+        const onScroll = throttle(() => {
+            const body = document.documentElement || document.body as HTMLElement
+            isShow.value = body.scrollTop >= scrollTop
+        }, 50)
 
         onMounted(() => {
             fTopDom = fTop.value as any
-            if (rounded && typeof rounded === 'number' && rounded >= 5) {
-                fTopDom.style.setProperty('--rounded', rounded + 'px')
-            }
-            onScrolling()
+            window.addEventListener('scroll', onScroll)
+            // onScrolling()
         })
+
+        onUnmounted(() => {
+            window.removeEventListener('scroll', onScroll)
+        })
+
+        onActivated(()=> {
+            fTopDom = fTop.value as any
+            window.addEventListener('scroll', onScroll)
+        })
+
+        onDeactivated(() => {
+            window.removeEventListener('scroll', onScroll)
+        })
+
         return{
             getBottom,
             getRight,
             gotoTop,
-            fTop
+            fTop,
+            isShow
         }
     }
 })
@@ -111,16 +129,15 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-toTop{
-    --rounded: 5px;
     position: fixed;
     z-index: 100;
     min-width: 24px;
     min-height: 24px;
     font-size: 14px;
-    box-shadow: 0 0 3px #999;
+    box-shadow: 0 0 3px #888;
     cursor: pointer;
     overflow: hidden;
-    display: none;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 4px;
@@ -128,9 +145,5 @@ export default defineComponent({
 }
 .f-toTop--circle{
     border-radius: 50%!important;
-}
-
-.f-toTop--rounded{
-    border-radius: var(--rounded);
 }
 </style>
