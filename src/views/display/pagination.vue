@@ -10,6 +10,10 @@
             <p>可以对其监听change事件可以获得变化后的数据。</p>
 
             <div class="desc">
+                您可以使用属性 <b>show-total</b> 和 <b>show-elevator</b> 来展现出总条目数和电梯。
+            </div>
+
+            <div class="desc">
                 事件 <b>change</b> 有两个参数，第一个是变化类型，第二个是变化后的值。
             </div>
 
@@ -23,6 +27,16 @@
                 ></f-pagination>
             </div>
 
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="total"
+                    :pageSize="pageSize"
+                    :page="page"
+                    show-total
+                    show-elevator
+                ></f-pagination>
+            </div>
+
             <div v-highlight>
                 <pre><code>
     {{`<f-pagination
@@ -30,6 +44,14 @@
         :pageSize="pageSize"
         :page="page"
         @change="updatePage"
+    ></f-pagination>
+
+    <f-pagination
+        :total="total"
+        :pageSize="pageSize"
+        :page="page"
+        show-total
+        show-elevator
     ></f-pagination>
 
 
@@ -81,7 +103,7 @@
                     :total="50"
                     :pageSize="10"
                     :page="1"
-
+                    disabled
                 ></f-pagination>
             </div>
 
@@ -92,6 +114,34 @@
         :pageSize="10"
         :page="1"
         disabled
+    ></f-pagination>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="yuan_xing">圆形
+                <a href="#yuan_xing" class="f-icon-anchor"></a>
+            </h3>
+            <p>添加分页器按钮变成的圆形样式。</p>
+
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="50"
+                    :pageSize="10"
+                    :page="1"
+                    circle
+                ></f-pagination>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="50"
+        :pageSize="10"
+        :page="1"
+        circle
     ></f-pagination>`}}
                 </code></pre>
             </div>
@@ -167,7 +217,7 @@
             <p>分页器拥有3种大小。</p>
 
             <div class="desc">
-                对其设置属性 <b>btn-size</b> 可以控制分页器的尺寸。
+                对其设置属性 <b>size</b> 可以控制分页器的尺寸。
             </div>
 
             <div class="demo-pagination">
@@ -184,7 +234,11 @@
                     :total="50"
                     :pageSize="10"
                     :page="1"
-                ></f-pagination>
+                >
+                    <template #total>
+                        <span>111</span>
+                    </template>
+                </f-pagination>
             </div>
 
             <div class="demo-pagination">
@@ -206,17 +260,17 @@
     ></f-pagination>
 
     <f-pagination
-            :total="total"
-            :pageSize="pageSize"
-            :page="page"
-            size="default"
+        :total="total"
+        :pageSize="pageSize"
+        :page="page"
+        size="default"
     ></f-pagination>
 
     <f-pagination
-            :total="total"
-            :pageSize="pageSize"
-            :page="page"
-            size="large"
+        :total="total"
+        :pageSize="pageSize"
+        :page="page"
+        size="large"
     ></f-pagination>
 
 
@@ -243,6 +297,295 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="xian_zhi_chang_du">按钮个数
+                <a href="#xian_zhi_chang_du" class="f-icon-anchor"></a>
+            </h3>
+            <p>您可以控制分页器中的按钮出现个数，当超出这个数值时将会被隐藏。</p>
+
+            <div class="desc">
+                通过设置属性 <b>limit</b> 来控制分页器中按钮的数量，默认数量为6, 最小6，最大为15，均为正整数。
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="6"
+                ></f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="7"
+                ></f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="8"
+                ></f-pagination>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="6"
+    ></f-pagination>
+
+    <f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="9"
+    ></f-pagination>
+
+    <f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="12"
+    ></f-pagination>
+
+                    `}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="bu_chang">翻页步长
+                <a href="#bu_chang" class="f-icon-anchor"></a>
+            </h3>
+            <p>您可以自定义分页器的翻页步长。</p>
+
+            <div class="desc">
+                通过设置属性 <b>step</b> 来控制分页器中的翻页步长，默认为5个, 最小5，最大为100，均为正整数。
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="6"
+                    :step="5"
+                ></f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="9"
+                    :step="10"
+                ></f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="1000"
+                    :pageSize="10"
+                    :page="1"
+                    :limit="12"
+                    :step="15"
+                ></f-pagination>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="6"
+        :step="5"
+    ></f-pagination>
+
+    <f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="9"
+        :step="10"
+    ></f-pagination>
+
+    <f-pagination
+        :total="1000"
+        :pageSize="10"
+        :page="1"
+        :limit="12"
+        :step="15"
+    ></f-pagination>
+
+                    `}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="wen_ben">文本样式
+                <a href="#wen_ben" class="f-icon-anchor"></a>
+            </h3>
+            <p>移除按钮的边框以及阴影效果，他看起和文本格式一样。</p>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    text
+                    size="small"
+                >
+                </f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    text
+                    size="default"
+                >
+                </f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    text
+                    size="large"
+                >
+                </f-pagination>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        text
+        size="small"
+    >
+    </f-pagination>
+
+    <f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        text
+        size="default"
+    >
+    </f-pagination>
+
+    <f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        text
+        size="large"
+    >
+    </f-pagination>
+                    `}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="jian_jie">简洁分页器
+                <a href="#jian_jie" class="f-icon-anchor"></a>
+            </h3>
+            <p>如果您觉得上述分页器过于冗长，您也可以使用简洁分页器。</p>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    simple
+                    placement="flex-start"
+                >
+                </f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    simple
+                    text
+                    placement="center"
+                >
+                </f-pagination>
+            </div>
+
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="200"
+                    :page-size="10"
+                    :page="1"
+                    simple
+                    circle
+                    placement="flex-end"
+                    show-elevator
+                >
+                </f-pagination>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        text
+        simple
+        placement="flex-start"
+    >
+    </f-pagination>
+
+    <f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        simple
+        text
+        placement="center"
+    >
+    </f-pagination>
+
+    <f-pagination
+        :total="200"
+        :page-size="10"
+        :page="1"
+        simple
+        circle
+        placement="flex-end"
+    >
+    </f-pagination>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <f-top :scroll-top="500">
+            <i class="f-icon-to-top"></i>
+        </f-top>
     </div>
 </template>
 
@@ -253,10 +596,12 @@ import {
     toRefs
 } from 'vue'
 import FPagination from '/@/views/components/Pagination.vue'
+import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
-        FPagination
+        FPagination,
+        FTop
     },
     setup () {
         const data = reactive({

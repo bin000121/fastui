@@ -2,9 +2,11 @@
     <ul
         :class="{
             'f-pagination': true,
+            'f-pagination__simple': simple,
             ['f-pagination__'+ size]: size !== 'default',
-            'f-pagination__circle': circle,
-            'f-pagination__disabled': disabled
+            'f-pagination__circle': !text && circle,
+            'f-pagination__disabled': disabled,
+            'f-pagination__text': text,
         }"
         :style="`justify-content: ${placement}`"
     >
@@ -15,16 +17,36 @@
             }"
             @click="pre"
         >
-            <i class="f-icon-arrow-left-bold" style="font-size: 20px"></i>
+            <i class="f-icon-arrow-left-bold"></i>
         </li>
-        <li
-            v-for="num in getAllPage"
-            :key="num"
-            :class="{
-                'f-pagination-is-active': currentPage === num
-            }"
-            @click.stop="handleChange('page', num)"
-        >{{num}}</li>
+
+        <template v-if="simple">
+            <li>{{currentPage}}</li>
+            <li>/</li>
+            <li>{{getAllPage}}</li>
+        </template>
+        <!--v-if 与 v-for不能一起使用-->
+        <template v-else>
+            <template v-for="num in getAllPage">
+                <li
+                    :key="num"
+                    :class="{
+                    'f-pagination-is-active': currentPage === num
+                }"
+                        v-show="showNumBtn(num)"
+                        @click.stop="handleChange('page', num)"
+                >{{num}}</li>
+                <li class="f-pagination-ellipsis" v-if="showEllipsisBtn(num)">
+                    <span>&hellip;</span>
+                    <i
+                        :class="getFastIcon(num)[0]"
+                        :title="getFastIcon(num)[1]"
+                        @click="handleFastStep(getFastIcon(num)[1])"
+                    ></i>
+                </li>
+            </template>
+        </template>
+
         <li
             :class="{
                 'f-pagination-next': true,
@@ -32,9 +54,57 @@
             }"
             @click="next"
         >
-            <i class="f-icon-arrow-right-bold" style="font-size: 20px"></i>
+            <i class="f-icon-arrow-right-bold"></i>
+        </li>
+        <li class="f-pagination__total" v-if="showTotal">
+            共 {{total}} 条
+        </li>
+
+        <li class="f-pagination__elevator" v-if="showElevator">
+            跳至
+            <input
+                type="text"
+                ref="elevatorIpt"
+                @keydown.enter="e => handleChange('page', Number(e.target.value))"
+                @blur="e => handleChange('page', Number(e.target.value))"
+            >
+            页
         </li>
     </ul>
+<!--    <ul-->
+<!--        v-else-->
+<!--        :class="{-->
+<!--            'f-pagination': true,-->
+<!--            'f-pagination__simple': true,-->
+<!--            ['f-pagination__'+ size]: size !== 'default',-->
+<!--            'f-pagination__circle': !text && circle,-->
+<!--            'f-pagination__disabled': disabled,-->
+<!--            'f-pagination__text': text,-->
+<!--        }"-->
+<!--        :style="`justify-content: ${placement}`"-->
+<!--    >-->
+<!--        <li-->
+<!--            :class="{-->
+<!--                'f-pagination-pre': true,-->
+<!--                'f-pagination__disabled': currentPage === 1-->
+<!--            }"-->
+<!--                @click="pre"-->
+<!--        >-->
+<!--            <i class="f-icon-arrow-left-bold"></i>-->
+<!--        </li>-->
+<!--        <li>{{currentPage}}</li>-->
+<!--        <li>/</li>-->
+<!--        <li>{{getAllPage}}</li>-->
+<!--        <li-->
+<!--            :class="{-->
+<!--                'f-pagination-next': true,-->
+<!--                'f-pagination__disabled': currentPage === getAllPage-->
+<!--            }"-->
+<!--                @click="next"-->
+<!--        >-->
+<!--            <i class="f-icon-arrow-right-bold"></i>-->
+<!--        </li>-->
+<!--    </ul>-->
 </template>
 
 <script lang="ts">
@@ -42,16 +112,26 @@ import {
     defineComponent,
     reactive,
     toRefs,
+    ref,
     onMounted,
-    computed
+    computed,
+    watchEffect
 } from 'vue'
+interface dataType {
+    currentPage: number;
+    currentSize: number;
+    showNum: number[];
+    showEllipsis: number[];
+}
 
 export default defineComponent({
+    name: 'FPagination',
+    inheritAttrs: false,
     emits: ['change'],
     props: {
         total: {
             type: Number,
-            default: 170
+            default: 0
         },
         pageSize: {
             type: Number,
@@ -68,11 +148,20 @@ export default defineComponent({
         },
         limit: {
             type: Number,
-            default: 6
+            default: 6,
+            validator: (num: number) => num >= 6 || num <= 15
+        },
+        step: {
+            type: Number,
+            default: 5,
+            validator: (num: number) => (num >= 5 || num <= 100)
         },
         disabled: Boolean,
         showTotal: Boolean,
+        showElevator: Boolean,
+        simple: Boolean,
         circle: Boolean,
+        text: Boolean,
         size: {
             type: String,
             default: 'default',
@@ -80,42 +169,161 @@ export default defineComponent({
         }
     },
     setup (props, { emit }) {
-        const data = reactive({
+
+        let limit: number = props.limit
+        let fastStep: number = props.step // 快进或快退的步长为5
+
+        const elevatorIpt = ref(null)
+        let elevatorIptDom: HTMLDivElement | any
+
+        watchEffect(() => {
+            if (props.limit < 6) limit = 6
+            else if (props.limit > 15) limit = 15
+            else limit = Math.floor(props.limit)
+
+            if (props.step < 5) fastStep = 5
+            else if (props.step > 100) fastStep = 100
+            else fastStep = Math.floor(props.step)
+        })
+        const data: dataType = reactive({
             currentPage: props.page,
-            currentSize: props.pageSize
+            currentSize: props.pageSize,
+            showNum: [],
+            showEllipsis: []
+        })
+        const getFastIcon = computed(() => {
+            return (num: number) => {
+                return num === 2 ? ['f-icon-backward', `向前${fastStep}页`] : ['f-icon-forward', `向后${fastStep}页`]
+            }
         })
 
         const getAllPage = computed(() => {
-            if (!props.total) return 1
+            if (!props.total || props.total <= props.pageSize) return 1
             // 向上取整
             return Math.ceil(props.total / props.pageSize)
         })
 
+        const showNumBtn = computed(() => {
+            return (num: number) => {
+                // 为空表示展示全部
+                if (!data.showNum.length) return true
+                return data.showNum.includes(num)
+            }
+        })
+
+        const showEllipsisBtn = computed(() => {
+            return (num: number) => {
+                return data.showEllipsis.includes(num)
+            }
+        })
+
+        const handleFastStep = (str: string) => {
+            if (str.startsWith('向前')) {
+                handleChange(
+                    'page',
+                    data.currentPage - fastStep > 1
+                        ? data.currentPage - fastStep
+                        : 1)
+            } else {
+                handleChange(
+                    'page',
+                    data.currentPage + fastStep > getAllPage.value
+                        ? getAllPage.value
+                        : data.currentPage + fastStep)
+            }
+        }
+
+        const updateBtnList = () => {
+
+            data.showNum = []
+            data.showEllipsis = []
+            // 限制数量大于等于总页码，则全部显示
+            if (limit >= getAllPage.value) return
+            // 省略号出现在最大页码-1的位置
+            if (data.currentPage < limit - 1) {
+                for (let i = 1; i<= limit - 1; i++) {
+                    data.showNum.push(i)
+                }
+                data.showNum = [...data.showNum ,getAllPage.value]
+                data.showEllipsis = [getAllPage.value - 1]
+                return
+            }
+            // 省略号出现在页码1和页码2之间
+            if (data.currentPage >= getAllPage.value - (limit - 2)) {
+                for (let i = getAllPage.value - (limit - 2); i<= getAllPage.value; i++) {
+                    data.showNum.push(i)
+                }
+                data.showNum = [1, ...data.showNum]
+                data.showEllipsis = [2]
+                return
+            }
+
+            // 摆出 1...按钮组...最大页码 的排列方式
+            if (data.currentPage >= limit - 1) {
+                // 中间按钮个数
+                const middleLength = limit - 2
+                // 找到中位数
+                const middleNum = middleLength % 2 === 0 ? middleLength / 2 : (middleLength + 1) / 2
+                const limitUp = data.currentPage - (middleNum - 1)
+                for (let i = 0; i<= middleLength - 1; i++) {
+                    data.showNum.push(i + limitUp)
+                }
+                data.showNum = [1, ...data.showNum ,getAllPage.value]
+                data.showEllipsis = [2, getAllPage.value - 1]
+            }
+        }
+
+        // 初始化按钮列表排列
+        updateBtnList()
+
+        // 处理页码或者一页大小变化
         const handleChange = (type: 'page' | 'pageSize', val: number) => {
             if (props.disabled) return
-            if (type === 'page') data.currentPage = val
-            else data.currentSize = val
+            // 变化后的页码或分页大小一致就不在执行该函数
+            if (type === 'page') {
+                if (data.currentPage === val) return
+                data.currentPage = val > getAllPage.value ? getAllPage.value : val
+            }
+            else {
+                if (data.currentSize === val) return
+                data.currentSize = val
+            }
+            updateBtnList()
+            if (elevatorIptDom) elevatorIptDom.value = data.currentPage
             emit('change', type, val)
         }
 
+        // 向前翻页
         const pre = () => {
             if (data.currentPage === 1 || props.disabled) return
             data.currentPage --
             handleChange('page', data.currentPage)
         }
 
+        // 向后翻页
         const next = () => {
             if (data.currentPage === getAllPage.value || props.disabled) return
             data.currentPage ++
             handleChange('page', data.currentPage)
         }
 
+        onMounted(() => {
+            if (props.showElevator) {
+                elevatorIptDom = elevatorIpt.value as any
+                elevatorIptDom.value = data.currentPage
+            }
+        })
+
         return{
-            open,
             getAllPage,
+            elevatorIpt,
             handleChange,
+            handleFastStep,
             pre,
             next,
+            showNumBtn,
+            showEllipsisBtn,
+            getFastIcon,
             ...toRefs(data)
         }
     }
@@ -131,9 +339,9 @@ export default defineComponent({
     padding: 10px 0;
     margin: 0;
     box-sizing: border-box;
-    font-size: 18px;
+    font-size: 16px;
     li + li{
-        margin-left: calc(.65em);
+        margin-left: calc(.75em);
     }
     li{
         box-sizing: border-box;
@@ -144,46 +352,119 @@ export default defineComponent({
         min-width: calc(2em);
         border-radius: calc(.35em);
         background-color: #fff;
-        box-shadow: 0 1px 3px #888;
+        box-shadow: 0 1px 3px #666;
         cursor: pointer;
         font-size: calc(1em);
         color: #333;
         user-select: none;
-        transition: all .15s;
-        &:not(:first-child):not(:last-child):not(.f-pagination-is-active):hover{
+        transition: all .1s;
+        &:not(.f-pagination-pre):not(.f-pagination-next):not(.f-pagination__total):not(.f-pagination__elevator):not(.f-pagination-is-active):hover{
             transition: all .05s;
-            box-shadow: 0 0 0 .12em #1661ab33;
+            box-shadow: 0 0 0 .15em #1661ab33;
             color: var(--primary);
         }
-    }
-    li.f-pagination-pre{
-        padding-right: calc(.25em);
-    }
-    li.f-pagination-next{
-        padding-left: calc(.25em);
+        i{
+            font-size: calc(1em);
+        }
     }
     li.f-pagination-is-active{
         background-color: var(--primary);
         color: #fff;
-        box-shadow: 0 0 0 .15em #1661ab33;
+        box-shadow: 0 0 0 .18em #1661ab33;
+    }
+    li.f-pagination-pre{
+        padding-right: calc(.12em);
+    }
+    li.f-pagination-next{
+        padding-left: calc(.12em);
+    }
+    li.f-pagination-ellipsis{
+        box-shadow: none;
+        &:hover{
+            box-shadow: none!important;
+            color: var(--primary);
+            transform: translateY(calc(-.15em)) scale(1.15);
+            span{
+                display: none;
+            }
+            i{
+                align-items: flex-end;
+                display: block;
+            }
+        }
+        i{
+             display: none;
+         }
+    }
+
+    li.f-pagination__total, li.f-pagination__elevator{
+        user-select: text;
+        cursor: text;
+        box-shadow: none;
+        font-size: calc(.9em);
+    }
+    li.f-pagination__elevator input{
+        display: inline-block;
+        box-sizing: border-box;
+        margin: 0 5px;
+        outline: 0;
+        padding: 0 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+        border-radius: calc(.35em);
+        width: calc(2em + 20px);
+        height: calc(2em);
+        cursor: pointer;
+        color: #333;
+        transition: border-color .15s;
+        &:focus{
+            border-color: var(--primary);
+        }
     }
 }
 .f-pagination__small{
-    font-size: 16px!important;
+    font-size: 14px!important;
 }
 .f-pagination__large{
-    font-size: 20px!important;
+    font-size: 18px!important;
 }
 .f-pagination__disabled{
     color: #999;
     pointer-events: none;
     opacity: .45;
 }
-
+.f-pagination__text{
+    li{
+        box-shadow: none!important;
+        &:hover{
+            transform: translateY(calc(-.15em)) scale(1.15);
+            color: var(--primary);
+        }
+    }
+}
 .f-pagination__circle{
    li{
        border-radius: 50% !important;
    }
 }
-
+.f-pagination__simple{
+   li {
+       &:not(.f-pagination-pre):not(.f-pagination-next){
+           cursor: default!important;
+       }
+       &:not(.f-pagination__total):not(.f-pagination__elevator):not(:nth-child(3)):hover{
+           box-shadow: 0 1px 3px #666!important;
+           color: #333!important;
+           transform: none !important;
+       }
+       &.f-pagination-pre:hover, &.f-pagination-next:hover{
+        box-shadow: none!important;
+       }
+       &:nth-child(3){
+           box-shadow: none!important;
+           color: #333!important;
+           transform: scale(1.15) !important;
+       }
+   }
+}
 </style>
