@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, RouteRecordRaw, createMemoryHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -15,6 +15,11 @@ const routes: RouteRecordRaw[] = [
                 path: '/doc/button',
                 name: 'button',
                 component: () => import('/@/views/display/button.vue')
+            },
+            {
+                path: '/doc/icon',
+                name: 'icon',
+                component: () => import('/@/views/display/icon.vue')
             },
             {
                 path: '/doc/tag',
@@ -77,6 +82,16 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/checkbox.vue')
             },
             {
+                path: '/doc/model',
+                name: 'model',
+                component: () => import('/@/views/display/model.vue')
+            },
+            {
+                path: '/doc/table',
+                name: 'table',
+                component: () => import('/@/views/display/table.vue')
+            },
+            {
                 path: '/doc/toTop',
                 name: 'toTop',
                 component: () => import('/@/views/display/toTop.vue')
@@ -86,6 +101,6 @@ const routes: RouteRecordRaw[] = [
 ]
 
 export default createRouter({
-    history: createWebHistory(),
-    routes
+    routes,
+    history: createMemoryHistory()
 })

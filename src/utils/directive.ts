@@ -50,7 +50,7 @@ const copy: ObjectDirective = {
             body.appendChild(inputDom)
             inputDom.select()
             try {
-                if (document.execCommand('coppy', false)) {
+                if (document.execCommand('copy', false)) {
                     console.log('复制完成')
                 }
             } catch (e) {

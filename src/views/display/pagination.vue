@@ -132,6 +132,8 @@
                     :pageSize="10"
                     :page="1"
                     circle
+                    show-elevator
+                    show-total
                 ></f-pagination>
             </div>
 
@@ -519,6 +521,8 @@
                     :page="1"
                     simple
                     placement="flex-start"
+                    show-elevator
+                    show-total
                 >
                 </f-pagination>
             </div>

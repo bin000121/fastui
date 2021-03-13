@@ -68,3 +68,15 @@
     transition: all .2s;
 }
 
+/*f-model*/
+.f-model-show-enter-from,
+.f-model-show-leave-to{
+    transform: scale(.2);
+    opacity: 0;
+}
+.f-model-show-enter-active,
+.f-model-show-leave-active{
+    transition: all .2s;
+    transform-origin: center;
+}
+

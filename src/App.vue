@@ -18,10 +18,11 @@ html, body{
   padding: 0;
   min-height: 100vh;
   width: 100%;
+  font-family: Helvetica!important;
+
 }
 #app{
   height: 100%;
-  font-family: Helvetica;
 }
 a{
   text-decoration: none;
@@ -70,14 +71,14 @@ div.desc b{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-[class='f-icon-anchor'] {
+h3 [class='f-icon-anchor'] {
   font-size: 19px;
   vertical-align: bottom;
   font-weight: 700;
   color: #1661abb3;
   display: none;
 }
-[class='f-icon-anchor']:hover{
+h3 [class='f-icon-anchor']:hover{
   color: #1661ab;
 }
 </style>

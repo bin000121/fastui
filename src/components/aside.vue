@@ -20,8 +20,9 @@ import { throttle } from '/@/utils/throttle'
 
 export default defineComponent( {
     setup () {
-        const element = reactive({
+        const element = {
             '/doc/button': 'Button 按钮',
+            '/doc/icon': 'Icon 图标',
             '/doc/tag': 'Tag 标签',
             '/doc/switch': 'Switch 开关',
             '/doc/box': 'Box 盒子',
@@ -34,8 +35,10 @@ export default defineComponent( {
             '/doc/pagination': 'Pagination 分页器',
             '/doc/radio': 'Radio 单选按钮',
             '/doc/checkbox': 'Checkbox 多选按钮',
+            '/doc/model': 'Model 弹出框',
+            '/doc/table': 'Table 表格',
             '/doc/toTop': 'ToTop 返回顶部',
-        })
+        }
 
         const Aside = ref(null)
         let asideDom: HTMLElement | any

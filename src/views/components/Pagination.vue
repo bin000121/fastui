@@ -27,9 +27,8 @@
         </template>
         <!--v-if 与 v-for不能一起使用-->
         <template v-else>
-            <template v-for="num in getAllPage">
+            <template v-for="num in getAllPage" :key="num">
                 <li
-                    :key="num"
                     :class="{
                     'f-pagination-is-active': currentPage === num
                 }"
@@ -65,8 +64,8 @@
             <input
                 type="text"
                 ref="elevatorIpt"
-                @keydown.enter="e => handleChange('page', Number(e.target.value))"
-                @blur="e => handleChange('page', Number(e.target.value))"
+                @keydown.enter="e => handleChange('page', e.target.value ? Number(e.target.value) : 1)"
+                @blur="e => handleChange('page', e.target.value ? Number(e.target.value) : 1)"
             >
             页
         </li>
@@ -280,14 +279,8 @@ export default defineComponent({
         const handleChange = (type: 'page' | 'pageSize', val: number) => {
             if (props.disabled) return
             // 变化后的页码或分页大小一致就不在执行该函数
-            if (type === 'page') {
-                if (data.currentPage === val) return
-                data.currentPage = val > getAllPage.value ? getAllPage.value : val
-            }
-            else {
-                if (data.currentSize === val) return
-                data.currentSize = val
-            }
+            if (type === 'page') data.currentPage = val > getAllPage.value ? getAllPage.value : val
+            else data.currentSize = val
             updateBtnList()
             if (elevatorIptDom) elevatorIptDom.value = data.currentPage
             emit('change', type, val)
@@ -396,30 +389,29 @@ export default defineComponent({
              display: none;
          }
     }
-
     li.f-pagination__total, li.f-pagination__elevator{
         user-select: text;
         cursor: text;
-        box-shadow: none;
+        box-shadow: none!important;
         font-size: calc(.9em);
     }
-    li.f-pagination__elevator input{
-        display: inline-block;
-        box-sizing: border-box;
-        margin: 0 5px;
-        outline: 0;
-        padding: 0 10px;
-        border: 1px solid #ccc;
-        text-align: center;
-        border-radius: calc(.35em);
-        width: calc(2em + 20px);
-        height: calc(2em);
-        cursor: pointer;
-        color: #333;
-        transition: border-color .15s;
-        &:focus{
-            border-color: var(--primary);
-        }
+}
+li.f-pagination__elevator input{
+    display: inline-block;
+    box-sizing: border-box;
+    margin: 0 5px;
+    outline: 0;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    border-radius: calc(.35em);
+    width: calc(2em + 20px);
+    height: calc(2em);
+    cursor: pointer;
+    color: #333;
+    transition: border-color .15s;
+    &:focus{
+        border-color: var(--primary);
     }
 }
 .f-pagination__small{
@@ -433,7 +425,7 @@ export default defineComponent({
     pointer-events: none;
     opacity: .45;
 }
-.f-pagination__text{
+.f-pagination.f-pagination__text{
     li{
         box-shadow: none!important;
         &:hover{
@@ -449,16 +441,17 @@ export default defineComponent({
 }
 .f-pagination__simple{
    li {
-       &:not(.f-pagination-pre):not(.f-pagination-next){
-           cursor: default!important;
+       cursor: default;
+       &.f-pagination-pre,&.f-pagination-next{
+           cursor: pointer;
        }
-       &:not(.f-pagination__total):not(.f-pagination__elevator):not(:nth-child(3)):hover{
+       &:hover{
            box-shadow: 0 1px 3px #666!important;
+           transform: none!important;
            color: #333!important;
-           transform: none !important;
        }
-       &.f-pagination-pre:hover, &.f-pagination-next:hover{
-        box-shadow: none!important;
+       &.f-pagination__total, &.f-pagination__elevator{
+           box-shadow: none!important
        }
        &:nth-child(3){
            box-shadow: none!important;
@@ -466,5 +459,10 @@ export default defineComponent({
            transform: scale(1.15) !important;
        }
    }
+}
+.f-pagination__simple.f-pagination__text{
+    li{
+        box-shadow: none!important;
+    }
 }
 </style>

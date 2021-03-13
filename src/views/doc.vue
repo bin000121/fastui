@@ -91,7 +91,7 @@ export default defineComponent( {
     top: 100px;
     transition: right .15s;
     backdrop-filter: blur(5px);
-    z-index: 100;
+    z-index: 99;
     color: #3cd0be;
     h4{
         text-align: center;
