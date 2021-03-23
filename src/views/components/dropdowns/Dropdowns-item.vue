@@ -1,8 +1,11 @@
 <template>
-    <div class="f-dropdowns-item--divided" v-if="divided"></div>
+    <div class="f-dropdowns-item__divided" v-if="divided"></div>
     <li
-        :class="['f-dropdowns-item', isDisabled]"
-        @click="handleClick"
+        :class="{
+            'f-dropdowns-item': true,
+            'f-dropdowns-item__disabled': disabled
+        }"
+        @click.stop="handleClick"
         ref="dropdownsItem"
     >
         <slot></slot>
@@ -12,10 +15,7 @@
 <script lang="ts">
 import {
     defineComponent,
-    getCurrentInstance,
-    onMounted,
-    computed,
-    nextTick,
+    inject,
     ref
 } from 'vue'
 
@@ -24,23 +24,23 @@ export default defineComponent({
     props: {
         disabled: Boolean,
         divided: Boolean,
-        action: String
+        value: [String, Number, Boolean]
     },
-    setup ({ disabled, action, divided }, { emit }) {
-        const isDisabled = computed(() => {
-            return disabled ?  'f-dropdowns-item--disabled' : ''
-        })
+    setup (props, { emit }) {
+        const root = inject('$parent')
+        const {
+            toggleHideAndShow,
+            ctx,
+            hoverClose
+        }: any = root
         const dropdownsItem = ref(null)
-        const _this: any = getCurrentInstance()
         const handleClick = () => {
-            _this.ctx.$parent.$emit('toggleHideAndShow')
-            emit('click')
-            emit('action')
-            // if (!disabled && action) _this.ctx.$parent.$parent.$emit('action', action)
+            if (props.disabled || ctx.props.clickNotClose) return
+            ctx.props.trigger === 'hover' ? hoverClose() : toggleHideAndShow()
+            props.value && ctx.emit('action', props.value)
         }
         return{
             handleClick,
-            isDisabled,
             dropdownsItem
         }
     }
@@ -52,18 +52,17 @@ export default defineComponent({
     cursor: pointer;
     line-height: 32px;
     padding: 0 20px;
-    &:hover{
+    color: #333;
+    font-size: 14px;
+    &:not(.f-dropdowns-item__disabled):hover{
         background-color: #eee;
     }
 }
-.f-dropdowns-item--disabled{
+.f-dropdowns-item__disabled{
     color: #bbb;
     cursor: not-allowed;
-    &:hover{
-        background-color: #fff;
-    }
 }
-.f-dropdowns-item--divided{
+.f-dropdowns-item__divided{
     height: 1px;
     background-color: #ddd;
     margin: 6px 0 5px;

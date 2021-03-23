@@ -32,12 +32,17 @@ export default defineComponent( {
             '/doc/slider': 'Slider 滑块',
             '/doc/input': 'Input 输入框',
             '/doc/select': 'Select 下拉框',
+            '/doc/tabs': 'Tabs 标签页',
             '/doc/pagination': 'Pagination 分页器',
             '/doc/radio': 'Radio 单选按钮',
             '/doc/checkbox': 'Checkbox 多选按钮',
             '/doc/model': 'Model 弹出框',
+            '/doc/popconfirm': 'Popconfirm 气泡弹出框',
             '/doc/table': 'Table 表格',
+            '/doc/tooltip': 'Tooltip 文字提示',
+            '/doc/drawer': 'Drawer 抽屉',
             '/doc/toTop': 'ToTop 返回顶部',
+            '/doc/spin': 'Spin 加载中',
         }
 
         const Aside = ref(null)

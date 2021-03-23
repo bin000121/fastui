@@ -62,18 +62,11 @@ export default defineComponent({
         }
     },
     setup (props, { emit }) {
-        const {
-            value,
-            disabled,
-            size,
-            border,
-            vertical
-        } = props
         const id = getRandomId('checkbox')
-        const currentValue = ref(value)
-        const Size = ref(size)
-        const Border = ref(border)
-        const Vertical = ref(vertical)
+        const currentValue = ref(props.value)
+        const Size = ref(props.size)
+        const Border = ref(props.border)
+        const Vertical = ref(props.vertical)
         const fCheckoutLabel = ref(null)
         const fCheckbox = ref(null)
         let fCheckboxDom: HTMLElement | any
@@ -86,7 +79,7 @@ export default defineComponent({
         })
 
         const handleChange = (e: any) => {
-            if (disabled) return
+            if (props.disabled) return
             let isChecked = e.target.checked
             let checkValue = e.target.value
             if (parent) {
@@ -111,14 +104,14 @@ export default defineComponent({
             if (_this.parent.ctx?.name && _this.parent.ctx?.name.includes('checkboxGroup')) parent = _this.parent.ctx
 
             if (parent) {
-                currentValue.value = parent.value.includes(value)
-                Size.value = parent.size || size
-                Border.value = parent.border || border
-                Vertical.value = parent.vertical || vertical
+                currentValue.value = parent.value.includes(props.value)
+                Size.value = parent.size || props.size
+                Border.value = parent.border || props.border
+                Vertical.value = parent.vertical || props.vertical
 
                 watch(() => _this.parent.props.value, (newV: any) => {
-                    if (disabled) return
-                    fCheckboxDom.checked = newV.includes(value)
+                    if (props.disabled) return
+                    fCheckboxDom.checked = newV.includes(props.value)
                     currentValue.value = fCheckboxDom.checked
                 }, { deep: true })
             } else {

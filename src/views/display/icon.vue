@@ -76,6 +76,24 @@ export default defineComponent({
     },
     setup () {
         const iconList = [
+            'f-icon-brush',
+            'f-icon-clock',
+            'f-icon-computer',
+            'f-icon-coordinates',
+            'f-icon-document',
+            'f-icon-manage',
+            'f-icon-picture_filling',
+            'f-icon-picture',
+            'f-icon-refresh',
+            'f-icon-scan',
+            'f-icon-setup_fill',
+            'f-icon-setup',
+            'f-icon-share',
+            'f-icon-audio',
+            'f-icon-microphone_fill',
+            'f-icon-microphone',
+            'f-icon-trash',
+            'f-icon-trash_fill',
             'f-icon-search',
             'f-icon-backward',
             'f-icon-forward',
@@ -143,7 +161,7 @@ export default defineComponent({
     display: grid;
     grid-template-columns: repeat(auto-fill, 120px);
     grid-template-rows: repeat(auto-fill, 120px);
-    grid-gap: 20px;
+    grid-gap: 15px;
     justify-content: center;
     align-items: center;
     .iconOne{
@@ -157,7 +175,7 @@ export default defineComponent({
         border-radius: 5px;
         padding: 5px;
         transition: all .1s;
-        border: 1px solid #ccc;
+        border: 1px solid #eee;
         &:hover{
             background-color: var(--primary);
             color: #fff;

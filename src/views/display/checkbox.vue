@@ -138,22 +138,22 @@
             <p></p>
 
             <div class="desc">
-                只要为其设置 <b>block</b> 就可以使多选按钮变成块级元素。
+                只要为其设置 <b>vertical</b> 就可以使多选按钮变成块级元素。
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox v-model:value="checkbox4" label="iphoneX" border block></f-checkbox>
-                <f-checkbox v-model:value="checkbox5" label="iphone11 pro" border block></f-checkbox>
-                <f-checkbox v-model:value="checkbox6" label="iphone12 mini" border block></f-checkbox>
+                <f-checkbox v-model:value="checkbox4" label="iphoneX" vertical></f-checkbox>
+                <f-checkbox v-model:value="checkbox5" label="iphone11 pro" vertical></f-checkbox>
+                <f-checkbox v-model:value="checkbox6" label="iphone12 mini" vertical></f-checkbox>
             </div>
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-checkbox v-model:value="checkbox" label="iphoneX" border></f-checkbox>
+    {{`<f-checkbox v-model:value="checkbox" label="iphoneX" vertical></f-checkbox>
 
-    <f-checkbox v-model:value="checkbox2" label="iphone11 pro" border></f-checkbox>
+    <f-checkbox v-model:value="checkbox2" label="iphone11 pro" vertical></f-checkbox>
 
-    <f-checkbox v-model:value="checkbox3" label="iphone12 mini" border></f-checkbox>
+    <f-checkbox v-model:value="checkbox3" label="iphone12 mini" vertical></f-checkbox>
 
 
     <script lang="ts">
@@ -168,7 +168,7 @@
             const checkbox2 = ref(false)
             const checkbox3 = ref(false)
             return{
-                checkbox
+                checkbox,
                 checkbox2,
                 checkbox3
             }
@@ -190,21 +190,21 @@
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox v-model:value="checkbox4" label="iphoneX" border size="small"></f-checkbox>
-                <f-checkbox v-model:value="checkbox5" label="iphone11 pro" border size="small"></f-checkbox>
-                <f-checkbox v-model:value="checkbox6" label="iphone12 mini" border size="small"></f-checkbox>
+                <f-checkbox v-model:value="checkbox7" label="iphoneX" border size="small"></f-checkbox>
+                <f-checkbox v-model:value="checkbox8" label="iphone11 pro" border size="small"></f-checkbox>
+                <f-checkbox v-model:value="checkbox9" label="iphone12 mini" border size="small"></f-checkbox>
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox v-model:value="checkbox4" label="iphoneX" border></f-checkbox>
-                <f-checkbox v-model:value="checkbox5" label="iphone11 pro" border></f-checkbox>
-                <f-checkbox v-model:value="checkbox6" label="iphone12 mini" border></f-checkbox>
+                <f-checkbox v-model:value="checkbox7" label="iphoneX" border></f-checkbox>
+                <f-checkbox v-model:value="checkbox8" label="iphone11 pro" border></f-checkbox>
+                <f-checkbox v-model:value="checkbox9" label="iphone12 mini" border></f-checkbox>
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox v-model:value="checkbox4" label="iphoneX" border size="large"></f-checkbox>
-                <f-checkbox v-model:value="checkbox5" label="iphone11 pro" border size="large"></f-checkbox>
-                <f-checkbox v-model:value="checkbox6" label="iphone12 mini" border size="large"></f-checkbox>
+                <f-checkbox v-model:value="checkbox7" label="iphoneX" border size="large"></f-checkbox>
+                <f-checkbox v-model:value="checkbox8" label="iphone11 pro" border size="large"></f-checkbox>
+                <f-checkbox v-model:value="checkbox9" label="iphone12 mini" border size="large"></f-checkbox>
             </div>
 
             <div v-highlight>
@@ -247,8 +247,8 @@
             <p>建议总是使用多选按钮组来包裹多选按钮。</p>
 
             <div class="demo-checkbox">
-                <p>选中值：{{checkbox7}}</p>
-                <f-checkbox-group v-model:value="checkbox7" size="small">
+                <p>选中值：{{checkbox10}}</p>
+                <f-checkbox-group v-model:value="checkbox10" size="small">
                     <f-checkbox label="iphoneX" value="iphoneX"></f-checkbox>
                     <f-checkbox label="iphone xs max" value="iphone xs max"></f-checkbox>
                     <f-checkbox label="iphone11" value="iphone11"></f-checkbox>
@@ -257,7 +257,7 @@
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox-group v-model:value="checkbox7" border>
+                <f-checkbox-group v-model:value="checkbox10" border>
                     <f-checkbox label="iphoneX" value="iphoneX"></f-checkbox>
                     <f-checkbox label="iphone xs max" value="iphone xs max"></f-checkbox>
                     <f-checkbox label="iphone11" value="iphone11"></f-checkbox>
@@ -266,7 +266,7 @@
             </div>
 
             <div class="demo-checkbox">
-                <f-checkbox-group v-model:value="checkbox7" size="large" vertical>
+                <f-checkbox-group v-model:value="checkbox10" size="large" vertical>
                     <f-checkbox label="iphoneX" value="iphoneX"></f-checkbox>
                     <f-checkbox label="iphone xs max" value="iphone xs max"></f-checkbox>
                     <f-checkbox label="iphone11" value="iphone11"></f-checkbox>
@@ -350,7 +350,10 @@ export default defineComponent({
             checkbox4: false,
             checkbox5: false,
             checkbox6: false,
-            checkbox7: ['iphoneX']
+            checkbox7: false,
+            checkbox8: false,
+            checkbox9: false,
+            checkbox10: ['iphoneX']
         })
 
         const change = (a: any) => {

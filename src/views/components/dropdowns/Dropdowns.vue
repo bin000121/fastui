@@ -1,19 +1,46 @@
 <template>
-    <div class="f-dropdowns" ref="dropdowns">
-        <div :id="getDropdownId" class="f-dropdowns-control">
+    <div
+        :class="{
+            'f-dropdowns': true,
+            ['f-dropdowns__' + size]: button && size !== 'default',
+            'f-dropdowns__disabled': disabled,
+            'f-dropdowns__button': button,
+            'f-dropdowns__isFocus': button && showMenu,
+        }"
+        :id="id"
+        ref="dropdowns"
+        @click="toggleHideAndShowWhenButton"
+        v-clickOutside="handleClose"
+    >
+        <div
+            ref="dropdownsControl"
+            class="f-dropdowns-control"
+            @click="toggleHideAndShow"
+        >
             <slot></slot>
         </div>
-        <transition :name="animate ? 'f-dropdowns-fade' : ''" mode="out-in">
-            <ul
-                :style="`text-align: ${textAlign || 'left'}`"
-                class="f-dropdowns-menu"
-                :id="getDropdownMenuId"
+        <transition
+            :name="gerAnimateName"
+            @after-enter="animateShow('opened')"
+            @after-leave="animateShow('closed')"
+        >
+            <div
                 v-show="showMenu"
-                @toggleHideAndShow="toggleHideAndShow"
-                ref="dropdownsMenu"
+                :class="{
+                    'f-dropdowns-menu-box': true,
+                    ['f-dropdowns-menu-box__' + getPlacement.x]: true,
+                    ['f-dropdowns-menu-box__' + getPlacement.y]: true,
+                }"
+                ref="dropdownsMenuBox"
             >
-                <slot name="dropdown"></slot>
-            </ul>
+                <ul
+                    class="f-dropdowns-menu"
+                    ref="dropdownsMenu"
+                    v-if="$slots.dropdownMenu"
+                >
+                    <slot name="dropdownMenu"></slot>
+                </ul>
+            </div>
         </transition>
     </div>
 </template>
@@ -23,67 +50,162 @@ import {
     defineComponent,
     ref,
     onMounted,
-    computed
+    onUnmounted,
+    computed,
+    provide,
+    reactive
 } from 'vue'
-import { getRandomId } from '../../../utils/getRandomId'
-import { debounce } from '../../../utils/debounce'
+import { getRandomId } from '/@/utils/getRandomId'
 
 export default defineComponent({
+    emits: ['action', 'show-menu'],
     props: {
+        id: {
+          type: String,
+          default: () =>  getRandomId('f-dropdowns')
+        },
         trigger: {
             type: String,
-            default: 'hover',
+            default: 'click',
             validator: (value: string) => ['hover', 'click'].includes(value)
         },
         textAlign: {
             type: String,
             validator: (value: string) => ['center', 'right'].includes(value)
         },
+        disabled: Boolean,
+        button: Boolean,
+        clickNotClose: Boolean,
+        placement: {
+            type: String,
+            default: 'bottom-center'
+        },
         animate: {
             type: Boolean,
             default: true
+        },
+        size: {
+            type: String,
+            default: 'default',
+            validator: (val: string) => ['small', 'default', 'large'].includes(val)
         }
     },
-    setup ({ trigger, textAlign }, ctx) {
-        const isShowMenu = !!ctx.slots['f-dropdowns-menu']
+    setup (props, ctx) {
         const dropdowns = ref(null)
+        let dropdownsDom: HTMLElement
+        const dropdownsControl = ref(null)
+        let dropdownsControlDom:HTMLElement
         const dropdownsMenu = ref(null)
+        let dropdownsMenuBoxDom: HTMLElement
+        const dropdownsMenuBox = ref(null)
         const showMenu = ref(false)
-        const getDropdownId = getRandomId('dropdowns')
-        const getDropdownMenuId = getRandomId('dropdowns-menu')
-        const toggleHideAndShow = () => {
-            showMenu.value = !showMenu.value
-        }
-        document.addEventListener('click', (e: any) => {
-            e.stopPropagation()
-            if (trigger === 'hover') return
-            if(e.target.parentNode.classList.contains('f-dropdowns-control')) return
-            if (!showMenu.value) return
-            showMenu.value = false
-        })
+        let timer: NodeJS.Timer
+        let lock = false
 
-        onMounted(() => {
-            const Dom: any = document.getElementById(getDropdownId)
-            const menuDom: HTMLElement = dropdownsMenu.value as any
-            menuDom.style.top = Dom.offsetHeight + 'px'
-            if (trigger === 'hover') {
-                Dom.addEventListener('mouseenter', debounce(toggleHideAndShow, 200))
-                menuDom.addEventListener('mouseenter', debounce(toggleHideAndShow, 200))
-                Dom.addEventListener('mouseleave', debounce(toggleHideAndShow, 200))
-                menuDom.addEventListener('mouseleave', debounce(toggleHideAndShow, 200))
-            } else {
-                Dom.addEventListener('click', toggleHideAndShow)
+        const getPlacement = computed(() => {
+            const [y, x] = props.placement.split('-')
+            return {
+                y,
+                x
             }
         })
+
+        const gerAnimateName = computed(() => {
+            if (!props.animate) return ''
+            if (getPlacement.value.x === 'center') return 'f-zoom-in__center'
+            return 'f-zoom-in'
+        })
+
+        const toggleHideAndShowWhenButton = () => {
+            if (!props.button || props.disabled) return
+            showMenu.value = !showMenu.value
+        }
+
+        const toggleHideAndShow = () => {
+            if (props.disabled ||
+                props.trigger === 'hover' ||
+                props.button
+            ) return
+            showMenu.value = !showMenu.value
+        }
+
+        const handleClose = () => {
+            if (props.disabled) return
+            showMenu.value = false
+        }
+
+        const animateShow = (status: string) => {
+            if (!props.animate) return
+            ctx.emit('show-menu', status)
+        }
+
+        const hoverShow = () => {
+            if (props.disabled) return
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                showMenu.value = true
+            }, 250)
+        }
+
+        const hoverClose = () => {
+            if (props.disabled) return
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                showMenu.value = false
+            }, 150)
+        }
+
+        type place = 'top' | 'bottom'
+        const initPlacement = () => {
+            const y = (getPlacement.value.y as place) === 'top' ? 'bottom' : 'top'
+            let value = 5
+            if (props.button) value += 3
+            dropdownsMenuBoxDom.style[y] = dropdownsDom.offsetHeight + value + 'px'
+        }
+
+        let controlDom: HTMLElement
+
+        onMounted(() => {
+            dropdownsDom = dropdowns.value as any
+            dropdownsControlDom = dropdownsControl.value as any
+            dropdownsMenuBoxDom = dropdownsMenuBox.value as any
+            initPlacement()
+            controlDom = props.button ? dropdownsDom : dropdownsControlDom
+            if (props.trigger === 'hover') {
+                controlDom.addEventListener('mouseenter', hoverShow)
+                controlDom.addEventListener('mouseleave', hoverClose)
+                dropdownsMenuBoxDom.addEventListener('mouseenter', hoverShow)
+                dropdownsMenuBoxDom.addEventListener('mouseleave', hoverClose)
+            }
+        })
+
+        onUnmounted(() => {
+            controlDom.removeEventListener('mouseenter', hoverShow)
+            controlDom.removeEventListener('mouseleave', hoverClose)
+            dropdownsMenuBoxDom.removeEventListener('mouseenter', hoverShow)
+            dropdownsMenuBoxDom.removeEventListener('mouseleave', hoverClose)
+        })
+
+        let toggleFn = props.button ? toggleHideAndShowWhenButton : toggleHideAndShow
+
+        provide('$parent', reactive({
+            toggleHideAndShow: toggleFn,
+            ctx,
+            hoverClose
+        }))
+
         return{
-            isShowMenu,
-            dropdowns,
-            getDropdownId,
-            getDropdownMenuId,
-            showMenu,
+            handleClose,
             toggleHideAndShow,
+            toggleHideAndShowWhenButton,
+            animateShow,
+            getPlacement,
+            gerAnimateName,
+            dropdownsControl,
+            dropdownsMenuBox,
+            dropdowns,
+            showMenu,
             dropdownsMenu,
-            textAlign
         }
     }
 })
@@ -91,44 +213,121 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-dropdowns{
+    box-sizing: border-box;
+    white-space: nowrap;
+    padding: calc(.35em) calc(1em);
     display: inline-block;
     position: relative;
+    font-size: 16px;
+}
+.f-dropdowns__small{
+    font-size: 12px!important;
+}
+.f-dropdowns__large{
+    font-size: 20px!important;
 }
 .f-dropdowns-control{
     cursor: pointer;
-    color: #007acc;
+    color: var(--primary);
     font-size: 14px;
 }
-.f-dropdowns-menu{
-    text-align: left;
-    box-sizing: border-box;
-    padding: 10px 0;
-    margin: 10px 0;
+.f-dropdowns__disabled{
+    opacity: .45;
+    user-select: none;
+    cursor: not-allowed;
+    .f-dropdowns-control{
+        cursor: not-allowed;
+    }
+}
+.f-dropdowns__button{
+    padding: calc(.5em) calc(1em);
+    border: 1px solid #ccc;
+    cursor: pointer;
+    transition: all .15s;
+    .f-dropdowns-control{
+        color: #666;
+    }
+}
+.f-dropdowns__isFocus{
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px #1661ab19;
+    .f-dropdowns-control{
+        color: var(--primary);
+    }
+}
+.f-dropdowns-menu-box{
+    min-width: 100px;
     background-color: #fff;
+    box-sizing: border-box;
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    /*border: 1px solid #eee;*/
-    border-radius: 5px;
-    box-shadow: 0 1px 5px #ddd;
-    z-index: 999;
+    z-index: 9999;
     &::before, &::after{
         content: '';
         display: block;
         position: absolute;
-        top: -14px;
-        left: 50%;
-        transform: translateX(-50%);
         height: 0;
         width: 0;
-        border: 7px solid transparent;
-        border-bottom-color: #fff;
-        z-index: 10;
+        border: 8px solid transparent;
+        z-index: 2;
     }
     &::after{
-        top: -16px;
-        z-index: 9;
-        border-bottom-color: #eee;
+        z-index: 1;
     }
+}
+.f-dropdowns-menu-box__bottom{
+    .f-dropdowns-menu{
+        box-shadow: 0 1px 4px #ccc;
+    }
+    transform-origin: center top;
+    &::before, &::after{
+        top: -14px;
+        border-bottom-color: #fff;
+    }
+    &::after{
+        top: -15px;
+        border-bottom-color: #ddd;
+    }
+}
+.f-dropdowns-menu-box__top{
+    .f-dropdowns-menu{
+        box-shadow: 0 0 4px #ccc;
+    }
+    transform-origin: center bottom;
+    &::before, &::after{
+        bottom: -14px;
+        border-top-color: #fff;
+    }
+    &::after{
+        bottom: -15px;
+        border-top-color: #ddd;
+    }
+}
+.f-dropdowns-menu-box__left{
+    left: -2px;
+    &::before, &::after{
+        left: 12px;
+    }
+}
+.f-dropdowns-menu-box__center{
+    left: 50%;
+    transform: translateX(-50%);
+    &::before, &::after{
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.f-dropdowns-menu-box__right{
+    right: -2px;
+    &::before, &::after{
+        right: 12px;
+    }
+}
+.f-dropdowns-menu{
+    box-sizing: border-box;
+    padding: 5px 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 5px;
 }
 </style>

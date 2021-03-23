@@ -138,14 +138,20 @@
             <div class="demo-radio">
                 <p>选中值：{{radio4}}</p>
                 <f-radio v-model:value="radio4" label="iphoneX" size="small">iphoneX</f-radio>
-                <f-radio v-model:value="radio4" label="iphone11">iphone11</f-radio>
-                <f-radio v-model:value="radio4" label="iphone12" size="large">iphone12</f-radio>
+                <f-radio v-model:value="radio4" label="iphone11" size="small">iphone11</f-radio>
+                <f-radio v-model:value="radio4" label="iphone12" size="small">iphone12</f-radio>
             </div>
 
             <div class="demo-radio">
-                <f-radio v-model:value="radio4" label="iphoneX" size="small" border>iphoneX</f-radio>
-                <f-radio v-model:value="radio4" label="iphone11" border>iphone11</f-radio>
-                <f-radio v-model:value="radio4" label="iphone12" size="large" border>iphone12</f-radio>
+                <f-radio v-model:value="radio4" label="iphoneX"  border size="default">iphoneX</f-radio>
+                <f-radio v-model:value="radio4" label="iphone11" border size="default">iphone11</f-radio>
+                <f-radio v-model:value="radio4" label="iphone12" border size="default">iphone12</f-radio>
+            </div>
+
+            <div class="demo-radio">
+                <f-radio v-model:value="radio4" label="iphoneX" size="large">iphoneX</f-radio>
+                <f-radio v-model:value="radio4" label="iphone11" size="large">iphone11</f-radio>
+                <f-radio v-model:value="radio4" label="iphone12" size="large">iphone12</f-radio>
             </div>
 
             <div v-highlight>
@@ -153,11 +159,17 @@
     {{`<p>选中值：\{\{radio\}\}</p>
 
     <f-radio v-model:value="radio" label="iphoneX" size="small">iphoneX</f-radio>
-    <f-radio v-model:value="radio" label="iphone11">iphone11</f-radio>
+    <f-radio v-model:value="radio" label="iphone11" size="small">iphone11</f-radio>
+    <f-radio v-model:value="radio" label="iphone12" size="small">iphone12</f-radio>
+
+    <f-radio v-model:value="radio" label="iphoneX"  border size="default">iphoneX</f-radio>
+    <f-radio v-model:value="radio" label="iphone11" border size="default">iphone11</f-radio>
+    <f-radio v-model:value="radio" label="iphone12" border size="default">iphone12</f-radio>
+
+    <f-radio v-model:value="radio" label="iphoneX" size="large">iphoneX</f-radio>
+    <f-radio v-model:value="radio" label="iphone11" size="large">iphone11</f-radio>
     <f-radio v-model:value="radio" label="iphone12" size="large">iphone12</f-radio>
-    <f-radio v-model:value="radio" label="iphoneX" size="small" border>iphoneX</f-radio>
-    <f-radio v-model:value="radio" label="iphone11" border>iphone11</f-radio>
-    <f-radio v-model:value="radio" label="iphone12" size="large" border>iphone12</f-radio>
+
 
 
     <script lang="ts">

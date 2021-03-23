@@ -1,4 +1,4 @@
-import { createRouter, RouteRecordRaw, createMemoryHistory } from 'vue-router'
+import { createRouter, RouteRecordRaw, createMemoryHistory, createWebHistory } from 'vue-router'
 
 const routes: RouteRecordRaw[] = [
     {
@@ -67,6 +67,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/select.vue')
             },
             {
+                path: '/doc/tabs',
+                name: 'tabs',
+                component: () => import('/@/views/display/tabs.vue')
+            },
+            {
                 path: '/doc/pagination',
                 name: 'pagination',
                 component: () => import('/@/views/display/pagination.vue')
@@ -87,14 +92,34 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/model.vue')
             },
             {
+                path: '/doc/popconfirm',
+                name: 'popconfirm',
+                component: () => import('/@/views/display/popconfirm.vue')
+            },
+            {
                 path: '/doc/table',
                 name: 'table',
                 component: () => import('/@/views/display/table.vue')
             },
             {
+                path: '/doc/tooltip',
+                name: 'tooltip',
+                component: () => import('/@/views/display/tooltip.vue')
+            },
+            {
+                path: '/doc/drawer',
+                name: 'drawer',
+                component: () => import('/@/views/display/drawer.vue')
+            },
+            {
                 path: '/doc/toTop',
                 name: 'toTop',
                 component: () => import('/@/views/display/toTop.vue')
+            },
+            {
+                path: '/doc/spin',
+                name: 'spin',
+                component: () => import('/@/views/display/spin.vue')
             }
         ]
     },
@@ -102,5 +127,5 @@ const routes: RouteRecordRaw[] = [
 
 export default createRouter({
     routes,
-    history: createMemoryHistory()
+    history: createWebHistory()
 })

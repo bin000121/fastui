@@ -129,7 +129,7 @@
                 <f-button @click="showModel2 = true">禁用遮罩层关闭</f-button>
 
                 <f-model
-                    title="v-model:value方式打开"
+                    title="禁用遮罩层关闭"
                     v-model:value="showModel2"
                     click-mask-not-close
                 >
@@ -192,7 +192,7 @@
                 <f-button @click="showModel3 = true">禁用esc关闭且隐藏右上角关闭按钮</f-button>
 
                 <f-model
-                    title="v-model:value方式打开"
+                    title="禁用esc关闭且隐藏右上角关闭按钮"
                     v-model:value="showModel3"
                     press-esc-not-close
                     :show-close="false"
@@ -242,6 +242,110 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="duo_ceng_qian_tao">多层嵌套
+                <a href="#duo_ceng_qian_tao" class="f-icon-anchor"></a>
+            </h3>
+            <p>弹出框里的弹出框...，一直套娃...。</p>
+
+            <div class="demo-model">
+                <f-button @click="showModel4 = true">打开第一层弹出框</f-button>
+
+                <f-model
+                    title="第一层弹出框"
+                    v-model:value="showModel4"
+                    top="10vh"
+                >
+                    <f-button @click="showModel5 = true">打开第二层弹出框</f-button>
+                    <f-model
+                        title="第二层弹出框"
+                        v-model:value="showModel5"
+                        top="20vh"
+                    >
+                        <f-button @click="showModel6 = true">打开第三层弹出框</f-button>
+                        <f-model
+                            title="第三层弹出框"
+                            v-model:value="showModel6"
+                            top="30vh"
+                        >
+                            <template #footer>
+                                <span>第三层弹出框底部内容区</span>
+                            </template>
+                        </f-model>
+                        <template #footer>
+                            <span>第二层弹出框底部内容区</span>
+                        </template>
+                    </f-model>
+                    <template #footer>
+                        <span>第一层弹出框底部内容区</span>
+                    </template>
+                </f-model>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-button @click="showModel = true">打开第一层弹出框</f-button>
+
+    <f-model
+        title="第一层弹出框"
+        v-model:value="showModel"
+        top="10vh"
+    >
+        <f-button @click="showModel2 = true">打开第二层弹出框</f-button>
+        <f-model
+            title="第二层弹出框"
+            v-model:value="showModel2"
+            top="20vh"
+        >
+            <f-button @click="showModel3 = true">打开第三层弹出框</f-button>
+            <f-model
+                title="第三层弹出框"
+                v-model:value="showModel4"
+                top="30vh"
+            >
+                <template #footer>
+                    <span>第三层弹出框底部内容区</span>
+                </template>
+            </f-model>
+            <template #footer>
+                <span>第二层弹出框底部内容区</span>
+            </template>
+        </f-model>
+        <template #footer>
+            <span>第一层弹出框底部内容区</span>
+        </template>
+    </f-model>
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs
+    } from 'vue'
+
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                showModel: false,
+                showModel2: false,
+                showModel3: false,
+            })
+            return{
+                ...toRefs(data),
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <f-top :scroll-top="500">
+            <i class="f-icon-to-top"></i>
+        </f-top>
+
     </div>
 </template>
 
@@ -249,15 +353,16 @@
 import {
     defineComponent,
     reactive,
-    toRefs,
-    ref
+    toRefs
 } from 'vue'
 import FModel from '/@/views/components/Model.vue'
 import FButton from '/@/views/components/Button.vue'
+import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FModel,
+        FTop,
         FButton
     },
     setup () {
@@ -266,6 +371,9 @@ export default defineComponent({
             showModel: false,
             showModel2: false,
             showModel3: false,
+            showModel4: false,
+            showModel5: false,
+            showModel6: false,
         })
         const open = () => {
             const modelDom = data.model as any

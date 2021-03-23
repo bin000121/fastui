@@ -7,7 +7,6 @@
 <script lang="ts">
 import {
     defineComponent,
-    ref
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 
@@ -28,6 +27,7 @@ export default defineComponent({
         border: Boolean,
     },
     setup (props, { emit }) {
+
         const emitEvent = (eventName: 'update:value' | 'change', value: boolean | number) => {
             emit(eventName, value)
         }

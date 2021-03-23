@@ -237,7 +237,7 @@ export default defineComponent({
     background-color: var(--primary);
     transform-origin: center;
     transform: scale(0);
-    transition: all .2s;
+    transition: all .25s ease-in-out;
 }
 
 .f-radio-label__border{

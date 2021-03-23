@@ -1,29 +1,45 @@
-import { App, ObjectDirective } from 'vue'
+import { App, ObjectDirective, DirectiveBinding } from 'vue'
 import hljs from 'highlight.js'
 
 // v-clickOutside
 
-const clickOutside: ObjectDirective = {
-    created: (el, binding, vnode: any) => {
-        el.handle = (e: MouseEvent) => {
-            const { instance, value }: any = binding
-            console.log(binding)
-            // const instance = vnode.ref.i.ctx
-            if (!instance.showOptionList) return
-            if (!el.contains(e.target)) {
-                value()
-                // instance.changeFocusOrBlur('blur')
-            }
-        }
-    },
-    mounted: el => {
-        document.addEventListener('click', el.handle)
-    },
-    updated: (el) => {
+const nodeObj: any = {}
 
+const newClickOutsideHandler = (el: any, binding: DirectiveBinding<any>) => {
+    const { instance, value }: any = binding
+    return (e: MouseEvent) => {
+        if (!instance ||
+            !e.target ||
+            el.contains(e.target) ||
+            el === e.target
+        ) return
+        value()
+    }
+}
+
+document.addEventListener('click', (e: MouseEvent) => {
+    for (const item in nodeObj) {
+        nodeObj[item].__clickOutside(e)
+    }
+})
+
+const clickOutside: ObjectDirective = {
+    beforeMount: (el, binding) => {
+        const { instance: { id }, value }: any = binding
+        if (!value) {
+            console.warn(`[v-clickOutside]: binding.value is not a function`)
+            return
+        }
+        nodeObj[id] = el
+        el.__clickOutside = newClickOutsideHandler(el, binding)
     },
-    unmounted: el => {
-        document.removeEventListener('click', el.handle)
+    updated: (el, binding) => {
+        el.__clickOutside = newClickOutsideHandler(el, binding)
+    },
+    unmounted: (el, binding) => {
+        const { instance: { id } }: any = binding
+        delete nodeObj[id]
+        delete el.__clickOutside
     }
 }
 
@@ -41,7 +57,7 @@ const highlight: ObjectDirective = {
 // v-copy
 
 const copy: ObjectDirective = {
-    created: (el, binding) => {
+    beforeMount: (el, binding) => {
         el.__copyValue = binding.value
         el.handleCopy = () => {
             const inputDom: any = document.createElement('input')
@@ -68,6 +84,7 @@ const copy: ObjectDirective = {
     },
     unmounted: el => {
         el.removeEventListener('click', el.handleCopy)
+        delete el.__copyValue
     }
 }
 

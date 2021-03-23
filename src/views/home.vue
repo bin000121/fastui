@@ -6,7 +6,7 @@
             <h2>一款基于Vue3、Typescript的UI框架，让开发更简单。</h2>
             <div class="link">
                 <router-link to="/doc">Getting Started</router-link>
-                <a href="https://github.com">github</a>
+                <a href="https://github.com/bin000121/fastui" target="_blank">github</a>
             </div>
         </div>
         <div style="height: 800px;"></div>

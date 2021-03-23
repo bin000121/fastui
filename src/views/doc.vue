@@ -70,7 +70,6 @@ export default defineComponent( {
     flex-basis: 768px;
     padding: 20px 25px 200px;
     box-sizing: border-box;
-    overflow: auto;
     & :deep(h3):hover{
         a{
             display: inline-block;
@@ -78,6 +77,7 @@ export default defineComponent( {
     }
 }
 .anchor{
+    display: none;
     padding: 10px;
     font-family: Helvetica;
     width: 160px;

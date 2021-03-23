@@ -63,47 +63,13 @@
             跳至
             <input
                 type="text"
-                ref="elevatorIpt"
+                :value="currentPage"
                 @keydown.enter="e => handleChange('page', e.target.value ? Number(e.target.value) : 1)"
                 @blur="e => handleChange('page', e.target.value ? Number(e.target.value) : 1)"
             >
             页
         </li>
     </ul>
-<!--    <ul-->
-<!--        v-else-->
-<!--        :class="{-->
-<!--            'f-pagination': true,-->
-<!--            'f-pagination__simple': true,-->
-<!--            ['f-pagination__'+ size]: size !== 'default',-->
-<!--            'f-pagination__circle': !text && circle,-->
-<!--            'f-pagination__disabled': disabled,-->
-<!--            'f-pagination__text': text,-->
-<!--        }"-->
-<!--        :style="`justify-content: ${placement}`"-->
-<!--    >-->
-<!--        <li-->
-<!--            :class="{-->
-<!--                'f-pagination-pre': true,-->
-<!--                'f-pagination__disabled': currentPage === 1-->
-<!--            }"-->
-<!--                @click="pre"-->
-<!--        >-->
-<!--            <i class="f-icon-arrow-left-bold"></i>-->
-<!--        </li>-->
-<!--        <li>{{currentPage}}</li>-->
-<!--        <li>/</li>-->
-<!--        <li>{{getAllPage}}</li>-->
-<!--        <li-->
-<!--            :class="{-->
-<!--                'f-pagination-next': true,-->
-<!--                'f-pagination__disabled': currentPage === getAllPage-->
-<!--            }"-->
-<!--                @click="next"-->
-<!--        >-->
-<!--            <i class="f-icon-arrow-right-bold"></i>-->
-<!--        </li>-->
-<!--    </ul>-->
 </template>
 
 <script lang="ts">
@@ -111,7 +77,6 @@ import {
     defineComponent,
     reactive,
     toRefs,
-    ref,
     onMounted,
     computed,
     watchEffect
@@ -172,9 +137,6 @@ export default defineComponent({
         let limit: number = props.limit
         let fastStep: number = props.step // 快进或快退的步长为5
 
-        const elevatorIpt = ref(null)
-        let elevatorIptDom: HTMLDivElement | any
-
         watchEffect(() => {
             if (props.limit < 6) limit = 6
             else if (props.limit > 15) limit = 15
@@ -184,6 +146,7 @@ export default defineComponent({
             else if (props.step > 100) fastStep = 100
             else fastStep = Math.floor(props.step)
         })
+
         const data: dataType = reactive({
             currentPage: props.page,
             currentSize: props.pageSize,
@@ -282,7 +245,7 @@ export default defineComponent({
             if (type === 'page') data.currentPage = val > getAllPage.value ? getAllPage.value : val
             else data.currentSize = val
             updateBtnList()
-            if (elevatorIptDom) elevatorIptDom.value = data.currentPage
+            // if (elevatorIptDom) elevatorIptDom.value = data.currentPage
             emit('change', type, val)
         }
 
@@ -300,16 +263,8 @@ export default defineComponent({
             handleChange('page', data.currentPage)
         }
 
-        onMounted(() => {
-            if (props.showElevator) {
-                elevatorIptDom = elevatorIpt.value as any
-                elevatorIptDom.value = data.currentPage
-            }
-        })
-
         return{
             getAllPage,
-            elevatorIpt,
             handleChange,
             handleFastStep,
             pre,
@@ -428,7 +383,7 @@ li.f-pagination__elevator input{
 .f-pagination.f-pagination__text{
     li{
         box-shadow: none!important;
-        &:hover{
+        &:not(.f-pagination-is-active):hover{
             transform: translateY(calc(-.15em)) scale(1.15);
             color: var(--primary);
         }

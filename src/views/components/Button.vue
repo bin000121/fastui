@@ -103,6 +103,9 @@ export default defineComponent( {
     transition: all .1s;
     box-sizing: border-box;
 }
+.f-btn + .f-btn{
+    margin-left: 6px;
+}
 .f-btn-icon{
     font-size: 14px;
     color: inherit;

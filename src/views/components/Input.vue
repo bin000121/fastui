@@ -96,7 +96,10 @@ export default defineComponent({
     emits: ['update:value', 'blur', 'change', 'focus', 'clear'],
     inheritAttrs: false,
     props: {
-        value: [String, Number],
+        value: {
+            type: [String, Number],
+            required: true
+        },
         type: {
             type: String,
             default: 'text',
@@ -192,16 +195,19 @@ export default defineComponent({
             return `${currentValue.value?.toString().length || 0}/${maxlength}`
         })
 
+        watch(() => props.disabled, (newV: Boolean) => {
+            nextTick(() => {
+                if (!fInputDom) return
+                if (newV) fInputDom.setAttribute('disabled', 'disabled')
+                else fInputDom.removeAttribute('disabled')
+            })
+        }, { immediate: true })
+
         onMounted(() => {
             fInputDom = fInput.value as any
             iconBoxDom = iconBox.value as any
             if (value) fInputDom.value = value
 
-            watch(() => props.disabled, (newV: Boolean) => {
-                if (!fInputDom) return
-                if (newV) fInputDom.setAttribute('disabled', 'disabled')
-                else fInputDom.removeAttribute('disabled')
-            }, { immediate: true })
             // 设置清空按钮初始位置
             initIconPosition()
         })

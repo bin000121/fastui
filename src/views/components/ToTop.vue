@@ -99,6 +99,7 @@ export default defineComponent({
 
         onMounted(() => {
             fTopDom = fTop.value as any
+            onScroll()
             window.addEventListener('scroll', onScroll)
             // onScrolling()
         })
@@ -130,18 +131,18 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-toTop{
     position: fixed;
-    z-index: 100;
-    min-width: 24px;
-    min-height: 24px;
-    font-size: 14px;
+    z-index: 1000;
+    min-width: 36px;
+    min-height: 36px;
     box-shadow: 0 0 3px #888;
     cursor: pointer;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    background-color: var(--primary);
     padding: 4px;
-    color: #333;
+    color: #fff;
 }
 .f-toTop--circle{
     border-radius: 50%!important;

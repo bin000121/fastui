@@ -1,9 +1,9 @@
-export function debounce(fn: Function, delay: number, isFirst?: boolean) {
+export function debounce(fn: Function, delay: number) {
     let timer: any = null
     return (...args: any) => {
-        if (isFirst) {
+        if (delay <= 0) {
             fn(...args)
-            isFirst = false
+            return
         }
         if (timer) clearTimeout(timer)
         timer = setTimeout(() => {

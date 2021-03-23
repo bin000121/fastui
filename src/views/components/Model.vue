@@ -1,33 +1,42 @@
 <template>
-    <teleport :to="'#' + id">
+    <teleport to="#app">
         <div
-            :class="['f-model-mask', showModel ? 'isShow' : '']"
-            @click="clickMask"
-        ></div>
-        <transition name="f-model-show" @after-leave="remove">
-            <div
-                class="f-model"
-                v-show="showModel"
-                :style="`width: ${width}; top: ${top}`"
-                ref="FModel"
-            >
-                <i
-                    class="f-icon-close-bold closeIcon"
-                    @click="closeIconClick"
-                    v-if="showClose"
-                ></i>
-                <div class="f-model-header">
-                    <span v-if="!$slots.title">{{title}}</span>
-                    <slot name="title"></slot>
+            class="f-model-container"
+            :id="id"
+            ref="fModelContainer"
+        >
+            <transition name="f-model-mask-fade">
+                <div
+                    class="f-model-mask"
+                    @click="clickMask"
+                    v-show="showModel"
+                ></div>
+            </transition>
+            <transition name="f-model-show-scale" @after-leave="remove">
+                <div
+                    class="f-model"
+                    v-show="showModel"
+                    :style="`width: ${width}; top: ${top}`"
+                    ref="FModel"
+                >
+                    <i
+                        class="f-icon-close-bold closeIcon"
+                        @click="hide"
+                        v-if="showClose"
+                    ></i>
+                    <div class="f-model-header">
+                        <span v-if="!$slots.title">{{title}}</span>
+                        <slot name="title"></slot>
+                    </div>
+                    <div class="f-model-body" v-if="!closeAndDestroyDom">
+                        <slot></slot>
+                    </div>
+                    <div class="f-model-footer" v-if="$slots.footer">
+                        <slot name="footer"></slot>
+                    </div>
                 </div>
-                <div class="f-model-body">
-                    <slot></slot>
-                </div>
-                <div class="f-model-footer" v-if="$slots.footer">
-                    <slot name="footer"></slot>
-                </div>
-            </div>
-        </transition>
+            </transition>
+        </div>
     </teleport>
 </template>
 
@@ -38,7 +47,8 @@ import {
     toRefs,
     onMounted,
     onBeforeUnmount,
-    watch
+    watch,
+    ref
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 
@@ -47,6 +57,10 @@ export default defineComponent({
     emits: ['update:value'],
     props: {
         value: Boolean,
+        id: {
+          type: String,
+          default: () => getRandomId('f-model')
+        },
         title: {
           type: String,
           default: ''
@@ -65,31 +79,31 @@ export default defineComponent({
         },
         clickMaskNotClose: Boolean,
         pressEscNotClose: Boolean,
+        closeAndDestroyDom: Boolean,
     },
     setup (props, { emit }) {
-        const id = getRandomId('f-model')
-        const modelContainer: HTMLDivElement | any = document.createElement('div')
-        modelContainer.setAttribute('id', id)
-        modelContainer.className = 'f-model-container'
-        document.body.appendChild(modelContainer)
+        let fModelContainerDom: HTMLElement
+        let fModelDom: HTMLElement
         let timer: any = null
 
         const data = reactive({
             showModel: props.value,
-            FModel: null
+            fModel: null,
+            fModelContainer: null,
+            closeAndDestroyDom: false
         })
 
         watch(() => props.value, (newV: boolean) => {
             newV ? open() : hide()
         })
 
-        const open = (...args: any) => {
+        const open = () => {
+            data.showModel = true
+            data.closeAndDestroyDom = false
             // 获取滚动条宽度
             const scrollBarWidth = window.innerWidth - document.body.offsetWidth
-            modelContainer.classList.add('isShow')
-            data.showModel = true
+            fModelContainerDom.classList.add('f-model-show')
             document.body.style.cssText = `width: calc(100% - ${scrollBarWidth}px);overflow: hidden`
-            console.log(...args)
         }
 
         const hide = () => {
@@ -98,17 +112,15 @@ export default defineComponent({
         }
 
         const remove = () => {
-            modelContainer.classList.remove('isShow')
-            document.body.removeAttribute('style')
-        }
-
-        const closeIconClick = () => {
-            hide()
+            fModelContainerDom.classList.remove('f-model-show')
+            let showModelList = document.getElementsByClassName('f-model-show')
+            !showModelList.length && document.body.removeAttribute('style')
+            if (props.closeAndDestroyDom) data.closeAndDestroyDom = true
         }
 
         const clickMask = () => {
             if (props.clickMaskNotClose) {
-                const FModelDom = data.FModel as any
+                const FModelDom = data.fModel as any
                 if (!timer) {
                     FModelDom.classList.add('f-model__not_close')
                     timer = setTimeout(() => {
@@ -124,11 +136,10 @@ export default defineComponent({
         const handelKeyDown = (e: KeyboardEvent) => {
             if (e.code === 'Escape' && e.key === 'Escape') {
                 if (props.pressEscNotClose) {
-                    const FModelDom = data.FModel as any
                     if (!timer) {
-                        FModelDom.classList.add('f-model__not_close')
+                        fModelDom.classList.add('f-model__not_close')
                         timer = setTimeout(() => {
-                            FModelDom.classList.remove('f-model__not_close')
+                            fModelDom.classList.remove('f-model__not_close')
                             timer = null
                         }, 150)
                     }
@@ -139,39 +150,31 @@ export default defineComponent({
         }
 
         onMounted(() => {
+            fModelContainerDom = data.fModelContainer as any
+            fModelDom = data.fModel as any
             document.addEventListener('keydown', handelKeyDown)
         })
         onBeforeUnmount(() => {
             document.removeEventListener('keydown', handelKeyDown)
-            modelContainer?.parentNode?.removeChild(modelContainer)
         })
         return{
             ...toRefs(data),
-            id,
             open,
             hide,
             remove,
             clickMask,
-            closeIconClick,
         }
     }
 })
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .f-model-container{
     position: fixed;
     left: 0;
     top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
+    width: 100%;
+    height: 0;
 }
-.f-model-container.isShow{
-    z-index: 999;
-    height: 100vh;
-}
-</style>
-<style scoped lang="scss">
 .f-model{
     position: relative;
     box-sizing: border-box;
@@ -215,6 +218,9 @@ export default defineComponent({
         padding: 12px 15px;
     }
 }
+.f-model-show{
+    height: 100%;
+}
 .f-model-mask{
     position: absolute;
     left: 0;
@@ -222,9 +228,6 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,.5);
-    z-index: -1;
-    transition: all .2s;
-    display: none;
 }
 .f-model-mask.isShow{
     display: block;
