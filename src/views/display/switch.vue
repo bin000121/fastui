@@ -4,7 +4,9 @@
         <p>用于表明两种对立的状态，使之在他们之间进行切换。</p>
 
         <div>
-            <h3>基本用法</h3>
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>基础样式。</p>
 
             <div class="desc">
@@ -60,7 +62,9 @@
     </div>
 
         <div>
-            <h3>禁用</h3>
+            <h3 id="jin_yong">禁用
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
             <p></p>
 
             <f-switch disabled></f-switch>
@@ -72,7 +76,9 @@
         </div>
 
         <div>
-            <h3>文本</h3>
+            <h3 id="wen_ben">文本
+                <a href="#wen_ben" class="f-icon-anchor"></a>
+            </h3>
             <p>可以嵌入一段html结构</p>
 
             <div class="desc">

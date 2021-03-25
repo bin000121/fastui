@@ -1,21 +1,19 @@
 <template>
-    <teleport :to="id">
-        <transition :name="animate ? 'f-toTop-zoom-in' : '' " mode="out-in">
-            <div
-                :class="{
-                    'f-toTop': true,
-                    'f-toTop--circle': circle
-                }"
-                    :title="title"
-                    :style="`right: ${getRight};bottom: ${getBottom};border-radius: ${rounded}px`"
-                    ref="fTop"
-                    v-if="isShow"
-                    @click="gotoTop"
-            >
-                <slot></slot>
-            </div>
-        </transition>
-    </teleport>
+    <transition :name="animate ? 'f-toTop-zoom-in' : '' " mode="out-in">
+        <div
+            :class="{
+                'f-toTop': true,
+                'f-toTop--circle': circle
+            }"
+            :title="title"
+            :style="`z-index: ${zIndex};right: ${getRight};bottom: ${getBottom};border-radius: ${rounded}px`"
+            ref="fTop"
+            v-show="isShow"
+            @click="gotoTop"
+        >
+            <slot></slot>
+        </div>
+    </transition>
 </template>
 
 <script lang="ts">
@@ -35,10 +33,6 @@ export default defineComponent({
     inheritAttrs: false,
     emits: ['click'],
     props: {
-        id:{
-          type: String,
-          default: '#app'
-        },
         title: {
           type: String,
           default: '回到顶部'
@@ -65,6 +59,10 @@ export default defineComponent({
             type: Number,
             default: 300
         },
+        zIndex: {
+            type: Number,
+            default: 1000
+        },
         animate: {
             type: Boolean,
             default: true
@@ -74,6 +72,7 @@ export default defineComponent({
     setup ({ bottom, right, behavior, rounded, scrollTop }, { emit }) {
         const fTop = ref(null)
         const isShow = ref(false)
+        const showTeleport = ref(false)
         let fTopDom: HTMLElement | any
         const getBottom = computed(() => {
             if (typeof bottom === 'number') return bottom + 'px'
@@ -101,6 +100,7 @@ export default defineComponent({
             fTopDom = fTop.value as any
             onScroll()
             window.addEventListener('scroll', onScroll)
+            showTeleport.value = true
             // onScrolling()
         })
 
@@ -108,16 +108,8 @@ export default defineComponent({
             window.removeEventListener('scroll', onScroll)
         })
 
-        onActivated(()=> {
-            fTopDom = fTop.value as any
-            window.addEventListener('scroll', onScroll)
-        })
-
-        onDeactivated(() => {
-            window.removeEventListener('scroll', onScroll)
-        })
-
         return{
+            showTeleport,
             getBottom,
             getRight,
             gotoTop,
@@ -131,7 +123,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-toTop{
     position: fixed;
-    z-index: 1000;
     min-width: 36px;
     min-height: 36px;
     box-shadow: 0 0 3px #888;

@@ -56,10 +56,6 @@
                 </div>
             </div>
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -68,11 +64,9 @@ import {
     defineComponent,
 } from 'vue'
 import FButton from '/@/views/components/Button.vue'
-import FTop from '/@/views/components/ToTop.vue'
 export default defineComponent({
     components: {
         FButton,
-        FTop
     },
     setup () {
         const iconList = [

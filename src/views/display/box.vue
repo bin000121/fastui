@@ -4,7 +4,9 @@
         <p>一个通用容器。可以承载文字、图片等，使其突出。</p>
 
         <div>
-            <h3>基本用法</h3>
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>常规用法</p>
 
             <div class="desc">
@@ -50,7 +52,9 @@
         </div>
 
         <div>
-            <h3>盒子阴影</h3>
+            <h3 id="he_zi_yin_ying">盒子阴影
+                <a href="#he_zi_yin_ying" class="f-icon-anchor"></a>
+            </h3>
             <p>可以显示控制阴影呈现方式。</p>
 
             <div class="desc">

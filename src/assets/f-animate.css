@@ -1,12 +1,12 @@
 /*doc.vue*/
 .doc-sliderTo-enter-from,
 .doc-sliderTo-leave-to{
-    transform: translateX(25px);
+    transform: translateX(20px);
     opacity: 0;
 }
 .doc-sliderTo-leave-active,
 .doc-sliderTo-enter-active{
-    transition: all .2s;
+    transition: all .15s ease-out;
 }
 
 /*f-dropdowns*/
@@ -92,7 +92,7 @@
 }
 .f-model-mask-fade-enter-active,
 .f-model-mask-fade-leave-active{
-    transition: all .3s;
+    transition: all .3s ease-out;
 }
 
 /*f-tooltip*/
@@ -102,7 +102,7 @@
 }
 .f-tooltip-fade-enter-active,
 .f-tooltip-fade-leave-active{
-    transition: all .15s;
+    transition: all .15s ease-out;
 }
 
 /*f-popconfirm*/

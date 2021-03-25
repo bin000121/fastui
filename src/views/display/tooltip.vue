@@ -297,10 +297,6 @@
                 </code></pre>
             </div>
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -312,13 +308,11 @@ import {
 } from 'vue'
 import FTooltip from '/@/views/components/Tooltip.vue'
 import FButton from '/@/views/components/Button.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FTooltip,
         FButton,
-        FTop
     },
     setup () {
 

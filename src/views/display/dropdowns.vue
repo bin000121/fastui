@@ -24,7 +24,7 @@
             </div>
 
             <div class="desc">
-                点击选项会隐藏选项面板，可以设置属性 <b>click-not-close</b> 来禁止该这一行为。
+                默认点击选项会隐藏选项面板，可以设置属性 <b>click-not-close</b> 来禁止该这一行为。
             </div>
 
             <div>
@@ -563,10 +563,6 @@
                 </code></pre>
             </div>
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -578,13 +574,11 @@ import {
 } from 'vue'
 import FDropdowns from '../components/dropdowns/Dropdowns.vue'
 import FDropdownsItem from '../components/dropdowns/Dropdowns-item.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FDropdowns,
         FDropdownsItem,
-        FTop
     },
     setup () {
         const data = reactive({

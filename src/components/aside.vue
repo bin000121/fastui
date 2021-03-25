@@ -38,7 +38,7 @@ export default defineComponent( {
             '/doc/checkbox': 'Checkbox 多选按钮',
             '/doc/model': 'Model 弹出框',
             '/doc/popconfirm': 'Popconfirm 气泡弹出框',
-            '/doc/table': 'Table 表格',
+            // '/doc/table': 'Table 表格',
             '/doc/tooltip': 'Tooltip 文字提示',
             '/doc/drawer': 'Drawer 抽屉',
             '/doc/toTop': 'ToTop 返回顶部',

@@ -857,10 +857,6 @@
                 </code></pre>
             </div>
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -874,14 +870,12 @@ import {
 import FSelect from '/@/views/components/select/Select.vue'
 import FSelectGroup from '/@/views/components/select/Select-group.vue'
 import FOption from '/@/views/components/select/Select-option.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FSelect,
         FOption,
         FSelectGroup,
-        FTop
     },
     setup () {
         const data = reactive({

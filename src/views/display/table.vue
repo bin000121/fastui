@@ -22,13 +22,10 @@ import {
     toRefs
 } from 'vue'
 import FTable from '/@/views/components/Table.vue'
-import FTop from '/@/views/components/Table.vue'
-
 
 export default defineComponent({
     components: {
         FTable,
-        FTop
     },
     setup () {
         const data = reactive({

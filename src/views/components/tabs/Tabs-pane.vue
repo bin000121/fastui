@@ -1,5 +1,5 @@
 <template>
-    <div class="f-tabs-pane" :id="id" v-show="isShow">
+    <div class="f-tabs-pane" v-show="isShow">
         <slot></slot>
     </div>
 </template>
@@ -14,7 +14,8 @@ import {
     inject,
     getCurrentInstance,
     PropType,
-    CSSProperties
+    CSSProperties,
+    nextTick
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 
@@ -25,12 +26,18 @@ export default defineComponent({
             default: () =>  getRandomId('f-tabs-pane')
         },
         label: String,
-        name: String,
-        icon: String,
+        name: {
+            type: String,
+            required: true
+        },
+        icon: {
+            type: String,
+            validator: (val: string) => val.startsWith('f-icon')
+        },
         disabled: Boolean,
         iconStyle: {
             type: Object as PropType<CSSProperties>,
-            default: () => ({ paddingRight: 'calc(.75em)'})
+            default: () => ({ paddingRight: 'calc(.75em)', color: '#000'})
         }
     },
     setup (props) {
@@ -58,6 +65,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-tabs-pane{
-
+    font-size: 16px;
 }
 </style>

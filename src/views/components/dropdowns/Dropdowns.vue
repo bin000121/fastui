@@ -100,7 +100,6 @@ export default defineComponent({
         const dropdownsMenuBox = ref(null)
         const showMenu = ref(false)
         let timer: NodeJS.Timer
-        let lock = false
 
         const getPlacement = computed(() => {
             const [y, x] = props.placement.split('-')

@@ -77,7 +77,7 @@
         ></textarea>
         <span
             class="f-textarea-showLimit"
-            v-if="showLimit && maxlength"
+            v-if="showLimit && maxlength && typeof value !== 'undefined'"
         >{{getLength}}</span>
     </div>
 </template>
@@ -96,10 +96,7 @@ export default defineComponent({
     emits: ['update:value', 'blur', 'change', 'focus', 'clear'],
     inheritAttrs: false,
     props: {
-        value: {
-            type: [String, Number],
-            required: true
-        },
+        value: [String, Number],
         type: {
             type: String,
             default: 'text',
@@ -165,7 +162,7 @@ export default defineComponent({
         }
 
         const handleInput = (e: any) => {
-            if (disabled || readonly) return
+            if (disabled || readonly || typeof props.value === 'undefined') return
             if (showLimit && maxlength) currentValue.value = e.target.value
             emit('update:value', e.target.value)
         }

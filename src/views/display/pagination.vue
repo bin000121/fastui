@@ -586,10 +586,6 @@
                 </code></pre>
             </div>
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -600,12 +596,10 @@ import {
     toRefs
 } from 'vue'
 import FPagination from '/@/views/components/Pagination.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FPagination,
-        FTop
     },
     setup () {
         const data = reactive({

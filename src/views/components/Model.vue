@@ -17,7 +17,7 @@
                     class="f-model"
                     v-show="showModel"
                     :style="`width: ${width}; top: ${top}`"
-                    ref="FModel"
+                    ref="fModel"
                 >
                     <i
                         class="f-icon-close-bold closeIcon"
@@ -120,11 +120,10 @@ export default defineComponent({
 
         const clickMask = () => {
             if (props.clickMaskNotClose) {
-                const FModelDom = data.fModel as any
                 if (!timer) {
-                    FModelDom.classList.add('f-model__not_close')
+                    fModelDom.classList.add('f-model__not_close')
                     timer = setTimeout(() => {
-                        FModelDom.classList.remove('f-model__not_close')
+                        fModelDom.classList.remove('f-model__not_close')
                         timer = null
                     }, 150)
                 }

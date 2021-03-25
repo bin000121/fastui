@@ -319,9 +319,6 @@
                 </code></pre>
             </div>
         </div>
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -334,13 +331,11 @@ import {
 } from 'vue'
 import FCheckbox from '/@/views/components/checkbox/Checkbox.vue'
 import FCheckboxGroup from '/@/views/components/checkbox/Checkbox-group.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FCheckbox,
         FCheckboxGroup,
-        FTop
     },
     setup () {
         const data = reactive({

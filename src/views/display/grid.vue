@@ -4,7 +4,9 @@
         <p>将网页（视口viewport）整体分割成 24 格。</p>
 
         <div>
-            <h3>基本布局</h3>
+            <h3 id="ji_ben_bu_ju">基本布局
+                <a href="#ji_ben_bu_ju" class="f-icon-anchor"></a>
+            </h3>
             <p>基础 24 格布局系统。</p>
 
             <div class="desc">
@@ -116,7 +118,9 @@
 
 
         <div>
-            <h3>栅格换行</h3>
+            <h3 id="huan_hang">栅格换行
+                <a href="#huan_hang" class="f-icon-anchor"></a>
+            </h3>
             <p>让栅格进行换行展示。</p>
 
             <div class="desc">
@@ -180,7 +184,9 @@
         </div>
 
         <div>
-            <h3>栅格间隔</h3>
+            <h3 id="jian_ge">栅格间隔
+                <a href="#jian_ge" class="f-icon-anchor"></a>
+            </h3>
             <p>基础 24 格布局系统。</p>
 
             <div class="desc">
@@ -221,7 +227,9 @@
         </div>
 
         <div>
-            <h3>栅格偏移</h3>
+            <h3 id="pian_yi">栅格偏移
+                <a href="#pian_yi" class="f-icon-anchor"></a>
+            </h3>
             <p>栅格可以进行偏移放置。</p>
 
             <div class="desc">
@@ -274,7 +282,9 @@
         </div>
 
         <div>
-            <h3>横向对齐方式</h3>
+            <h3 id="heng_xiang_dui_qi_fang_shi">横向对齐方式
+                <a href="#heng_xiang_dui_qi_fang_shi" class="f-icon-anchor"></a>
+            </h3>
             <p>栅格在横向方向的排版方式。</p>
 
             <div class="desc">
@@ -358,7 +368,9 @@
         </div>
 
         <div>
-            <h3>竖向对齐方式</h3>
+            <h3 id="shu_xiang_dui_qi_fang_shi">竖向对齐方式
+                <a href="#shu_xiang_dui_qi_fang_shi" class="f-icon-anchor"></a>
+            </h3>
             <p>栅格在竖向方向的排版方式。</p>
 
             <div>

@@ -4,7 +4,9 @@
         <p>常用于标记事物或特写标注。</p>
 
         <div>
-            <h3>基本用法</h3>
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>基础样式。</p>
 
             <MnTag>default</MnTag>
@@ -28,7 +30,9 @@
      </div>
 
         <div>
-            <h3>尺寸</h3>
+            <h3 id="chi_cun">尺寸
+                <a href="#chi_cun" class="f-icon-anchor"></a>
+            </h3>
             <p>标签的不同尺寸。</p>
 
             <MnTag size="mini">迷你（mini）</MnTag>

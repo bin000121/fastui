@@ -40,7 +40,9 @@
         </div>
 
         <div>
-            <h3>可清空内容</h3>
+            <h3 id="ke_qing_kong">可清空内容
+                <a href="#ke_qing_kong" class="f-icon-anchor"></a>
+            </h3>
             <p>为input添加一个清空按钮，清空内容同时向外部触发 clear 事件。</p>
 
             <div class="demo-input demo-input-width">
@@ -153,7 +155,7 @@
             </div>
 
             <div class="demo-input demo-input-width">
-                <f-input :maxlength="15" show-limit></f-input>
+                <f-input :maxlength="15" show-limit v-model:value="ipt3"></f-input>
             </div>
 
             <div v-highlight>
@@ -352,27 +354,27 @@
     <f-input type="textarea" :rows="5"></f-input>
 
     <f-input
-            type="textarea"
-            :rows="10"
-            :maxlength="120"
-            show-limit
+        type="textarea"
+        :rows="10"
+        :maxlength="120"
+        show-limit
     ></f-input>
 
     <f-input
-            type="textarea"
-            :rows="10"
-            :maxlength="120"
-            show-limit
-            disabled
+        type="textarea"
+        :rows="10"
+        :maxlength="120"
+        show-limit
+        disabled
     ></f-input>
 
     <f-input
-            type="textarea"
-            :rows="10"
-            :maxlength="120"
-            show-limit
-            readonly
-            v-model:value="readonly"
+        type="textarea"
+        :rows="10"
+        :maxlength="120"
+        show-limit
+        readonly
+        v-model:value="readonly"
     ></f-input>
 
     <f-input type="textarea" :rows="10" resize="none"></f-input>
@@ -396,10 +398,6 @@
             </div>
 
         </div>
-
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -410,16 +408,15 @@ import {
 } from 'vue'
 import FInput from '/@/views/components/Input.vue'
 import FButton from '/@/views/components/Button.vue'
-import FTop from '/@/views/components/ToTop.vue'
 export default defineComponent({
     components: {
         FInput,
         FButton,
-        FTop
     },
     setup () {
         const ipt = ref('')
         const ipt2 = ref('')
+        const ipt3 = ref('')
         const readonly = ref('当前只读')
         const emitClearNum = ref(0)
         const clear = () => {
@@ -428,6 +425,7 @@ export default defineComponent({
         return{
             ipt,
             ipt2,
+            ipt3,
             clear,
             readonly,
             emitClearNum

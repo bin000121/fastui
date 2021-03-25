@@ -328,9 +328,6 @@
             </div>
         </div>
 
-        <f-top :scroll-top="500">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -341,13 +338,11 @@ import {
 } from 'vue'
 import FRadio from '/@/views/components/radio/Radio.vue'
 import FRadioGroup from '/@/views/components/radio/Radio-group.vue'
-import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
         FRadio,
         FRadioGroup,
-        FTop
     },
     setup () {
         const radio = ref('')

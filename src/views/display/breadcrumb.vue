@@ -4,7 +4,9 @@
         <p>用于凸显当前页面所在的导航路径。</p>
 
         <div>
-            <h3>基本用法</h3>
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>基础用法示例。</p>
 
             <div class="demo-breadcrumb">
@@ -27,7 +29,9 @@
         </div>
 
         <div>
-            <h3>分隔符号</h3>
+            <h3 id="fen_ge_fu_hao">分隔符号
+                <a href="#fen_ge_fu_hao" class="f-icon-anchor"></a>
+            </h3>
             <p>可以自定义分隔符图标。</p>
 
             <div class="desc">
@@ -54,7 +58,9 @@
         </div>
 
         <div>
-            <h3>导航跳转</h3>
+            <h3 id="dao_hang_tiao_zhuan">导航跳转
+                <a href="#dao_hang_tiao_zhuan" class="f-icon-anchor"></a>
+            </h3>
             <p>给予面包屑导航跳转功能。</p>
 
             <div class="desc">
@@ -84,7 +90,9 @@
         </div>
 
         <div>
-            <h3>跳转方式</h3>
+            <h3 id="tiao_zhuan_fang_shi">跳转方式
+                <a href="#tiao_zhuan_fang_shi" class="f-icon-anchor"></a>
+            </h3>
 
             <div class="desc">
                 通过给 <b>f-breadcrumb-item</b> 配置属性 <b>replace</b> 来设置跳转方式（同 vue-router 中的router.replace）。
@@ -110,7 +118,9 @@
         </div>
 
         <div>
-            <h3>尺寸</h3>
+            <h3 id="chi_cun">尺寸
+                <a href="#chi_cun" class="f-icon-anchor"></a>
+            </h3>
             <p>面包屑导航中的字体大小。</p>
             <div class="desc">
                 通过给 <b>f-breadcrumb</b> 配置属性 <b>font-size</b> 来设置字体大小，默认值为14。

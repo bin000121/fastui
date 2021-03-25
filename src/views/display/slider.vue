@@ -4,7 +4,9 @@
         <p>Slider 滑块</p>
 
         <div>
-            <h3>基本用法</h3>
+            <h3 id="ji_ben_yong_fa">基本用法
+                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+            </h3>
             <p>列举一些常用用法示例。</p>
             <div class="slider-demo">
                 <f-slider></f-slider>
@@ -86,7 +88,9 @@
         </div>
 
         <div>
-            <h3>禁用</h3>
+            <h3 id="jin_yong">禁用
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
             <p>滑块呈现出禁用的样式。</p>
             <div class="slider-demo">
                 <f-slider disabled :value="50"></f-slider>
@@ -102,7 +106,9 @@
     </div>
 
         <div>
-            <h3>只读</h3>
+            <h3 id="zhi_du">只读
+                <a href="#zhi_du" class="f-icon-anchor"></a>
+            </h3>
             <p>您不能与之进行交互，且不会添加禁用的样式，他看起来是正常的模样。</p>
             <div class="slider-demo">
                 <f-slider readonly :value="50"></f-slider>
@@ -118,7 +124,9 @@
         </div>
 
         <div>
-            <h3>提示框</h3>
+            <h3 id="ti_shi_kuang">提示框
+                <a href="#ti_shi_kuang" class="f-icon-anchor"></a>
+            </h3>
             <p>用于标识当前进度。</p>
 
             <div class="desc">
@@ -149,7 +157,9 @@
         </div>
 
         <div>
-            <h3>步长</h3>
+            <h3 id="bu_chang">步长
+                <a href="#bu_chang" class="f-icon-anchor"></a>
+            </h3>
             <p>滑块组件可以拥有 1 以上的步长。</p>
 
             <div class="desc">

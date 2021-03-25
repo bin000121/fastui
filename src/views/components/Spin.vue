@@ -145,11 +145,11 @@ export default defineComponent({
     --snowflake-bar-transform-origin: '';
     display: inline-block;
     padding: 10px;
+    text-align: center;
 }
 .f-spin-tip{
     font-size: 14px;
     margin-top: 5px;
-    text-align: center;
 }
 .f-svg{
     animation: loading-rotate 2s linear infinite;

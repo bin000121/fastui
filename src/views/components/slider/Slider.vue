@@ -295,7 +295,7 @@ export default defineComponent({
     transform: translateX(-50%) rotate(45deg);
     border-radius: 50% 50% 0;
     background-color: var(--primary);
-    transition: opacity .15s;
+    transition: opacity .15s ease-in-out;
     .slider-num{
         user-select: none;
         transform: rotate(-45deg);
