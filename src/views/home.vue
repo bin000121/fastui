@@ -17,12 +17,19 @@
 import Header from '../components/header.vue'
 
 import {
-    defineComponent
+    defineComponent,
+    onMounted
 } from 'vue'
 
 export default defineComponent( {
     components: {
         Header
+    },
+    setup () {
+        onMounted(() => {
+            let dom = document.getElementById('loading') as HTMLElement | any
+            dom.parentNode.removeChild(dom)
+        })
     }
 })
 </script>

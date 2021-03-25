@@ -7,6 +7,9 @@ import '/@/assets/font/iconfont.css'
 import directive from '/@/utils/directive'
 import message from '/@/views/components/message/message'
 
+
+
+
 const app = createApp(App)
 
 app.use(message)
