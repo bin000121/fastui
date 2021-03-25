@@ -44,7 +44,7 @@
                         :style="`background-color: ${ card ? '#fff': 'var(--primary)'};`"
                     />
                     <div
-                        v-for="({ ctx }, i) in instance"
+                        v-for="({ props: ctx }, i) in instance"
                         :key="ctx.id"
                         :id="ctx.id"
                         @click="toggleActive(i)"
@@ -150,7 +150,7 @@ export default defineComponent({
         }
 
         const toggleActive = (index: number) => {
-            const { id, name, disabled } = instance.value[index].ctx
+            const { id, name, disabled } = instance.value[index].props
             if (disabled) return
             const dom = document.getElementById(id) as HTMLElement
             let width = dom.offsetWidth
@@ -194,26 +194,26 @@ export default defineComponent({
         })
 
         const closeTabs = (index: number, isActive: boolean) => {
-            const el = instance.value[index].ctx.$el as HTMLElement | any
-            const id = instance.value[index].ctx.id
+            const el = instance.value[index].vnode.$el as HTMLElement | any
+            const id = instance.value[index].props.id
             let dom: HTMLElement | any = document.getElementById(id)
             let length = isY ? dom!.offsetWidth : dom!.offsetHeight
             el?.parentNode.removeChild(el)
             let i: number
             let name = ''
-            if (index === 0) name = instance.value[index + 1].ctx.name
-            else if (isActive) name = instance.value[index - 1].ctx.name
+            if (index === 0) name = instance.value[index + 1].props.name
+            else if (isActive) name = instance.value[index - 1].props.name
             else name = current.value
-            emit('tab-close', instance.value[index].ctx.name)
+            emit('tab-close', instance.value[index].props.name)
             instance.value.splice(index, 1)
-            i = instance.value.findIndex((value: any) => value.ctx.name === name)
+            i = instance.value.findIndex((value: any) => value.props.name === name)
             toggleActive(i)
             checkIsShowArrow()
             handleScroll(-1 * (length + 5) || 0)
         }
 
         const initPlacement = () => {
-            const index = instance.value.findIndex((value: any) => value.ctx.name === props.value)
+            const index = instance.value.findIndex((value: any) => value.props.name === props.value)
             if (props.value && index !== -1) {
                 if (!instance.value.length) return
                 toggleActive(index)
@@ -253,7 +253,7 @@ export default defineComponent({
             fTabsNavScrollDom.style.transform = transform
         }
 
-        provide('$parent', reactive({
+        provide('parent', reactive({
             root,
             getInstance
         }))
@@ -272,8 +272,8 @@ export default defineComponent({
             fTabsNavDom = fTabsNav.value as any
             fTabsNavScrollWrapDom = fTabsNavScrollWrap.value as any
             fTabsNavScrollDom = fTabsNavScroll.value as any
-            fTabsNavDom.addEventListener(eventName, onScroll)
             initPlacement()
+            fTabsNavDom.addEventListener(eventName, onScroll)
         })
         onUnmounted(() =>{
             fTabsNavDom.removeEventListener(eventName, onScroll)

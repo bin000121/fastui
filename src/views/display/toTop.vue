@@ -9,9 +9,9 @@
             </h3>
             <p>该元素会使用固定定位，请注意页面的右下角处。</p>
 
-            <div class="desc">
-                该元素会默认插入到 id= 'app' 的元素内作为其子元素，您可以通过设置 <b>id</b> 属性指定父亲元素。
-            </div>
+<!--            <div class="desc">-->
+<!--                该元素会默认插入到 id= 'app' 的元素内作为其子元素，您可以通过设置 <b>id</b> 属性指定父亲元素。-->
+<!--            </div>-->
 
             <div class="desc">
                 属性 <b>bottom</b> <b>right</b> 控制其到底部、右边的距离。
@@ -85,10 +85,12 @@ import {
     onMounted
 } from 'vue'
 import FButton from '/@/views/components/Button.vue'
+import FTop from '/@/views/components/ToTop.vue'
 
 export default defineComponent({
     components: {
-        FButton
+        FButton,
+        FTop
     },
     setup () {
         const toTop = ref(null)

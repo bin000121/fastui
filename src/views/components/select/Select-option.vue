@@ -47,13 +47,14 @@ export default defineComponent({
             collectionInstance,
             getChose,
             toggleView,
-        }: any = inject('$parent')
+        }: any = inject('parent')
 
         collection(props.label, props.value)
-        collectionInstance(props.label, getCurrentInstance())
+        const son = getCurrentInstance()
+        collectionInstance(props.label, son)
         const isActive = ref(false)
         const isShowCheck = ref(true)
-        const root: any = parent.ctx
+        const root: any = parent.props
         const isShowOption = ref(true)
 
         const handleClickOption = () => {

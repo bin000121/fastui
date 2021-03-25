@@ -27,16 +27,17 @@ export default defineComponent({
         value: [String, Number, Boolean]
     },
     setup (props, { emit }) {
-        const root = inject('$parent')
+        const root = inject('parent')
         const {
             toggleHideAndShow,
+            props: parentProps,
             ctx,
             hoverClose
         }: any = root
         const dropdownsItem = ref(null)
         const handleClick = () => {
-            if (props.disabled || ctx.props.clickNotClose) return
-            ctx.props.trigger === 'hover' ? hoverClose() : toggleHideAndShow()
+            if (props.disabled || parentProps.clickNotClose) return
+            parentProps.trigger === 'hover' ? hoverClose() : toggleHideAndShow()
             props.value && ctx.emit('action', props.value)
         }
         return{

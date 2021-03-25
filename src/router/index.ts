@@ -275,6 +275,12 @@ const routes: RouteRecordRaw[] = [
 
 export default createRouter({
     routes,
-    history: process.env.NODE_ENV === 'development' ? createWebHistory() : createMemoryHistory()
+    history: process.env.NODE_ENV === 'development' ? createWebHistory() : createMemoryHistory(),
+    scrollBehavior: (to: any, form: any, savedPosition: any) => {
+        if (savedPosition) {
+            return savedPosition
+        }
+        return { x: 0, y:0 }
+    }
     // history: createWebHistory()
 })

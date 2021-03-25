@@ -97,8 +97,8 @@ export default defineComponent({
         const handleChange = () => {
             if (disabled) return
             if (parent) {
-                parent.emitEvent('update:value', label)
-                parent.emitEvent('change', label)
+                parent.emit('update:value', label)
+                parent.emit('change', label)
             } else emit('update:value', label)
         }
 
@@ -110,17 +110,17 @@ export default defineComponent({
             const radioLabelDom: HTMLElement | any = radioLabel.value as any
             fRadioDom = fRadio.value as any
             // 获取 radio-group组件实例，如果被 radio-group 包裹的话，name就一定包括 radioGroup
-            if (_this.parent.ctx?.name && _this.parent.ctx?.name.includes('radioGroup')) parent = _this.parent.ctx
+            if (_this.parent.props?.name && _this.parent.props?.name.includes('radioGroup')) parent = _this.parent
 
             radioLabelDom.setAttribute('for', id)
             fRadioDom.setAttribute('id', id)
             fRadioDom.setAttribute('name', parent?.name || '')
 
             if (parent) {
-                currentValue.value = parent.value === label
-                Size.value = parent.size || size
-                Border.value = parent.border || border
-                Vertical.value = parent.vertical || vertical
+                currentValue.value = parent.props.value === label
+                Size.value = parent.props.size || size
+                Border.value = parent.props.border || border
+                Vertical.value = parent.props.vertical || vertical
             }
 
             watch(() => parent ? _this.parent.props.value : props.value, (newV: any) => {

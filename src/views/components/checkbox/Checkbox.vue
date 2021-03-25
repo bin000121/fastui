@@ -85,8 +85,8 @@ export default defineComponent({
             if (parent) {
                 let arr = [..._this.parent.props.value]
                 isChecked ? arr.push(checkValue) : arr.splice(arr.indexOf(checkValue), 1)
-                parent.emitEvent('update:value', arr)
-                parent.emitEvent('change', arr)
+                parent.emit('update:value', arr)
+                parent.emit('change', arr)
             } else {
                 emit('update:value', isChecked)
                 emit('change', isChecked)
@@ -101,13 +101,13 @@ export default defineComponent({
             fCheckboxDom.setAttribute('name', parent?.name || '')
 
             // 获取 checkbox-group组件实例，如果被 checkbox-group 包裹的话，name就一定包括 checkboxGroup
-            if (_this.parent.ctx?.name && _this.parent.ctx?.name.includes('checkboxGroup')) parent = _this.parent.ctx
+            if (_this.parent.props?.name && _this.parent.props?.name.includes('checkboxGroup')) parent = _this.parent
 
             if (parent) {
-                currentValue.value = parent.value.includes(props.value)
-                Size.value = parent.size || props.size
-                Border.value = parent.border || props.border
-                Vertical.value = parent.vertical || props.vertical
+                currentValue.value = parent.props.value.includes(props.value)
+                Size.value = parent.props.size || props.size
+                Border.value = parent.props.border || props.border
+                Vertical.value = parent.props.vertical || props.vertical
 
                 watch(() => _this.parent.props.value, (newV: any) => {
                     if (props.disabled) return

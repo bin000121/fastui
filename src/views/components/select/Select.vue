@@ -163,6 +163,7 @@ export default defineComponent({
         let onComposition = ''
         let hasChildren: boolean
 
+        const parent = getCurrentInstance()
         const currentData: any = ref({})
 
         const getLabelList = computed(() => {
@@ -194,7 +195,6 @@ export default defineComponent({
                 selectIptDom.value = selectIptDom.placeholder === props.placeholder ? '' : selectIptDom.placeholder
                 selectIptDom.placeholder = props.placeholder
             }
-
         }
 
         // 中文输入法时锁定input
@@ -228,11 +228,10 @@ export default defineComponent({
         const toggleOptionLiShow = (val: string | number, initial = false) => {
             if (!hasChildren) return
             const blockArr: string[] = initial ? ['block'] : []
-            console.log('toggleOptionLiShow')
             for (let key in instanceList) {
-                const { props: { label }, ctx: { $el } } = instanceList[key]
+                const { props: { label }, vnode: { el } } = instanceList[key]
                 if (initial) {
-                    $el.style.display = 'block'
+                    el.style.display = 'block'
                     continue
                 }
                 // 自定义过滤函数
@@ -240,9 +239,9 @@ export default defineComponent({
                     props.filterFunction :
                     defaultFilterFunction
                 if (FilterFunction(val, label)) {
-                    $el.style.display = 'block'
+                    el.style.display = 'block'
                     blockArr.push('block')
-                } else $el.style.display = 'none'
+                } else el.style.display = 'none'
             }
             isEmpty.value = !blockArr.length
         }
@@ -375,10 +374,10 @@ export default defineComponent({
             } else selectIptDom.value = props.value
         }, { deep: true })
 
-        provide('$parent', reactive({
+        provide('parent', reactive({
             collection,
             collectionInstance,
-            parent: getCurrentInstance(),
+            parent,
             toggleView,
             getChose,
         }))

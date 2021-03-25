@@ -187,9 +187,10 @@ export default defineComponent({
 
         let toggleFn = props.button ? toggleHideAndShowWhenButton : toggleHideAndShow
 
-        provide('$parent', reactive({
+        provide('parent', reactive({
             toggleHideAndShow: toggleFn,
             ctx,
+            props,
             hoverClose
         }))
 

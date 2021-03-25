@@ -4,11 +4,11 @@
         <Aside></Aside>
         <div class="content">
             <router-view v-slot="{ Component }">
-                <transition mode="out-in" name="doc-sliderTo">
+<!--                <transition mode="out-in" name="doc-sliderTo">-->
 <!--                    <keep-alive>-->
                     <component :is="Component" />
 <!--                    </keep-alive>-->
-                </transition>
+<!--                </transition>-->
             </router-view>
             <div
                 :class="{
@@ -28,7 +28,7 @@
                 >{{k}}</a>
             </div>
         </div>
-        <f-top :scroll-top="800">
+        <f-top :scroll-top="800" v-show="!route.path.includes('toTop')">
             <i class="f-icon-to-top"></i>
         </f-top>
     </div>
@@ -64,14 +64,14 @@ export default defineComponent( {
         const route = useRoute()
         const onResize = debounce(() => {
             let pageWidth = document.body.offsetWidth
-            isAnchorHide.value = pageWidth < 1400
+            isAnchorHide.value = pageWidth < 1200
             updateAList(document.querySelectorAll("a[class^='f-icon']") as any)
         }, 100)
 
         let aOffsetTop: number[] = []
         const onScroll = throttle(() => {
             let body = document.documentElement || document.body
-            let scrollTop = Math.ceil(body.scrollTop) + 5
+            let scrollTop = body.scrollTop
             for (let i = aOffsetTop.length; i > 0; i--) {
                 if (scrollTop < aOffsetTop[0]) {
                     isActive.value = 0
@@ -95,9 +95,10 @@ export default defineComponent( {
             watch(() => route.path, (newV: any) => {
                 if (!newV.includes('/doc/')) return
                 tipList.value = Object.entries(route.meta) as any
-                setTimeout(() => {
-                    updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any)
-                }, 200)
+                // setTimeout(() => {
+                //     updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any)
+                // }, 50)
+                nextTick(() => updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any))
             }, { immediate: true})
             onResize()
             window.addEventListener('resize', onResize)
@@ -112,6 +113,7 @@ export default defineComponent( {
             isAnchorHide,
             tipList,
             isActive,
+            route,
         }
     }
 })
