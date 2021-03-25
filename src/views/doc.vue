@@ -11,13 +11,11 @@
                 </transition>
             </router-view>
             <div
-                v-if="tipList.length"
                 :class="{
                     'anchor': true,
                     'anchor__hide': isAnchorHide,
                 }"
             >
-
                 <a
                     v-for="([k, v], i) in tipList"
                     :key="i"
@@ -49,6 +47,7 @@ import {
     onUnmounted,
     ref,
     watch,
+    nextTick
 } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -96,12 +95,15 @@ export default defineComponent( {
             watch(() => route.path, (newV: any) => {
                 if (!newV.includes('/doc/')) return
                 tipList.value = Object.entries(route.meta) as any
-                updateAList(document.querySelectorAll("a[class^='f-icon']") as any)
+                setTimeout(() => {
+                    updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any)
+                }, 200)
             }, { immediate: true})
             onResize()
             window.addEventListener('resize', onResize)
             window.addEventListener('scroll', onScroll)
         })
+
         onUnmounted(() => {
             window.removeEventListener('resize', onResize)
             window.removeEventListener('scroll', onScroll)
