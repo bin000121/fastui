@@ -72,7 +72,7 @@ export default defineComponent({
         }, { deep: true })
 
         onMounted(() => {
-            isShowCheck.value = !root.removeCheck
+            isShowCheck.value = !root.removeCheckIcon
             if (typeof root.value === 'undefined') return
             // 如果用户绑定了v-model:value
             if (root.multiple) {

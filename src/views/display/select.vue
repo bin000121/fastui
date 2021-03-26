@@ -286,11 +286,11 @@
             </div>
 
             <div class="desc">
-                在 <b>multiple</b> 模式下，可以设置属性 <b>remove-check</b> 来移除option后面的勾子图标。
+                在 <b>multiple</b> 模式下，可以设置属性 <b>remove-check-icon</b> 来移除option后面的✔图标。
             </div>
 
             <div class="demo-select">
-                <f-select v-model:value="select3" clearable multiple fold-tag remove-check>
+                <f-select v-model:value="select3" clearable multiple fold-tag remove-check-icon>
                     <f-option
                         v-for="item in 15"
                         :key="item"
@@ -336,7 +336,7 @@
         clearable
         multiple
         fold-tag
-        remove-check
+        remove-check-icon
     >
         <f-option
             v-for="item in 15"
@@ -376,7 +376,11 @@
             <p>多选模式下限制选择的最大数目。</p>
 
             <div class="desc">
-                设置属性 <b>multiple-limit</b> 即可开启限制，0或负数将不限制，以下是限制数为5的例子。
+                设置属性 <b>multiple-limit</b> 即可开启限制，0或负数将不限制。
+            </div>
+
+            <div class="desc">
+                以下是限制数为5的例子。
             </div>
 
             <div class="demo-select">

@@ -143,7 +143,7 @@ export default defineComponent({
         filterable: Boolean,
         filterFunction: Function as PropType<FilterFunction>,
         foldTag: Boolean,
-        removeCheck: Boolean,
+        removeCheckIcon: Boolean,
     },
     setup (props, { emit }) {
         const selectRoot = ref(null)

@@ -3,6 +3,7 @@
     <li
         :class="{
             'f-dropdowns-item': true,
+            ['f-dropdowns-item__' + size]: size !== 'default',
             'f-dropdowns-item__disabled': disabled
         }"
         @click.stop="handleClick"
@@ -26,7 +27,7 @@ export default defineComponent({
         divided: Boolean,
         value: [String, Number, Boolean]
     },
-    setup (props, { emit }) {
+    setup (props) {
         const root = inject('parent')
         const {
             toggleHideAndShow,
@@ -35,6 +36,7 @@ export default defineComponent({
             hoverClose
         }: any = root
         const dropdownsItem = ref(null)
+        const size = ref(parentProps.size)
         const handleClick = () => {
             if (props.disabled || parentProps.clickNotClose) return
             parentProps.trigger === 'hover' ? hoverClose() : toggleHideAndShow()
@@ -42,6 +44,7 @@ export default defineComponent({
         }
         return{
             handleClick,
+            size,
             dropdownsItem
         }
     }
@@ -51,13 +54,20 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-dropdowns-item{
     cursor: pointer;
-    line-height: 32px;
-    padding: 0 20px;
+    height: calc(2.15em);
+    line-height: calc(2.15em);
+    padding: 0 calc(1.5em);
     color: #333;
     font-size: 14px;
     &:not(.f-dropdowns-item__disabled):hover{
         background-color: #eee;
     }
+}
+.f-dropdowns-item__small{
+    font-size: 12px!important;
+}
+.f-dropdowns-item__large{
+    font-size: 16px!important;
 }
 .f-dropdowns-item__disabled{
     color: #bbb;

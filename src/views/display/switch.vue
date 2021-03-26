@@ -70,7 +70,7 @@
             <f-switch disabled></f-switch>
             <div v-highlight>
     <pre><code>
-        {{`<f-switch></f-switch>`}}
+        {{`<f-switch disabled></f-switch>`}}
     </code></pre>
             </div>
         </div>
