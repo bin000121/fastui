@@ -16,7 +16,6 @@ export function isEmpty(data: any) {
         '[object Array]': false,
         '[object Object]': false
     }
-
     if (resObj[getType(data)]) return true
 
     // 只有对象和数组会往下执行
