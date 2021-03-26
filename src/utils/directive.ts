@@ -1,5 +1,5 @@
 import { App, ObjectDirective, DirectiveBinding } from 'vue'
-import hljs from 'highlight.js'
+import { highlightBlock } from 'highlight.js'
 
 // v-clickOutside
 
@@ -46,10 +46,10 @@ const clickOutside: ObjectDirective = {
 // v-highlight
 
 const highlight: ObjectDirective = {
-    mounted: (el) => {
+    mounted: (el: any) => {
         const blocks = el.querySelectorAll('pre code')
         blocks.forEach((block: any) => {
-            hljs.highlightBlock(block)
+            highlightBlock(block)
         })
     }
 }
