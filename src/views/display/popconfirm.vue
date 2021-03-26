@@ -324,8 +324,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import FPopconfirm from '/@/views/packages/Popconfirm.vue'
-import FButton from '/@/views/packages/Button.vue'
+import FPopconfirm from '/@/views/packages/popconfirm/Popconfirm.vue'
+import FButton from '/@/views/packages/button/Button.vue'
 
 export default defineComponent({
     components: {

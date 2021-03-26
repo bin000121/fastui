@@ -233,8 +233,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FButton from '/@/views/packages/Button.vue'
-import FDrawer from '/@/views/packages/Drawer.vue'
+import FButton from '/@/views/packages/button/Button.vue'
+import FDrawer from '/@/views/packages/drawer/Drawer.vue'
 import FRadioGroup from '/@/views/packages/radio/Radio-group.vue'
 import FRadio from '/@/views/packages/radio/Radio.vue'
 

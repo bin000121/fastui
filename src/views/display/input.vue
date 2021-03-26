@@ -406,8 +406,8 @@ import {
     defineComponent,
     ref
 } from 'vue'
-import FInput from '/@/views/packages/Input.vue'
-import FButton from '/@/views/packages/Button.vue'
+import FInput from '/@/views/packages/input/Input.vue'
+import FButton from '/@/views/packages/button/Button.vue'
 export default defineComponent({
     components: {
         FInput,

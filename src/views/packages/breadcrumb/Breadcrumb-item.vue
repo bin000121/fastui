@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { isEmpty } from '../../utils/isEmpty'
+import { isEmpty } from '/@/utils/isEmpty'
 import {
     defineComponent,
     inject,

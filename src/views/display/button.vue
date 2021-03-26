@@ -154,7 +154,7 @@ import {
     ref,
     reactive
 } from 'vue'
-import MnButton from '/@/views/packages/Button.vue'
+import MnButton from '/@/views/packages/button/Button.vue'
 
 export default defineComponent( {
     components: {

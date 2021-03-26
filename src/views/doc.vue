@@ -29,7 +29,7 @@
                 >{{k}}</a>
             </div>
         </div>
-        <f-top :scroll-top="800" v-show="!route.path.includes('toTop')">
+        <f-top :scroll-top="800" v-if="!route.path.includes('/toTop')">
             <i class="f-icon-to-top"></i>
         </f-top>
     </div>
@@ -38,7 +38,7 @@
 <script lang="ts">
 import Header from '/@/components/header.vue'
 import Aside from '/@/components/aside.vue'
-import FTop from '/@/views/packages/ToTop.vue'
+import FTop from '/@/views/packages/toTop/ToTop.vue'
 import { debounce } from '/@/utils/debounce'
 import { throttle } from '/@/utils/throttle'
 
@@ -183,6 +183,9 @@ export default defineComponent( {
         border-left: 2px solid transparent;
         &:last-child{
             margin-bottom: 0;
+        }
+        &:hover{
+            color: #3cd0be;
         }
     }
     a.is-active{

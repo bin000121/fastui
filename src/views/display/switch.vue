@@ -370,8 +370,8 @@ import {
     ref
 } from 'vue'
 
-import FSwitch from '/@/views/packages/Switch.vue'
-import FButton from '/@/views/packages/Button.vue'
+import FSwitch from '/@/views/packages/switch/Switch.vue'
+import FButton from '/@/views/packages/button/Button.vue'
 
 export default defineComponent({
     components: {

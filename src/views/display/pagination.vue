@@ -595,7 +595,7 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FPagination from '/@/views/packages/Pagination.vue'
+import FPagination from '/@/views/packages/pagination/Pagination.vue'
 
 export default defineComponent({
     components: {

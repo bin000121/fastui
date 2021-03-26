@@ -107,7 +107,7 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FSpin from '/@/views/packages/Spin.vue'
+import FSpin from '/@/views/packages/spin/Spin.vue'
 
 export default defineComponent({
     components: {

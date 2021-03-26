@@ -67,7 +67,7 @@ import {
     onMounted,
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
-import FButton from '/@/views/components/Button.vue'
+import FButton from '/@/views/packages/button/Button.vue'
 
 const placementList: string[] = [
     'top-left',
