@@ -93,7 +93,8 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
                     '移除动画': 'yi_chu_dong_hua',
-                    '按钮样式': 'chu_fa_fang_shi',
+                    '触发方式': 'chu_fa_fang_shi',
+                    '按钮样式': 'an_niu_yang_shi',
                     '尺寸': 'chi_cun',
                     '禁用': 'jin_yong',
                     '伸展方向': 'shen_zhan_fang_xiang'
@@ -276,11 +277,5 @@ const routes: RouteRecordRaw[] = [
 export default createRouter({
     routes,
     history: process.env.NODE_ENV === 'development' ? createWebHistory() : createMemoryHistory(),
-    scrollBehavior: (to: any, form: any, savedPosition: any) => {
-        if (savedPosition) {
-            return savedPosition
-        }
-        return { x: 0, y:0 }
-    }
     // history: createWebHistory()
 })

@@ -15,6 +15,7 @@
                     'anchor': true,
                     'anchor__hide': isAnchorHide,
                 }"
+                v-show="isShowAnchor"
             >
                 <a
                     v-for="([k, v], i) in tipList"
@@ -59,6 +60,7 @@ export default defineComponent( {
     },
     setup () {
         const isAnchorHide = ref(false)
+        const isShowAnchor = ref(true)
         const tipList = ref([])
         const isActive = ref(0)
         const route = useRoute()
@@ -69,10 +71,17 @@ export default defineComponent( {
         }, 100)
 
         let aOffsetTop: number[] = []
+
+        let body = document.documentElement || document.body
+
+        const handleClick = (index: number) => {
+            isActive.value = index
+            body.scrollTop += 50
+        }
+
         const onScroll = throttle(() => {
-            let body = document.documentElement || document.body
-            let scrollTop = body.scrollTop
-            for (let i = aOffsetTop.length; i > 0; i--) {
+            let scrollTop = body.scrollTop + 15
+            for (let i = aOffsetTop.length - 1 ; i >= 0; i--) {
                 if (scrollTop < aOffsetTop[0]) {
                     isActive.value = 0
                     break
@@ -89,16 +98,21 @@ export default defineComponent( {
             for (let i = 0; i < arr.length; i++) {
                 aOffsetTop.push(arr[i].offsetTop)
             }
+            isShowAnchor.value = true
+            window.scrollTo(0, 0)
         }
 
         onMounted(() => {
             watch(() => route.path, (newV: any) => {
                 if (!newV.includes('/doc/')) return
+                isShowAnchor.value = false
                 tipList.value = Object.entries(route.meta) as any
                 // setTimeout(() => {
                 //     updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any)
                 // }, 50)
-                nextTick(() => updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any))
+                nextTick(() => {
+                    updateAList(document.querySelectorAll('a[class=\'f-icon-anchor\']') as any)
+                })
             }, { immediate: true})
             onResize()
             window.addEventListener('resize', onResize)
@@ -110,7 +124,9 @@ export default defineComponent( {
             window.removeEventListener('scroll', onScroll)
         })
         return {
+            handleClick,
             isAnchorHide,
+            isShowAnchor,
             tipList,
             isActive,
             route,

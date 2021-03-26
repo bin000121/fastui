@@ -2,11 +2,18 @@
   <router-view />
 </template>
 
-<script>
+<script lang="ts">
+import {
+  defineComponent
+} from 'vue'
 
-export default {
-  name: 'App'
-}
+export default defineComponent({
+    name: 'app',
+    setup () {
+        let dom = document.getElementById('loading') as HTMLElement | any
+        dom?.parentNode?.removeChild?.(dom)
+    }
+})
 </script>
 <style>
 :root{
