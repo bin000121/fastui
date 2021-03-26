@@ -483,8 +483,8 @@
 import {
     defineComponent
 } from 'vue'
-import MnRow from '../components/Row.vue'
-import MnCol from '../components/Col.vue'
+import MnRow from '/@/views/packages/Row.vue'
+import MnCol from '/@/views/packages/Col.vue'
 
 export default defineComponent({
     components: {

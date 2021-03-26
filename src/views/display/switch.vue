@@ -107,7 +107,7 @@ import {
     ref
 } from 'vue'
 
-import FSwitch from '../components/Switch.vue'
+import FSwitch from '/@/views/packages/Switch.vue'
 
 export default defineComponent({
     components: {

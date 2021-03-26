@@ -57,7 +57,7 @@ import {
     ref
 } from 'vue'
 
-import MnTag from '../components/Tag.vue'
+import MnTag from '/@/views/packages/Tag.vue'
 
 export default defineComponent({
     components: {

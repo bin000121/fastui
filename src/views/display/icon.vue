@@ -63,7 +63,7 @@
 import {
     defineComponent,
 } from 'vue'
-import FButton from '/@/views/components/Button.vue'
+import FButton from '/@/views/packages/Button.vue'
 export default defineComponent({
     components: {
         FButton,

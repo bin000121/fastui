@@ -350,8 +350,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FModel from '/@/views/components/Model.vue'
-import FButton from '/@/views/components/Button.vue'
+import FModel from '/@/views/packages/Model.vue'
+import FButton from '/@/views/packages/Button.vue'
 
 export default defineComponent({
     components: {

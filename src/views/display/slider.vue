@@ -206,7 +206,7 @@ import {
     ref
 } from 'vue'
 
-import FSlider from '../components/slider/Slider.vue'
+import FSlider from '/@/views/packages/slider/Slider.vue'
 export default defineComponent({
     components: {
         FSlider

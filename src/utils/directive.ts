@@ -16,8 +16,8 @@ const newClickOutsideHandler = (el: any, binding: DirectiveBinding<any>) => {
         value()
     }
 }
-
-document.addEventListener('click', (e: MouseEvent) => {
+const clickName = 'ontouchstart' in window ? 'touchstart' : 'click';
+document.addEventListener(clickName, (e: MouseEvent | TouchEvent) => {
     for (const item in nodeObj) {
         nodeObj[item].__clickOutside(e)
     }

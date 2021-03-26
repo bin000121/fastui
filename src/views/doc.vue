@@ -38,7 +38,7 @@
 <script lang="ts">
 import Header from '/@/components/header.vue'
 import Aside from '/@/components/aside.vue'
-import FTop from '/@/views/components/ToTop.vue'
+import FTop from '/@/views/packages/ToTop.vue'
 import { debounce } from '/@/utils/debounce'
 import { throttle } from '/@/utils/throttle'
 

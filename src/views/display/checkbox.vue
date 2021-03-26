@@ -329,8 +329,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FCheckbox from '/@/views/components/checkbox/Checkbox.vue'
-import FCheckboxGroup from '/@/views/components/checkbox/Checkbox-group.vue'
+import FCheckbox from '/@/views/packages/checkbox/Checkbox.vue'
+import FCheckboxGroup from '/@/views/packages/checkbox/Checkbox-group.vue'
 
 export default defineComponent({
     components: {

@@ -21,7 +21,7 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FTable from '/@/views/components/Table.vue'
+import FTable from '/@/views/packages/Table.vue'
 
 export default defineComponent({
     components: {

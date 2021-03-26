@@ -572,8 +572,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FDropdowns from '../components/dropdowns/Dropdowns.vue'
-import FDropdownsItem from '../components/dropdowns/Dropdowns-item.vue'
+import FDropdowns from '/@/views/packages/dropdowns/Dropdowns.vue'
+import FDropdownsItem from '/@/views/packages/dropdowns/Dropdowns-item.vue'
 
 export default defineComponent({
     components: {

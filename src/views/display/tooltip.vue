@@ -306,8 +306,8 @@ import {
     reactive,
     toRefs
 } from 'vue'
-import FTooltip from '/@/views/components/Tooltip.vue'
-import FButton from '/@/views/components/Button.vue'
+import FTooltip from '/@/views/packages/Tooltip.vue'
+import FButton from '/@/views/packages/Button.vue'
 
 export default defineComponent({
     components: {

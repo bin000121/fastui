@@ -5,7 +5,7 @@ import 'highlight.js/styles/solarized-light.css'
 import '/@/assets/f-animate.css'
 import '/@/assets/font/iconfont.css'
 import directive from '/@/utils/directive'
-import message from '/@/views/components/message/message'
+import message from '/@/views/packages/message/message'
 
 const app = createApp(App)
 

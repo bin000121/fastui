@@ -867,9 +867,9 @@ import {
     reactive,
     computed
 } from 'vue'
-import FSelect from '/@/views/components/select/Select.vue'
-import FSelectGroup from '/@/views/components/select/Select-group.vue'
-import FOption from '/@/views/components/select/Select-option.vue'
+import FSelect from '/@/views/packages/select/Select.vue'
+import FSelectGroup from '/@/views/packages/select/Select-group.vue'
+import FOption from '/@/views/packages/select/Select-option.vue'
 
 export default defineComponent({
     components: {

@@ -108,7 +108,7 @@ import {
     ref
 } from 'vue'
 
-import MnBox from '../components/Box.vue'
+import MnBox from '/@/views/packages/Box.vue'
 
 export default defineComponent({
     components: {

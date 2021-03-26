@@ -84,8 +84,8 @@ import {
     ref,
     onMounted
 } from 'vue'
-import FButton from '/@/views/components/Button.vue'
-import FTop from '/@/views/components/ToTop.vue'
+import FButton from '/@/views/packages/Button.vue'
+import FTop from '/@/views/packages/ToTop.vue'
 
 export default defineComponent({
     components: {

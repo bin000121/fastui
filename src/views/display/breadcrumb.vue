@@ -166,8 +166,8 @@ import {
     defineComponent
 } from 'vue'
 
-import FBreadcrumb from '../components/Breadcrumb.vue'
-import FBreadcrumbItem from '../components/Breadcrumb-item.vue'
+import FBreadcrumb from '/@/views/packages/Breadcrumb.vue'
+import FBreadcrumbItem from '/@/views/packages/Breadcrumb-item.vue'
 export default defineComponent({
     components: {
         FBreadcrumb,

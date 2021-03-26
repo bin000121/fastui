@@ -336,8 +336,8 @@ import {
     defineComponent,
     ref
 } from 'vue'
-import FRadio from '/@/views/components/radio/Radio.vue'
-import FRadioGroup from '/@/views/components/radio/Radio-group.vue'
+import FRadio from '/@/views/packages/radio/Radio.vue'
+import FRadioGroup from '/@/views/packages/radio/Radio-group.vue'
 
 export default defineComponent({
     components: {
