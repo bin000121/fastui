@@ -242,18 +242,21 @@
             <div v-highlight>
                 <pre><code>
     {{`<f-switch
+        v-model:value="flag"
         inset
         inset-on-text="开"
         inset-off-text="关"
     ></f-switch>
 
     <f-switch
+        v-model:value="flag"
         inset
         inset-on-text="on"
         inset-off-text="off"
     ></f-switch>
 
     <f-switch
+        v-model:value="flag"
         inset
         size="large"
         inset-on-text="开启"
@@ -261,6 +264,7 @@
     ></f-switch>
 
     <f-switch
+        v-model:value="flag"
         inset
         size="large"
         inset-on-text="开启"
@@ -271,7 +275,23 @@
             fontSize: '12px',
             color: '#000'
         }"
-    ></f-switch>`}}
+    ></f-switch>
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref
+    } from 'vue'
+    export default defineComponent({
+        setup () {
+            const flag = ref(true)
+            return {
+                flag
+            }
+        }
+    })
+    </script>`}}
                 </code></pre>
             </div>
         </div>
