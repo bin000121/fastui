@@ -99,7 +99,7 @@ export default defineComponent( {
                 aOffsetTop.push(arr[i].offsetTop)
             }
             isShowAnchor.value = true
-            window.scrollTo(0, 0)
+            if (process.env.NODE_ENV !== 'development') window.scrollTo(0, 0)
         }
 
         onMounted(() => {

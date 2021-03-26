@@ -264,6 +264,10 @@ export default defineComponent({
             setTimeout(() => initPlacement(), 201)
         })
 
+        watch(() => props.value, (newV: string | any) => {
+            current.value = newV
+        })
+
         let eventName =  isFireFox ? 'DOMMouseScroll' : 'mousewheel'
 
         onMounted(() => {

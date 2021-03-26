@@ -167,3 +167,13 @@
         stroke-dashoffset: var(--end-stroke-dashoffset);
     }
 }
+
+/*f-switch__loading*/
+@keyframes f-switch__loading-rotate {
+    0%{
+        transform: translate(-50%, -50%) rotate(0);
+    }
+    100%{
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}

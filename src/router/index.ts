@@ -49,7 +49,11 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                    '基本用法': 'ji_ben_yong_fa',
                    '禁用': 'jin_yong',
-                   '文本': 'wen_ben'
+                   '文本': 'wen_ben',
+                   '内嵌': 'nei_qian',
+                   '加载中': 'jia_zai_zhong',
+                   '内嵌文本': 'nei_qian_wen_ben',
+                   '尺寸': 'chi_cun',
                 }
             },
             {
@@ -276,6 +280,5 @@ const routes: RouteRecordRaw[] = [
 
 export default createRouter({
     routes,
-    history: process.env.NODE_ENV === 'development' ? createWebHistory() : createMemoryHistory(),
-    // history: createWebHistory()
+    history: process.env.NODE_ENV === 'development' ? createWebHistory() : createMemoryHistory()
 })
