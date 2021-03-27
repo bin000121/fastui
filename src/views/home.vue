@@ -23,6 +23,9 @@ import {
 export default defineComponent( {
     components: {
         Header
+    },
+    setup () {
+        window.scrollTo(0, 0)
     }
 })
 </script>

@@ -59,6 +59,7 @@ export default defineComponent({
     padding: 0 calc(1.5em);
     color: #333;
     font-size: 14px;
+    margin-left: -1px;
     &:not(.f-dropdowns-item__disabled):hover{
         background-color: #eee;
     }

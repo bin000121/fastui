@@ -213,7 +213,7 @@
 
             <div class="demo-select">
                 <f-select disabled>
-                    <f-option label="111" value="222"></f-option>
+                    <f-option label="111" value="111"></f-option>
                     <f-option label="222" value="222"></f-option>
                     <f-option label="333" value="333"></f-option>
                 </f-select>
@@ -225,7 +225,7 @@
 
             <div class="demo-select">
                 <f-select>
-                    <f-option label="111" value="222"></f-option>
+                    <f-option label="111" value="111"></f-option>
                     <f-option label="222" value="222" disabled></f-option>
                     <f-option label="333" value="333"></f-option>
                 </f-select>
@@ -234,13 +234,13 @@
             <div v-highlight>
                 <pre><code>
     {{`<f-select disabled>
-        <f-option label="111" value="222"></f-option>
+        <f-option label="111" value="111"></f-option>
         <f-option label="222" value="222"></f-option>
         <f-option label="333" value="333"></f-option>
     </f-select>
 
     <f-select>
-        <f-option label="111" value="222"></f-option>
+        <f-option label="111" value="111"></f-option>
         <f-option label="222" value="222" disabled></f-option>
         <f-option label="333" value="333"></f-option>
     </f-select>`}}
