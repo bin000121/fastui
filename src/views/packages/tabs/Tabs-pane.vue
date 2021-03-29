@@ -44,18 +44,16 @@ export default defineComponent({
         const parent: any = inject('parent')
         const {
             getInstance,
-            root
+            root,
         } = parent
         const isShow = ref(true)
         const son = getCurrentInstance()
         getInstance(son)
-
-        watch(() => root.props.current, (newV: string) => {
-            isShow.value = newV ===props.name
+        watch(() => root.proxy.current, (newV: string) => {
+            isShow.value = newV === props.name
         })
-
         onMounted(() => {
-            isShow.value = root.props.value === props.name
+            isShow.value = root.proxy.current === props.name
         })
         return{
             isShow,

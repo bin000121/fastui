@@ -164,8 +164,7 @@ export default defineComponent( {
     font-family: Helvetica;
     width: 120px;
     max-height: 500px;
-    min-height: 50px;
-    background-color: transparent;
+    background-color: #fff;
     border-left: 2px solid #eee;
     position: fixed;
     right: 5px;
