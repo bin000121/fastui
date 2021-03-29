@@ -324,7 +324,7 @@
                     :total="1000"
                     :pageSize="10"
                     :page="1"
-                    :limit="7"
+                    :limit="8"
                 ></f-pagination>
             </div>
 
@@ -333,7 +333,7 @@
                     :total="1000"
                     :pageSize="10"
                     :page="1"
-                    :limit="8"
+                    :limit="10"
                 ></f-pagination>
             </div>
 
@@ -350,17 +350,15 @@
         :total="1000"
         :pageSize="10"
         :page="1"
-        :limit="9"
+        :limit="8"
     ></f-pagination>
 
     <f-pagination
         :total="1000"
         :pageSize="10"
         :page="1"
-        :limit="12"
-    ></f-pagination>
-
-                    `}}
+        :limit="10"
+    ></f-pagination>`}}
                 </code></pre>
             </div>
         </div>
@@ -380,7 +378,6 @@
                     :total="1000"
                     :pageSize="10"
                     :page="1"
-                    :limit="6"
                     :step="5"
                 ></f-pagination>
             </div>
@@ -390,7 +387,6 @@
                     :total="1000"
                     :pageSize="10"
                     :page="1"
-                    :limit="9"
                     :step="10"
                 ></f-pagination>
             </div>
@@ -400,7 +396,6 @@
                     :total="1000"
                     :pageSize="10"
                     :page="1"
-                    :limit="12"
                     :step="15"
                 ></f-pagination>
             </div>
@@ -411,7 +406,6 @@
         :total="1000"
         :pageSize="10"
         :page="1"
-        :limit="6"
         :step="5"
     ></f-pagination>
 
@@ -419,7 +413,6 @@
         :total="1000"
         :pageSize="10"
         :page="1"
-        :limit="9"
         :step="10"
     ></f-pagination>
 
@@ -427,11 +420,8 @@
         :total="1000"
         :pageSize="10"
         :page="1"
-        :limit="12"
         :step="15"
-    ></f-pagination>
-
-                    `}}
+    ></f-pagination>`}}
                 </code></pre>
             </div>
         </div>
@@ -502,8 +492,7 @@
         text
         size="large"
     >
-    </f-pagination>
-                    `}}
+    </f-pagination>`}}
                 </code></pre>
             </div>
         </div>

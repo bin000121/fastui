@@ -56,7 +56,7 @@ export default defineComponent({
             isShow.value = root.proxy.current === props.name
         })
         return{
-            isShow,
+            isShow
         }
     }
 })

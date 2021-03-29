@@ -83,7 +83,7 @@ export default defineComponent({
         const _this: any = getCurrentInstance()
         const radioLabel = ref(null)
         const fRadio = ref(null)
-        const currentValue = ref(value === label)
+        const currentValue = ref(false)
         const Size = ref(size)
         const Border = ref(border)
         const Vertical = ref(vertical)
