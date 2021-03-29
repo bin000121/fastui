@@ -50,7 +50,7 @@ export default defineComponent({
     emits: ['change', 'update:value'],
     props: {
         label: [String, Number],
-        value: [String, Number, Boolean],
+        value: [String, Number, Boolean, Object],
         disabled: Boolean,
         name: String,
         border: Boolean,

@@ -43,6 +43,7 @@ export default defineComponent( {
             '/doc/drawer': 'Drawer 抽屉',
             '/doc/toTop': 'ToTop 返回顶部',
             '/doc/spin': 'Spin 加载中',
+            '/doc/progress': 'Progress 进度条',
         }
 
         const Aside = ref(null)

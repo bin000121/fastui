@@ -22,7 +22,8 @@
                     :key="i"
                     :href="'#' + v"
                     :class="{
-                        'is-active': i === isActive
+                        'is-active': i === isActive,
+                        'is-anchorHide': isAnchorHide,
                     }"
                     :title="k"
                     @click="isActive = i"
@@ -84,6 +85,10 @@ export default defineComponent( {
             for (let i = aOffsetTop.length - 1 ; i >= 0; i--) {
                 if (scrollTop < aOffsetTop[0]) {
                     isActive.value = 0
+                    break
+                }
+                if (scrollTop >= aOffsetTop[aOffsetTop.length - 1]) {
+                    isActive.value = aOffsetTop.length - 1
                     break
                 }
                 if (scrollTop >= aOffsetTop[i]) {
@@ -159,13 +164,19 @@ export default defineComponent( {
     font-family: Helvetica;
     width: 120px;
     max-height: 500px;
-    background-color: #fff;
+    min-height: 50px;
+    background-color: transparent;
     border-left: 2px solid #eee;
     position: fixed;
     right: 5px;
     top: 60px;
-    transition: right .15s;
+    transition: right .15s ease-out;
     backdrop-filter: blur(5px);
+    &:hover a.is-anchorHide{
+        &::after, &::before{
+            opacity: 0;
+        }
+    }
     a{
         position: relative;
         left: -2px;
@@ -178,7 +189,7 @@ export default defineComponent( {
         text-overflow: ellipsis;
         white-space: nowrap;
         margin: 0 0 8px 0;
-        transition: all .1s;
+        transition: all .1s ease-out;
         padding-left: 15px;
         border-left: 2px solid transparent;
         &:last-child{
@@ -193,6 +204,38 @@ export default defineComponent( {
         font-size: 16px;
         font-weight: 700;
         border-left-color: #3cd0be;
+        &.is-anchorHide::before{
+            height: 10px;
+            width: 10px;
+            background-color: #3cd0be;
+        }
+    }
+    .is-anchorHide{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        &::after, &::before{
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #fff;
+            z-index: 2;
+            transition: opacity .15s ease-in-out;
+        }
+        &::before{
+            position: absolute;
+            border-radius: 50%;
+            background-color: #999;
+            height: 6px;
+            width: 6px;
+            z-index: 3;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     }
 }
 .anchor__hide{

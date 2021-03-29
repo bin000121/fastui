@@ -273,6 +273,18 @@ const routes: RouteRecordRaw[] = [
                     '大小、宽度、色彩': 'da_xiao_kuan_du_se_cai',
                     '提示文字': 'ti_shi_wen_zi'
                 }
+            },
+            {
+                path: '/doc/progress',
+                name: 'progress',
+                component: () => import('/@/views/display/progress.vue'),
+                meta: {
+                    '基本样式': 'ji_ben_yang_shi',
+                    '提示文本': 'ti_shi_wen_ben_xin_xi',
+                    '圆角': 'yuan_jiao',
+                    '动效': 'dong_xiao',
+                    '环形': 'huan_xing',
+                }
             }
         ]
     },

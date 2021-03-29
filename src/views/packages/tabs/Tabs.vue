@@ -522,7 +522,7 @@ export default defineComponent({
         background-color: #fff;
         position: absolute;
         cursor: pointer;
-        font-size: calc(1em);
+        font-size: 1em;
         color: #333;
         &:hover{
             color: var(--primary);

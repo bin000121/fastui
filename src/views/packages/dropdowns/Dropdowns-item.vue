@@ -60,8 +60,9 @@ export default defineComponent({
     color: #333;
     font-size: 14px;
     margin-left: -1px;
+    transition: background-color .08s ease-out;
     &:not(.f-dropdowns-item__disabled):hover{
-        background-color: #eee;
+        background-color: #f2f2f2;
     }
 }
 .f-dropdowns-item__small{

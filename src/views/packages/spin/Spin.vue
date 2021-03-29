@@ -12,7 +12,7 @@
                 v-if="type === 'ring'"
                 :cx="size"
                 :cy="size"
-                :r="(size / 2) - width"
+                :r="(size - width) / 2"
                 stroke="#ccc"
                 fill="transparent"
                 :stroke-width="width"
@@ -23,7 +23,7 @@
                 ]"
                 :cx="size"
                 :cy="size"
-                :r="(size / 2) - width"
+                :r="(size - width) / 2"
                 :stroke="color"
                 fill="transparent"
                 :stroke-width="width"
@@ -69,12 +69,12 @@ export default defineComponent({
             default: () => ({ color: '#1661ab' })
         },
         width: {
-            type: String,
-            default: '3'
+            type: Number,
+            default: 3
         },
         size: {
-            type: String,
-            default: '40',
+            type: Number,
+            default: 40,
             validator: (val: string) => parseInt(val) >= 25
         },
         tip: String,
@@ -94,7 +94,7 @@ export default defineComponent({
         })
 
         const initCssProperties = () => {
-            let radius = props.size / 2 - props.width
+            let radius = (props.size - props.width) / 2
             let C = 2 * pi * radius
             if (props.type === 'ring') {
                 fSpinDom.style.setProperty('--transform-origin', `${props.size}px ${props.size}px`)

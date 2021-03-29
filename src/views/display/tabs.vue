@@ -584,7 +584,7 @@
                 水平方向。
             </div>
             <div class="demo-tabs-list">
-                <f-tabs placement="bottom" closeable>
+                <f-tabs placement="top" closeable>
                     <f-tabs-pane
                         v-for="item in 30"
                         :key="item"
@@ -617,7 +617,7 @@
         水平方向。
     </div>
 
-    <f-tabs placement="bottom" closeable>
+    <f-tabs placement="top" closeable>
         <f-tabs-pane
             v-for="item in 30"
             :key="item"

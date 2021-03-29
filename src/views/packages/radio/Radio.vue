@@ -57,7 +57,7 @@ export default defineComponent({
     props: {
         label: [String, Number],
         value: {
-            type: [String, Number, Boolean],
+            type: [String, Number, Boolean, Object],
             default: false
         },
         border: Boolean,

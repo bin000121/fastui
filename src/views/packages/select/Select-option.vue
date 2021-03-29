@@ -103,9 +103,9 @@ export default defineComponent({
     height: calc(2.5em);
     line-height: calc(2.5em);
     width: 100%;
+    transition: background-color .08s ease-out;
     &:not(.f-select-option__isActive):not(.f-select-option__disabled):hover{
         background-color: #f2f2f2;
-
     }
     & > i{
         font-size: 14px;

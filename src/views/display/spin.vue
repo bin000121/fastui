@@ -50,28 +50,28 @@
             <p>可以自定义spin的宽度和线条的粗细、颜色。</p>
 
             <div class="demo-spin">
-                <f-spin size="50" width="2" color="#3cd0be"></f-spin>
+                <f-spin :size="50" :width="2" color="#3cd0be"></f-spin>
 
-                <f-spin size="70" width="4" color="skyblue" type="ring"></f-spin>
+                <f-spin :size="70" :width="4" color="skyblue" type="ring"></f-spin>
 
-                <f-spin size="90" width="6" color="yellow"></f-spin>
+                <f-spin :size="90" :width="6" color="yellow"></f-spin>
 
-                <f-spin size="70" width="8" color="#f00" type="snowflake"></f-spin>
+                <f-spin :size="70" :width="8" color="#f00" type="snowflake"></f-spin>
 
-                <f-spin size="50" width="10" color="purple"></f-spin>
+                <f-spin :size="50" :width="10" color="purple"></f-spin>
             </div>
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-spin size="50" width="2" color="#3cd0be"></f-spin>
+    {{`<f-spin :size="50" :width="2" color="#3cd0be"></f-spin>
 
-    <f-spin size="70" width="4" color="skyblue" type="ring"></f-spin>
+    <f-spin :size="70" :width="4" color="skyblue" type="ring"></f-spin>
 
-    <f-spin size="90" width="6" color="yellow"></f-spin>
+    <f-spin :size="90" :width="6" color="yellow"></f-spin>
 
-    <f-spin size="70" width="8" color="#f00" type="snowflake"></f-spin>
+    <f-spin :size="70" :width="8" color="#f00" type="snowflake"></f-spin>
 
-    <f-spin size="50" width="10" color="purple"></f-spin>`}}
+    <f-spin :size="50" :width="10" color="purple"></f-spin>`}}
                 </code></pre>
             </div>
         </div>

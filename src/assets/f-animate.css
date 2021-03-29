@@ -17,7 +17,7 @@
 }
 .f-zoom-in__center-enter-active,
 .f-zoom-in__center-leave-active{
-    transition: all .15s;
+    transition: all .18s ease-out;
 }
 
 /*f-dropdowns placement left/ right*/
@@ -175,5 +175,29 @@
     }
     100%{
         transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/*f-progress*/
+@keyframes f-progress__stripe {
+    0%{
+        background-position-x: var(--bgp-x);
+    }
+    100%{
+        background-position-x: 0;
+    }
+}
+@keyframes f-progress__stripe2 {
+    to{
+        left: 100%;
+    }
+}
+@keyframes f-progress__wave {
+    75%{
+        opacity: .6;
+    }
+    100%{
+        width: 100%;
+        opacity: 0;
     }
 }
