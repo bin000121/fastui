@@ -55,7 +55,7 @@
         </template>
     </f-dropdowns>
 
-    <f-dropdowns click-and-close>
+    <f-dropdowns click-not-close>
         <span>下拉菜单
             <i class="f-icon-arrow-down-bold"></i>
         </span>
@@ -181,8 +181,22 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-dropdowns :animate="false">
+    {{`<f-dropdowns trigger="click">
         <span>下拉菜单
+            <i class="f-icon-arrow-down-bold"></i>
+        </span>
+        <template #dropdownMenu>
+            <f-dropdowns-item>北京</f-dropdowns-item>
+            <f-dropdowns-item>上海</f-dropdowns-item>
+            <f-dropdowns-item>广州</f-dropdowns-item>
+            <f-dropdowns-item>深圳</f-dropdowns-item>
+            <f-dropdowns-item>厦门</f-dropdowns-item>
+            <f-dropdowns-item>杭州</f-dropdowns-item>
+        </template>
+    </f-dropdowns>
+
+    <f-dropdowns trigger="hover">
+        <span>hover触发
             <i class="f-icon-arrow-down-bold"></i>
         </span>
         <template #dropdownMenu>

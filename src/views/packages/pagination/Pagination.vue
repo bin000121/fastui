@@ -79,7 +79,8 @@ import {
     toRefs,
     onMounted,
     computed,
-    watchEffect
+    watchEffect,
+    PropType
 } from 'vue'
 interface dataType {
     currentPage: number;
@@ -87,6 +88,7 @@ interface dataType {
     showNum: number[];
     showEllipsis: number[];
 }
+type orderType = 'pagination' | 'total' | 'elevator' | 'pages'[]
 
 export default defineComponent({
     name: 'FPagination',
@@ -109,6 +111,10 @@ export default defineComponent({
             type: String,
             default: 'center',
             validator: (value: string) => ['flex-start', 'flex-end', 'center'].includes(value)
+        },
+        order: {
+           type: Array as PropType<orderType>,
+           default: ['pagination', 'total', 'elevator', 'pages']
         },
         limit: {
             type: Number,
