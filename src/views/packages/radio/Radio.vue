@@ -227,6 +227,7 @@ export default defineComponent({
 .choose-box__isChecked{
     border-color: var(--primary);
     box-shadow: 0 0 0 .15em #1661ab33;
+    animation: f-radio-scale-in .15s ease-in-out;
 }
 .choose-box-inner__isChecked{
     box-sizing: border-box;

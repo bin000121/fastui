@@ -8,7 +8,6 @@ import directive from '/@/utils/directive'
 import message from '/@/views/packages/message/message'
 
 const app = createApp(App)
-
 app.use(message)
 app.use(directive)
 app.use(router)

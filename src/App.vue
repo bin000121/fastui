@@ -18,6 +18,7 @@ export default defineComponent({
 <style>
 :root{
   --primary: #1661ab;
+  --primary-rgba: 22, 97, 171;
   --primary-disabled: #9fc7e8;
 }
 html, body{
@@ -26,7 +27,6 @@ html, body{
   min-height: 100vh;
   width: 100%;
   font-family: Helvetica!important;
-
 }
 #app{
   height: 100%;

@@ -201,3 +201,19 @@
         opacity: 0;
     }
 }
+
+/*f-radio*/
+@keyframes  f-radio-scale-in{
+    0%{
+        opacity: .4;
+        transform: scale(.5);
+    }
+    70%{
+        opacity: .7;
+        transform: scale(1.07);
+    }
+    100%{
+        opacity: 1;
+        transform: scale(1);
+    }
+}

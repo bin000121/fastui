@@ -23,6 +23,7 @@ export default defineComponent( {
         const element = {
             '/doc/button': 'Button 按钮',
             '/doc/icon': 'Icon 图标',
+            '/doc/layout': 'Layout 布局',
             '/doc/tag': 'Tag 标签',
             '/doc/switch': 'Switch 开关',
             '/doc/box': 'Box 盒子',

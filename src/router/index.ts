@@ -285,6 +285,12 @@ const routes: RouteRecordRaw[] = [
                     '动效': 'dong_xiao',
                     '环形': 'huan_xing',
                 }
+            },
+            {
+                path: '/doc/layout',
+                name: 'layout',
+                component: () => import('/@/views/display/layout.vue'),
+                meta: {}
             }
         ]
     },
