@@ -177,7 +177,7 @@
                         <b>校验账号用户名、密码。</b>
                     </f-timeline-item>
                     <f-timeline-item status="error">
-                        <p><b>密码错误！</b>
+                        <b>密码错误！</b>
                     </f-timeline-item>
                     <f-timeline-item>
                         <b>再次校验账号数据...</b>
@@ -199,7 +199,7 @@
 
             <div v-highlight>
                 <pre><code>
-    {{` <f-timeline>
+    {{`<f-timeline>
         <f-timeline-item>
             <b>登录游戏账号中...</b>
         </f-timeline-item>
