@@ -106,7 +106,6 @@ interface dataType {
     showNum: number[];
     showEllipsis: number[];
 }
-
 type orderType = 'pagination' | 'total' | 'elevator' | 'pages'[]
 
 export default defineComponent({
