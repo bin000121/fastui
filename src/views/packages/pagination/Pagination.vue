@@ -396,18 +396,16 @@ export default defineComponent({
 }
 li.f-pagination__size-array{
     width: 100px;
-    :deep {
-        .f-select{
-            min-height: 32px!important;
-            font-size: 14px!important;
-        }
-        .f-select-input{
-            height: 32px;
-            line-height: 32px;
-        }
-        .f-option-list-ul {
-            min-width: 120px;
-        }
+    :deep(.f-select){
+        min-height: 32px!important;
+        font-size: 14px!important;
+    }
+    :deep(.f-select-input){
+        height: 32px;
+        line-height: 32px;
+    }
+    :deep(.f-option-list-ul){
+        min-width: 120px;
     }
 }
 li.f-pagination__elevator input{
@@ -431,15 +429,13 @@ li.f-pagination__elevator input{
 .f-pagination__small{
     font-size: 14px!important;
     .f-pagination__size-array{
-        :deep {
-            .f-select{
-                min-height: 28px!important;
-                font-size: 14px!important;
-            }
-            .f-select-input{
-                height: 28px;
-                line-height: 28px;
-            }
+        :deep(.f-select){
+            min-height: 28px!important;
+            font-size: 14px!important;
+        }
+        :deep(.f-select-input){
+            height: 28px;
+            line-height: 28px;
         }
     }
 }
@@ -447,15 +443,13 @@ li.f-pagination__elevator input{
     font-size: 18px!important;
     .f-pagination__size-array{
         width: 120px;
-        :deep {
-            .f-select{
-                min-height: 36px!important;
-                font-size: 16px!important;
-            }
-            .f-select-input{
-                height: 36px;
-                line-height: 36px;
-            }
+        :deep(.f-select){
+            min-height: 36px!important;
+            font-size: 16px!important;
+        }
+        :deep(.f-select-input){
+            height: 36px;
+            line-height: 36px;
         }
     }
 }
