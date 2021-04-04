@@ -98,6 +98,7 @@ import {
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 import { debounce } from '/@/utils/debounce'
+import { isEmpty as isEmptyFn } from '/@/utils/isEmpty'
 
 type accept = number | string | number[] | string[]
 type FilterFunction = (val: string | number, label: any) => boolean
@@ -188,7 +189,7 @@ export default defineComponent({
         const blur = () => {
             if (!props.filterable) return
             if (props.multiple) {
-                selectIptDom.placeholder = JSON.stringify(currentData.value) === '{}' ? props.placeholder : ''
+                selectIptDom.placeholder = isEmptyFn(currentData.value) ? '': props.placeholder
                 selectIptDom.value = ''
             }
             else {
@@ -275,9 +276,9 @@ export default defineComponent({
             }
             else {
                 // 如果点击的值与上次相同则不处理
-                if (currentData.value === data) return
-                currentData.value = data
-                selectIptDom.value = data
+                if (currentData.value === label) return
+                currentData.value = label
+                selectIptDom.value = label
                 emitData = data
             }
             emit('change', emitData)
@@ -334,6 +335,7 @@ export default defineComponent({
 
 
         const initInputValue = () => {
+            if (isEmpty.value) return
             if (props.multiple) {
                 selectRootDom.style.paddingRight = 'calc(1.5em)'
                 let valueArr = props.value as Array<boolean | number | string> || []
@@ -345,9 +347,7 @@ export default defineComponent({
                         instanceList[label].ctx.isActive = true
                     }
                 }
-            } else {
-                selectIptDom.value = props.value || ''
-            }
+            } else selectIptDom.value = collectionData[props.value as string] || ''
         }
 
         watch(() => showOptionList.value, (newV: boolean) => {
@@ -364,6 +364,7 @@ export default defineComponent({
         }, { deep: true })
 
         watch(() => props.value, (newV: any) => {
+            if (isEmpty.value) return
             if (props.multiple) {
                 currentData.value = {}
                 for (let index in newV) {
@@ -371,7 +372,7 @@ export default defineComponent({
                     let label = collectionData[newV[index]]
                     currentData.value[label] = newV[index]
                 }
-            } else selectIptDom.value = props.value
+            } else selectIptDom.value = collectionData[props.value as string] || ''
         }, { deep: true })
 
         provide('parent', reactive({

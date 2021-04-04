@@ -164,7 +164,7 @@ export default defineComponent( {
     font-family: Helvetica;
     width: 120px;
     max-height: 500px;
-    background-color: #fff;
+    background-color: transparent;
     border-left: 2px solid #eee;
     position: fixed;
     right: 5px;
@@ -180,15 +180,15 @@ export default defineComponent( {
         position: relative;
         left: -2px;
         box-sizing: border-box;
-        font-size: 12px;
+        font-size: 14px;
         display: block;
-        color: #999;
+        color: #333;
         width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         margin: 0 0 8px 0;
-        transition: all .1s ease-out;
+        transition: all .12s ease-out;
         padding-left: 15px;
         border-left: 2px solid transparent;
         &:last-child{

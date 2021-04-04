@@ -453,7 +453,7 @@
                         v-for="item in area"
                         :key="item"
                         :label="item"
-                        :value="item"
+                        :value="'城市-' + item"
                     />
                 </f-select>
             </div>
@@ -584,11 +584,8 @@
                         :key="item"
                         :label="item"
                         :value="item"
-                    >
-                        <template #default>
-                            <span>{{configLabel(item)}}</span>
-                        </template>
-                    </f-option>
+                        :format-option="configLabel"
+                    ></f-option>
                 </f-select>
             </div>
 
@@ -763,27 +760,27 @@
                             options: [
                                 {
                                     label: '苏州',
-                                    value: '苏州',
+                                    value: 'suzhou',
                                 },
                                 {
                                     label: '徐州',
-                                    value: '徐州',
+                                    value: 'xuzhou',
                                 },
                                 {
                                     label: '无锡',
-                                    value: '无锡',
+                                    value: 'wuxi',
                                 },
                                 {
                                     label: '南京',
-                                    value: '南京',
+                                    value: 'nanjing',
                                 },
                                 {
                                     label: '杭州',
-                                    value: '杭州',
+                                    value: 'hangzhou',
                                 },
                                 {
                                     label: '扬州',
-                                    value: '扬州',
+                                    value: 'yangzhou',
                                 }
                             ]
                         },
@@ -792,19 +789,19 @@
                             options: [
                                 {
                                     label: '广州',
-                                    value: '广州',
+                                    value: 'guangzhou',
                                 },
                                 {
                                     label: '深圳',
-                                    value: '深圳',
+                                    value: 'shenzhen',
                                 },
                                 {
                                     label: '东莞',
-                                    value: '东莞',
+                                    value: 'dongguan',
                                 },
                                 {
                                     label: '佛山',
-                                    value: '佛山',
+                                    value: 'foshan',
                                 }
                             ]
                         },
@@ -813,19 +810,19 @@
                             options: [
                                 {
                                     label: '厦门',
-                                    value: '厦门',
+                                    value: 'xiamen',
                                 },
                                 {
                                     label: '福州',
-                                    value: '福州',
+                                    value: 'fuzhou',
                                 },
                                 {
                                     label: '泉州',
-                                    value: '泉州',
+                                    value: 'quanzhou',
                                 },
                                 {
                                     label: '漳州',
-                                    value: '漳州',
+                                    value: 'zhangzhou',
                                 }
                             ]
                         },
@@ -834,19 +831,19 @@
                             options: [
                                 {
                                     label: '南宁',
-                                    value: '南宁',
+                                    value: 'nanning',
                                 },
                                 {
                                     label: '桂林',
-                                    value: '桂林',
+                                    value: 'guilin',
                                 },
                                 {
                                     label: '柳州',
-                                    value: '柳州',
+                                    value: 'liuzhou',
                                 },
                                 {
                                     label: '玉林',
-                                    value: '玉林',
+                                    value: 'yulin',
                                 }
                             ]
                         }
@@ -889,8 +886,35 @@ export default defineComponent({
             select4: [],
             select5: '',
             select6: ['福州'],
-            select7: '北京',
+            select7: '',
             select8: '苏州',
+            // area: [
+            //     '北京-beijing',
+            //     '上海-shanghai',
+            //     '广州-guangzhou',
+            //     '深圳-shenzhen',
+            //     '东莞-dngguan',
+            //     '佛山-foshan',
+            //     '重庆-chongqiong',
+            //     '南京-nanjing',
+            //     '杭州-huangzhou',
+            //     '武汉-wuhan',
+            //     '天津-tianjin',
+            //     '厦门-xiamen',
+            //     '福州-fuzhou',
+            //     '泉州-quanzhou',
+            //     '漳州-zhangzhou',
+            //     '石家庄-shijiazhuang',
+            //     '青岛-qingdao',
+            //     '桂林-guilin',
+            //     '南宁-nanning',
+            //     '柳州-liuzhou',
+            //     '长沙-changsha',
+            //     '贵州-guizhou',
+            //     '昆明-kunming',
+            //     '三亚-sanya',
+            //     '郑州-zhengzhou',
+            // ],
             area: [
                 '北京',
                 '上海',
@@ -924,27 +948,27 @@ export default defineComponent({
                     options: [
                         {
                             label: '苏州',
-                            value: '苏州',
+                            value: 'suzhou',
                         },
                         {
                             label: '徐州',
-                            value: '徐州',
+                            value: 'xuzhou',
                         },
                         {
                             label: '无锡',
-                            value: '无锡',
+                            value: 'wuxi',
                         },
                         {
                             label: '南京',
-                            value: '南京',
+                            value: 'nanjing',
                         },
                         {
                             label: '杭州',
-                            value: '杭州',
+                            value: 'hangzhou',
                         },
                         {
                             label: '扬州',
-                            value: '扬州',
+                            value: 'yangzhou',
                         }
                     ]
                 },
@@ -953,19 +977,19 @@ export default defineComponent({
                     options: [
                         {
                             label: '广州',
-                            value: '广州',
+                            value: 'guangzhou',
                         },
                         {
                             label: '深圳',
-                            value: '深圳',
+                            value: 'shenzhen',
                         },
                         {
                             label: '东莞',
-                            value: '东莞',
+                            value: 'dongguan',
                         },
                         {
                             label: '佛山',
-                            value: '佛山',
+                            value: 'foshan',
                         }
                     ]
                 },
@@ -974,19 +998,19 @@ export default defineComponent({
                     options: [
                         {
                             label: '厦门',
-                            value: '厦门',
+                            value: 'xiamen',
                         },
                         {
                             label: '福州',
-                            value: '福州',
+                            value: 'fuzhou',
                         },
                         {
                             label: '泉州',
-                            value: '泉州',
+                            value: 'quanzhou',
                         },
                         {
                             label: '漳州',
-                            value: '漳州',
+                            value: 'zhangzhou',
                         }
                     ]
                 },
@@ -995,36 +1019,34 @@ export default defineComponent({
                     options: [
                         {
                             label: '南宁',
-                            value: '南宁',
+                            value: 'nanning',
                         },
                         {
                             label: '桂林',
-                            value: '桂林',
+                            value: 'guilin',
                         },
                         {
                             label: '柳州',
-                            value: '柳州',
+                            value: 'liuzhou',
                         },
                         {
                             label: '玉林',
-                            value: '玉林',
+                            value: 'yulin',
                         }
                     ]
                 }
             ],
         })
 
-        const configLabel = computed(() => {
+        const configLabel = (label: string) => {
             const gd = ['广州', '深圳','东莞','佛山']
             const gx = ['南宁', '桂林','柳州']
             const fj = ['福州', '厦门','泉州','漳州']
-            return (label: string) => {
-                if (gd.includes(label)) return '广东省 - ' + label
-                if (gx.includes(label)) return '广西壮族自治区 - ' + label
-                if (fj.includes(label)) return '福建省 - ' + label
-                return '中国城市 - ' + label
-            }
-        })
+            if (gd.includes(label)) return '广东省 - ' + label
+            if (gx.includes(label)) return '广西壮族自治区 - ' + label
+            if (fj.includes(label)) return '福建省 - ' + label
+            return '中国城市 - ' + label
+        }
         return {
             ...toRefs(data),
             configLabel

@@ -10,7 +10,7 @@
             <p>可以对其监听change事件可以获得变化后的数据。</p>
 
             <div class="desc">
-                您可以使用属性 <b>show-total</b> 和 <b>show-elevator</b> 来展现出总条目数和电梯。
+                您可以使用属性 <b>show-total</b> 、 <b>show-elevator</b> 和 <b>show-size-array</b> 来展现出总条目数、电梯、条目选择器。
             </div>
 
             <div class="desc">
@@ -24,8 +24,18 @@
                     :pageSize="pageSize"
                     :page="page"
                     @change="updatePage"
-                ></f-pagination>
+                />
             </div>
+
+<!--            <div class="demo-pagination">-->
+<!--                <f-pagination-->
+<!--                    :total="total"-->
+<!--                    :pageSize="pageSize"-->
+<!--                    :page="page"-->
+<!--                    show-total-->
+<!--                    show-elevator-->
+<!--                ></f-pagination>-->
+<!--            </div>-->
 
             <div class="demo-pagination">
                 <f-pagination
@@ -34,7 +44,10 @@
                     :page="page"
                     show-total
                     show-elevator
-                ></f-pagination>
+                    show-size-array
+                    :sizeArray="[10, 15, 20, 50]"
+                    @change="updatePage"
+                />
             </div>
 
             <div v-highlight>
@@ -44,7 +57,7 @@
         :pageSize="pageSize"
         :page="page"
         @change="updatePage"
-    ></f-pagination>
+    />
 
     <f-pagination
         :total="total"
@@ -52,7 +65,10 @@
         :page="page"
         show-total
         show-elevator
-    ></f-pagination>
+        show-size-array
+        :sizeArray="[10, 15, 20, 50]"
+        @change="updatePage"
+    />
 
 
     <script lang="ts">

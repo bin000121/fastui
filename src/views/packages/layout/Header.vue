@@ -10,10 +10,7 @@ import {
 } from 'vue'
 
 export default defineComponent({
-    name: 'fHeader',
-    setup() {
-
-    }
+    name: 'fHeader'
 })
 </script>
 

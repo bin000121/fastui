@@ -64,9 +64,9 @@
                 <pre><code>
     {{`<p>选中值：\{\{radio\}\}</p>
 
-    <f-radio v-model:value="radio" label="iphoneX" border disabled>iphoneX</f-radio>
-    <f-radio v-model:value="radio" label="iphone11" border>iphone11</f-radio>
-    <f-radio v-model:value="radio" label="iphone12" border>iphone12</f-radio>
+    <f-radio v-model:value="radio" label="iphoneX" disabled>iphoneX</f-radio>
+    <f-radio v-model:value="radio" label="iphone11">iphone11</f-radio>
+    <f-radio v-model:value="radio" label="iphone12">iphone12</f-radio>
 
 
     <script lang="ts">

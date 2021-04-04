@@ -153,8 +153,8 @@ export default defineComponent({
             const { id, name, disabled } = instance.value[index].props
             if (disabled) return
             const dom = document.getElementById(id) as HTMLElement
-            let width = dom.offsetWidth
-            let height = dom.offsetHeight
+            let width = dom?.offsetWidth || 0
+            let height = dom?.offsetHeight || 0
             let direction: string
             let translate: string
             let bgc = `background-color: ${ props.card ? '#fff' : 'var(--primary)' };`
@@ -207,7 +207,7 @@ export default defineComponent({
             emit('tab-close', instance.value[index].props.name)
             instance.value.splice(index, 1)
             i = instance.value.findIndex((value: any) => value.props.name === name)
-            toggleActive(i)
+            nextTick(() => toggleActive(i))
             checkIsShowArrow()
             handleScroll(-1 * (length + 5) || 0)
         }

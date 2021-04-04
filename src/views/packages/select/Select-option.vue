@@ -7,12 +7,7 @@
         }"
         @click.stop="handleClickOption"
     >
-        <template v-if="$slots.default">
-            <slot></slot>
-        </template>
-        <template v-else>
-            {{label || ''}}
-        </template>
+        {{getLabel}}
         <i class="f-icon-yes" v-if="isShowCheck"></i>
     </li>
 </template>
@@ -24,7 +19,9 @@ import {
     watch,
     inject,
     getCurrentInstance,
-    ref
+    ref,
+    PropType,
+    computed
 } from 'vue'
 
 export default defineComponent({
@@ -38,7 +35,8 @@ export default defineComponent({
             type: [String, Number, Boolean],
             required: true
         },
-        disabled: Boolean
+        disabled: Boolean,
+        formatOption: Function as PropType<(label: string | number) => string>
     },
     setup (props) {
         const {
@@ -49,26 +47,26 @@ export default defineComponent({
             toggleView,
         }: any = inject('parent')
 
-        collection(props.label, props.value)
         const son = getCurrentInstance()
-        collectionInstance(props.label, son)
         const isActive = ref(false)
         const isShowCheck = ref(true)
         const root: any = parent.props
         const isShowOption = ref(true)
 
+        const getLabel = computed(() => props.formatOption?.(props.label) || props.label)
+        collection(getLabel.value, props.value)
+        collectionInstance(getLabel.value, son)
         const handleClickOption = () => {
             if (props.disabled) return
-            if (root.multiple) getChose(props.label, props.value, isActive.value)
+            if (root.multiple) getChose(getLabel.value, props.value, isActive.value)
             else {
-                getChose(props.label, props.value)
+                getChose(getLabel.value, props.value)
                 toggleView()
             }
         }
 
         watch(() => root.value, (newV: any) => {
-            if (root.multiple) isActive.value = newV.includes(props.value)
-            else isActive.value = newV === props.value
+            isActive.value = root.multiple ?newV.includes(props.value) : newV === props.value
         }, { deep: true })
 
         onMounted(() => {
@@ -77,9 +75,8 @@ export default defineComponent({
             // 如果用户绑定了v-model:value
             if (root.multiple) {
                 // 多选模式下的绑定的数据必须是数组
-                if (Array.isArray(root.value)) {
-                    isActive.value = root.value.includes(props.value)
-                } else console.warn('[fast-ui]: value is not of Array!')
+                if (Array.isArray(root.value)) isActive.value = root.value.includes(props.value)
+                else console.warn('[fast-ui]: value is not of Array!')
             } else isActive.value = props.value === root.value
         })
         return{
@@ -87,6 +84,7 @@ export default defineComponent({
             isActive,
             isShowOption,
             isShowCheck,
+            getLabel
         }
     }
 })
@@ -107,7 +105,7 @@ export default defineComponent({
     &:not(.f-select-option__isActive):not(.f-select-option__disabled):hover{
         background-color: #f2f2f2;
     }
-    & > i{
+    & i{
         font-size: 14px;
         color: var(--primary);
         display: none;
@@ -124,7 +122,7 @@ export default defineComponent({
         background-color: #1661ab26;
     }
     & > i{
-        display: block;
+        display: block!important;
     }
 }
 .f-select-option__disabled{

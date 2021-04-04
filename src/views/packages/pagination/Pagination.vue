@@ -55,8 +55,24 @@
         >
             <i class="f-icon-arrow-right-bold"></i>
         </li>
+
         <li class="f-pagination__total" v-if="showTotal">
             共 {{total}} 条
+        </li>
+
+        <li class="f-pagination__size-array" v-if="showSizeArray">
+            <f-select
+                @change="sizeArrayChange"
+                v-model:value="currentSize"
+            >
+                <f-option
+                    v-for="(item, i) in sizeArray"
+                    :key="i"
+                    :label="item"
+                    :value="item"
+                    :format-option="formatOption || ((label) => `${label} 条/页`)"
+                />
+            </f-select>
         </li>
 
         <li class="f-pagination__elevator" v-if="showElevator">
@@ -82,15 +98,22 @@ import {
     watchEffect,
     PropType
 } from 'vue'
+import fSelect from '/@/views/packages/select/Select.vue'
+import fOption from '/@/views/packages/select/Select-option.vue'
 interface dataType {
     currentPage: number;
     currentSize: number;
     showNum: number[];
     showEllipsis: number[];
 }
+
 type orderType = 'pagination' | 'total' | 'elevator' | 'pages'[]
 
 export default defineComponent({
+    components: {
+        fSelect,
+        fOption
+    },
     name: 'FPagination',
     inheritAttrs: false,
     emits: ['change'],
@@ -103,6 +126,12 @@ export default defineComponent({
             type: Number,
             default: 10
         },
+        sizeArray: {
+            type: Array as PropType<number[]>,
+            default: [10, 20, 50, 100],
+            validator: (val: number[]) => val.length > 0
+        },
+        formatOption: Function as PropType<(label: string | number) => string>,
         page: {
             type: Number,
             default: 1
@@ -129,9 +158,15 @@ export default defineComponent({
         disabled: Boolean,
         showTotal: Boolean,
         showElevator: Boolean,
+        showSizeArray: Boolean,
         simple: Boolean,
         circle: Boolean,
         text: Boolean,
+        // type: {
+        //     type: String,
+        //     default: 'default',
+        //     validator: (val: string) =>  ['default', 'text', 'circle', 'simple'].includes(val)
+        // },
         size: {
             type: String,
             default: 'default',
@@ -184,6 +219,10 @@ export default defineComponent({
                 return data.showEllipsis.includes(num)
             }
         })
+
+        const sizeArrayChange = (data: number) => {
+            handleChange('pageSize', data)
+        }
 
         const handleFastStep = (str: string) => {
             if (str.startsWith('向前')) {
@@ -273,6 +312,7 @@ export default defineComponent({
             getAllPage,
             handleChange,
             handleFastStep,
+            sizeArrayChange,
             pre,
             next,
             showNumBtn,
@@ -294,10 +334,8 @@ export default defineComponent({
     margin: 0;
     box-sizing: border-box;
     font-size: 16px;
-    li + li{
-        margin-left: calc(.75em);
-    }
-    li{
+    & > li{
+        margin-left: .75em;
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
@@ -312,7 +350,7 @@ export default defineComponent({
         color: #333;
         user-select: none;
         transition: all .1s;
-        &:not(.f-pagination-pre):not(.f-pagination-next):not(.f-pagination__total):not(.f-pagination__elevator):not(.f-pagination-is-active):hover{
+        &:not(.f-pagination-pre):not(.f-pagination-next):not(.f-pagination__total):not(.f-pagination__elevator):not(.f-pagination__size-array):not(.f-pagination-is-active):hover{
             transition: all .05s;
             box-shadow: 0 0 0 .15em #1661ab33;
             color: var(--primary);
@@ -350,11 +388,27 @@ export default defineComponent({
              display: none;
          }
     }
-    li.f-pagination__total, li.f-pagination__elevator{
+    li.f-pagination__total, li.f-pagination__elevator, li.f-pagination__size-array{
         user-select: text;
         cursor: text;
         box-shadow: none!important;
         font-size: calc(.9em);
+    }
+}
+li.f-pagination__size-array{
+    width: 100px;
+    ::v-deep {
+        .f-select{
+            min-height: 32px!important;
+            font-size: 14px!important;
+        }
+        .f-select-input{
+            height: 32px;
+            line-height: 32px;
+        }
+        .f-option-list-ul {
+            min-width: 120px;
+        }
     }
 }
 li.f-pagination__elevator input{
@@ -377,9 +431,34 @@ li.f-pagination__elevator input{
 }
 .f-pagination__small{
     font-size: 14px!important;
+    .f-pagination__size-array{
+        ::v-deep {
+            .f-select{
+                min-height: 28px!important;
+                font-size: 14px!important;
+            }
+            .f-select-input{
+                height: 28px;
+                line-height: 28px;
+            }
+        }
+    }
 }
 .f-pagination__large{
     font-size: 18px!important;
+    .f-pagination__size-array{
+        width: 120px;
+        ::v-deep {
+            .f-select{
+                min-height: 36px!important;
+                font-size: 16px!important;
+            }
+            .f-select-input{
+                height: 36px;
+                line-height: 36px;
+            }
+        }
+    }
 }
 .f-pagination__disabled{
     color: #999;
@@ -411,7 +490,7 @@ li.f-pagination__elevator input{
            transform: none!important;
            color: #333!important;
        }
-       &.f-pagination__total, &.f-pagination__elevator{
+       &.f-pagination__total, &.f-pagination__elevator, &.f-pagination__size-array{
            box-shadow: none!important
        }
        &:nth-child(3){
