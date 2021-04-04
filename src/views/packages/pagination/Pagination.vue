@@ -240,7 +240,6 @@ export default defineComponent({
         }
 
         const updateBtnList = () => {
-
             data.showNum = []
             data.showEllipsis = []
             // 限制数量大于等于总页码，则全部显示
@@ -287,7 +286,10 @@ export default defineComponent({
             if (props.disabled) return
             // 变化后的页码或分页大小一致就不在执行该函数
             if (type === 'page') data.currentPage = val > getAllPage.value ? getAllPage.value : val
-            else data.currentSize = val
+            else {
+                data.currentSize = val
+                if (Math.ceil(props.total / val) === 1) data.currentPage = 1
+            }
             updateBtnList()
             // if (elevatorIptDom) elevatorIptDom.value = data.currentPage
             emit('change', type, val)
