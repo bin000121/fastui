@@ -85,7 +85,7 @@
             <div class="demo-spin">
                 <f-spin tip="正在拼命加载..."></f-spin>
                 <f-spin type="ring" tip="加载中..." :tip-style="{ color: '#333' }"></f-spin>
-                <f-spin tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>
+                <f-spin type="snowflake" tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>
             </div>
 
             <div v-highlight>
@@ -94,7 +94,7 @@
 
     <f-spin type="ring" tip="加载中..." :tip-style="{ color: '#333' }"></f-spin>
 
-    <f-spin tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>`}}
+    <f-spin type="snowflake" tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>`}}
                 </code></pre>
             </div>
         </div>

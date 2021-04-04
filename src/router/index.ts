@@ -246,6 +246,16 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/timeline',
+                name: 'timeline',
+                component: () => import('/@/views/display/timeline.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                    '左右交替': 'zuo_you_jiao_ti',
+                    '时间节点状态': 'shi_jian_jie_dian_zhuang_tai',
+                }
+            },
+            {
                 path: '/doc/drawer',
                 name: 'drawer',
                 component: () => import('/@/views/display/drawer.vue'),

@@ -55,7 +55,7 @@ import { getRandomId } from '/@/utils/getRandomId'
 export default defineComponent({
     emits: ['update:value', 'change'],
     props: {
-        label: [String, Number],
+        label: [String, Number, Boolean],
         value: {
             type: [String, Number, Boolean, Object],
             default: false
@@ -128,7 +128,7 @@ export default defineComponent({
                 fRadioDom.checked = newV === label
                 currentValue.value = fRadioDom.checked
                 !parent && emit('change', label)
-            })
+            }, { immediate: true })
         })
         return{
             radioLabel,
@@ -154,6 +154,9 @@ export default defineComponent({
     position: relative;
     align-items: center;
     color: #333;
+}
+.f-radio-label + .f-radio-label{
+    margin-left: 15px;
 }
 .f-radio-vertical{
     display: flex!important;
