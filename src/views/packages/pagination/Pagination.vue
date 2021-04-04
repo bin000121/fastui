@@ -396,7 +396,7 @@ export default defineComponent({
 }
 li.f-pagination__size-array{
     width: 100px;
-    ::v-deep {
+    :deep {
         .f-select{
             min-height: 32px!important;
             font-size: 14px!important;
@@ -431,7 +431,7 @@ li.f-pagination__elevator input{
 .f-pagination__small{
     font-size: 14px!important;
     .f-pagination__size-array{
-        ::v-deep {
+        :deep {
             .f-select{
                 min-height: 28px!important;
                 font-size: 14px!important;
@@ -447,7 +447,7 @@ li.f-pagination__elevator input{
     font-size: 18px!important;
     .f-pagination__size-array{
         width: 120px;
-        ::v-deep {
+        :deep {
             .f-select{
                 min-height: 36px!important;
                 font-size: 16px!important;
