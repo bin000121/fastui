@@ -7,14 +7,20 @@
             <h3 id="ji_ben_yong_fa">基本用法
                 <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
             </h3>
-            <p>默认垂直自上而下方向。</p>
+            <p>默认垂直自上而下的方向，横向靠左对齐。</p>
+
+            <div class="desc">
+                设置属性 <b>type</b> 可以为其应用不同的对齐方式。
+            </div>
 
             <div class="demo-timeline">
                 <div style="margin-bottom: 15px;">
-                    <f-radio :label="false" v-model:value="reverse" border>默认</f-radio>
-                    <f-radio :label="true" v-model:value="reverse" border>反向</f-radio>
+                    <f-radio label="left" v-model:value="type" border>默认</f-radio>
+                    <f-radio label="right" v-model:value="type" border>靠右</f-radio>
+                    <f-radio label="reverse" v-model:value="type" border>反向</f-radio>
+                    <f-radio label="alternate" v-model:value="type" border>左右交替</f-radio>
                 </div>
-                <f-timeline :reverse="reverse">
+                <f-timeline :type="type">
                     <f-timeline-item>
                         <p><b>唐朝（618年－907年）</b></p>
                         <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一，唐朝共历274年（包括武周是289年），20位皇帝。唐朝声誉远及海外，与南亚、西亚和欧洲国家均有往来</p>
@@ -42,11 +48,13 @@
                 <pre><code>
     {{`<div class="demo-timeline">
         <div style="margin-bottom: 15px;">
-            <f-radio :label="false" v-model:value="reverse" border>默认</f-radio>
-            <f-radio :label="true" v-model:value="reverse" border>反向</f-radio>
+            <f-radio label="left" v-model:value="type" border>默认</f-radio>
+            <f-radio label="right" v-model:value="type" border>靠右</f-radio>
+            <f-radio label="reverse" v-model:value="type" border>反向</f-radio>
+            <f-radio label="alternate" v-model:value="type" border>左右交替</f-radio>
         </div>
 
-        <f-timeline :reverse="reverse">
+        <f-timeline :type="type">
             <f-timeline-item>
                 <p><b>唐朝（618年－907年）</b></p>
                 <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一，唐朝共历274年（包括武周是289年），20位皇帝。唐朝声誉远及海外，与南亚、西亚和欧洲国家均有往来</p>
@@ -78,9 +86,9 @@
     } from 'vue'
     export default defineComponent({
         setup() {
-            const reverse = ref(false)
+            const type = ref('left')
             return{
-                reverse
+                type
             }
         }
     })
@@ -99,68 +107,68 @@
             </div>
         </div>
 
-        <div>
-            <h3 id="zuo_you_jiao_ti">左右交替
-                <a href="#zuo_you_jiao_ti" class="f-icon-anchor"></a>
-            </h3>
-            <p>时间轴组件将会应用左右交替展现的样式。</p>
+<!--        <div>-->
+<!--            <h3 id="zuo_you_jiao_ti">左右交替-->
+<!--                <a href="#zuo_you_jiao_ti" class="f-icon-anchor"></a>-->
+<!--            </h3>-->
+<!--            <p>时间轴组件将会应用左右交替展现的样式。</p>-->
 
-            <div class="desc">
-                设置属性 <b>alternate</b> 即可生效。
-            </div>
+<!--            <div class="desc">-->
+<!--                设置属性 <b>alternate</b> 即可生效。-->
+<!--            </div>-->
 
-            <div class="demo-timeline">
-                <f-timeline alternate>
-                    <f-timeline-item>
-                        <p><b>唐朝（618年－907年）</b></p>
-                        <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一。</p>
-                    </f-timeline-item>
-                    <f-timeline-item>
-                        <p><b>宋朝（960年－1279年）</b></p>
-                        <p>宋朝是中国历史上承五代十国、下启元朝的时代，分北宋和南宋。</p>
-                    </f-timeline-item>
-                    <f-timeline-item>
-                        <p><b>元朝（1271年－1368年）</b></p>
-                        <p>元朝是中国历史上由蒙古族建立的王朝，定都大都（北京市）。</p>
-                    </f-timeline-item>
-                    <f-timeline-item>
-                        <p><b>明朝（1368年－1644年）</b></p>
-                        <p>明朝是中国历史上最后一个由汉族建立的中原王朝。</p>
-                    </f-timeline-item>
-                    <f-timeline-item>
-                        <p><b>清朝（1636年－1912年）</b></p>
-                        <p>清朝是中国历史上第二个由少数民族建立的统一政权，也是中国最后一个封建帝制王朝。</p>
-                    </f-timeline-item>
-                </f-timeline>
-            </div>
+<!--            <div class="demo-timeline">-->
+<!--                <f-timeline type="alternate">-->
+<!--                    <f-timeline-item>-->
+<!--                        <p><b>唐朝（618年－907年）</b></p>-->
+<!--                        <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一。</p>-->
+<!--                    </f-timeline-item>-->
+<!--                    <f-timeline-item>-->
+<!--                        <p><b>宋朝（960年－1279年）</b></p>-->
+<!--                        <p>宋朝是中国历史上承五代十国、下启元朝的时代，分北宋和南宋。</p>-->
+<!--                    </f-timeline-item>-->
+<!--                    <f-timeline-item>-->
+<!--                        <p><b>元朝（1271年－1368年）</b></p>-->
+<!--                        <p>元朝是中国历史上由蒙古族建立的王朝，定都大都（北京市）。</p>-->
+<!--                    </f-timeline-item>-->
+<!--                    <f-timeline-item>-->
+<!--                        <p><b>明朝（1368年－1644年）</b></p>-->
+<!--                        <p>明朝是中国历史上最后一个由汉族建立的中原王朝。</p>-->
+<!--                    </f-timeline-item>-->
+<!--                    <f-timeline-item>-->
+<!--                        <p><b>清朝（1636年－1912年）</b></p>-->
+<!--                        <p>清朝是中国历史上第二个由少数民族建立的统一政权，也是中国最后一个封建帝制王朝。</p>-->
+<!--                    </f-timeline-item>-->
+<!--                </f-timeline>-->
+<!--            </div>-->
 
-            <div v-highlight>
-                <pre><code>
-    {{`<f-timeline alternate>
-        <f-timeline-item>
-            <p><b>唐朝（618年－907年）</b></p>
-            <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一。</p>
-        </f-timeline-item>
-        <f-timeline-item>
-            <p><b>宋朝（960年－1279年）</b></p>
-            <p>宋朝是中国历史上承五代十国、下启元朝的时代，分北宋和南宋。</p>
-        </f-timeline-item>
-        <f-timeline-item>
-            <p><b>元朝（1271年－1368年）</b></p>
-            <p>元朝是中国历史上由蒙古族建立的王朝，定都大都（北京市）。</p>
-        </f-timeline-item>
-        <f-timeline-item>
-            <p><b>明朝（1368年－1644年）</b></p>
-            <p>明朝是中国历史上最后一个由汉族建立的中原王朝。</p>
-        </f-timeline-item>
-        <f-timeline-item>
-            <p><b>清朝（1636年－1912年）</b></p>
-            <p>清朝是中国历史上第二个由少数民族建立的统一政权，也是中国最后一个封建帝制王朝。</p>
-        </f-timeline-item>
-    </f-timeline>`}}
-                </code></pre>
-            </div>
-        </div>
+<!--            <div v-highlight>-->
+<!--                <pre><code>-->
+<!--    {{`<f-timeline type="alternate">-->
+<!--        <f-timeline-item>-->
+<!--            <p><b>唐朝（618年－907年）</b></p>-->
+<!--            <p>唐朝是中国封建社会中统一时间最长，国力最强盛的朝代之一。</p>-->
+<!--        </f-timeline-item>-->
+<!--        <f-timeline-item>-->
+<!--            <p><b>宋朝（960年－1279年）</b></p>-->
+<!--            <p>宋朝是中国历史上承五代十国、下启元朝的时代，分北宋和南宋。</p>-->
+<!--        </f-timeline-item>-->
+<!--        <f-timeline-item>-->
+<!--            <p><b>元朝（1271年－1368年）</b></p>-->
+<!--            <p>元朝是中国历史上由蒙古族建立的王朝，定都大都（北京市）。</p>-->
+<!--        </f-timeline-item>-->
+<!--        <f-timeline-item>-->
+<!--            <p><b>明朝（1368年－1644年）</b></p>-->
+<!--            <p>明朝是中国历史上最后一个由汉族建立的中原王朝。</p>-->
+<!--        </f-timeline-item>-->
+<!--        <f-timeline-item>-->
+<!--            <p><b>清朝（1636年－1912年）</b></p>-->
+<!--            <p>清朝是中国历史上第二个由少数民族建立的统一政权，也是中国最后一个封建帝制王朝。</p>-->
+<!--        </f-timeline-item>-->
+<!--    </f-timeline>`}}-->
+<!--                </code></pre>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div>
             <h3 id="shi_jian_jie_dian_zhuang_tai">时间节点状态
@@ -191,7 +199,7 @@
                     <f-timeline-item status="success">
                         <b>加载人物数据成功！</b>
                     </f-timeline-item>
-                    <f-timeline-item status="error">
+                    <f-timeline-item status="error" icon="f-icon-computer">
                         <b>网络连接中断，请检查您的网络！</b>
                     </f-timeline-item>
                 </f-timeline>
@@ -246,9 +254,9 @@ export default defineComponent({
         fRadio
     },
     setup() {
-        const reverse = ref(false)
+        const type = ref('left')
         return{
-            reverse
+            type
         }
     }
 })

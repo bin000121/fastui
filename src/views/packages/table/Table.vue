@@ -1,6 +1,7 @@
 <template>
     <div class="f-table">
-        <table border="1">
+        <table>
+            <slot></slot>
             <thead>
                 <tr>
                     <th>6</th>

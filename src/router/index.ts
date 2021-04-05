@@ -251,7 +251,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/timeline.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
-                    '左右交替': 'zuo_you_jiao_ti',
+                    // '左右交替': 'zuo_you_jiao_ti',
                     '时间节点状态': 'shi_jian_jie_dian_zhuang_tai',
                 }
             },

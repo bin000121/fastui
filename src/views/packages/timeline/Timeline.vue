@@ -2,7 +2,7 @@
     <ul
         :class="{
             'f-timeline': true,
-            'is-reverse': reverse
+            'is-reverse': type === 'reverse'
         }"
     >
         <slot></slot>
@@ -26,13 +26,16 @@ export default defineComponent({
             validator: (val: string) => ['default', 'revert'].includes(val)
         },
         reverse: Boolean,
-        alternate: Boolean
+        alternate: Boolean,
+        type: {
+            type: String,
+            default: 'left',
+            validator: (val: string) => ['left', 'right', 'reverse', 'alternate'].includes(val)
+        }
     },
     setup(props) {
         let num = 0
-        const getInstanceNum = () => {
-            return ++num
-        }
+        const getInstanceNum = () => ++num
         provide('$parent', getCurrentInstance())
         // onMounted(() => {
         //     if (props.alternate) {
