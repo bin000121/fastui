@@ -46,6 +46,7 @@ export default defineComponent( {
             '/doc/toTop': 'ToTop 返回顶部',
             '/doc/spin': 'Spin 加载中',
             '/doc/progress': 'Progress 进度条',
+            '/doc/badge': 'Badge 徽章',
         }
 
         const Aside = ref(null)

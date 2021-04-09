@@ -1,5 +1,9 @@
 :root{
     --primary: #1661ab;
+    --error: red;
+    --success: #52c41a;
+    --warning: #faad14;
+    --info: #6c757d;
     --primary-rgba: 22, 97, 171;
     --primary-disabled: #9fc7e8;
 }

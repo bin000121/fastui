@@ -297,6 +297,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/badge',
+                name: 'badge',
+                component: () => import('/@/views/display/badge.vue'),
+                meta: {
+                    '基本样式': 'ji_ben_yang_shi',
+                }
+            },
+            {
                 path: '/doc/layout',
                 name: 'layout',
                 component: () => import('/@/views/display/layout.vue'),
