@@ -297,10 +297,23 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/badge',
+                name: 'badge',
+                component: () => import('/@/views/display/badge.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                    '多种色彩': 'duo_zhong_se_cai',
+                    '位置': 'wei_zhi',
+                    '自定义样式': 'zi_ding_yi_yang_shi',
+                }
+            },
+            {
                 path: '/doc/layout',
                 name: 'layout',
                 component: () => import('/@/views/display/layout.vue'),
-                meta: {}
+                meta: {
+                    '基本布局': 'ji_ben_bu_ju',
+                }
             }
         ]
     },
