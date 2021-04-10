@@ -265,6 +265,9 @@ export default defineComponent({
 <style scoped lang="scss">
 .demo-timeline{
     padding: 20px 0;
+    p{
+        margin: 0;
+    }
     b{
         font-size: 16px;
     }

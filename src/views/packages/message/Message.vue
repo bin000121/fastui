@@ -1,5 +1,9 @@
 <template>
-    <transition name="f-message-slider-in" @before-leave="onClose" @after-leave="$emit('destroy')">
+    <transition
+            name="f-message-slider-in"
+            @before-leave="onClose"
+            @after-leave="removeDom"
+    >
         <div
             v-show="isShow"
             :class="{
@@ -24,11 +28,13 @@ import {
     ref,
     computed,
     onMounted,
+    onUnmounted,
     getCurrentInstance,
-    PropType
 } from 'vue'
 
+import type { PropType } from 'vue'
 export default defineComponent({
+    inheritAttrs: false,
     emits: ['destroy'],
     props: {
         top: Number,
@@ -48,7 +54,7 @@ export default defineComponent({
             required: true
         },
         removeDom: {
-            type: Function as PropType<(id: string) => void>,
+            type: Function as PropType<() => void>,
             required: true
         },
         onClose: {
@@ -84,6 +90,10 @@ export default defineComponent({
         onMounted(() => {
             isShow.value = true
             startClose()
+        })
+
+        onUnmounted(() => {
+            props.removeDom()
         })
 
         return{

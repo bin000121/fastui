@@ -4,7 +4,6 @@ import { getRandomId } from '/@/utils/getRandomId'
 import MsgComponent from './Message.vue'
 
 const instanceList: any[] = []
-let idNum = 1
 const msgGap = 15
 const initOffsetTop = 20
 const close = (id: string, userOnClose: any) => {
@@ -23,7 +22,7 @@ const MsgInstance: any = (options: optionsType) => {
         }
     }
     const userOnClose = options.onClose
-    const id = getRandomId('f-message') + '-' + (idNum++)
+    const id = getRandomId('f-message')
 
     options = {
         ...options,
@@ -46,10 +45,9 @@ const MsgInstance: any = (options: optionsType) => {
                 }
             }
         },
-        removeDom: (id: string) => {
+        removeDom: () => {
             const dom: any = document.getElementById(id)
-            dom.parentNode.removeChild(dom)
-
+            dom && dom?.parentNode.removeChild(dom)
         },
 
     }
@@ -69,15 +67,14 @@ const MsgInstance: any = (options: optionsType) => {
     //     console.log(vnode)
     //     render(null, container)
     // }
-    render(vnode, container)
     console.log(vnode)
+    render(vnode, container)
     instanceList.push(vnode)
-    console.log(instanceList)
+    console.log(container)
     document.body.appendChild(container.children[0])
 }
 
-
-['info', 'success', 'error', 'warning'].forEach((type: any) => {
+(['info', 'success', 'error', 'warning'] as const).forEach((type: string) => {
     MsgInstance[type] = (options: optionsType): void => {
         if (typeof options === 'string') {
             options = {
@@ -89,7 +86,11 @@ const MsgInstance: any = (options: optionsType) => {
     }
 })
 
-
+MsgInstance.closeAll = () => {
+    for (let item of instanceList) {
+        console.log(item)
+    }
+}
 
 interface optionType {
     id?: string;
@@ -111,10 +112,11 @@ interface MessageType {
     success: (options: optionsType) => void;
     error: (options: optionsType) => void;
     warning: (options: optionsType) => void;
+    closeAll: () => void;
 }
 
 export default {
     install(app: App) {
-        app.provide('$message', MsgInstance)
+        app.provide('$message', MsgInstance as MessageType)
     }
 }

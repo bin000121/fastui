@@ -67,11 +67,12 @@
 /*f-message*/
 .f-message-slider-in-enter-from,
 .f-message-slider-in-leave-to{
+    transform: translate(-50%, -50px) !important;
     opacity: 0;
 }
 .f-message-slider-in-enter-active,
 .f-message-slider-in-leave-active{
-    transition: all .2s;
+    transition: all .25s ease-in-out;
 }
 
 /*f-model*/
