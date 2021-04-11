@@ -229,6 +229,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/message',
+                name: 'message',
+                component: () => import('/@/views/display/message.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
+            },
+            {
                 path: '/doc/table',
                 name: 'table',
                 component: () => import('/@/views/display/table.vue')

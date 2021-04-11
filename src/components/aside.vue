@@ -39,6 +39,7 @@ export default defineComponent( {
             '/doc/checkbox': 'Checkbox 多选按钮',
             '/doc/model': 'Model 弹出框',
             '/doc/popconfirm': 'Popconfirm 气泡弹出框',
+            '/doc/message': 'Message 消息通知',
             '/doc/table': 'Table 表格',
             '/doc/tooltip': 'Tooltip 文字提示',
             '/doc/timeline': 'Timeline 时间线',

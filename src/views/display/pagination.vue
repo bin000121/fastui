@@ -18,26 +18,16 @@
             </div>
 
             <div class="demo-pagination">
-                <p>变化类型： {{type}}，变化值后的值：{{val}}</p>
-                <f-pagination
-                    :total="total"
-                    :pageSize="pageSize"
-                    :page="page"
-                    @change="updatePage"
-                />
-            </div>
-
-<!--            <div class="demo-pagination">-->
+                <p>变化类型： {{type}}，变化值后的值：{{type && val}}</p>
 <!--                <f-pagination-->
 <!--                    :total="total"-->
 <!--                    :pageSize="pageSize"-->
 <!--                    :page="page"-->
-<!--                    show-total-->
-<!--                    show-elevator-->
-<!--                ></f-pagination>-->
+<!--                    @change="updatePage"-->
+<!--                />-->
 <!--            </div>-->
 
-            <div class="demo-pagination">
+<!--            <div class="demo-pagination">-->
                 <f-pagination
                     :total="total"
                     :pageSize="pageSize"
@@ -52,12 +42,7 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-pagination
-        :total="total"
-        :pageSize="pageSize"
-        :page="page"
-        @change="updatePage"
-    />
+    {{`<p>变化类型： \{\{type\}\}，变化值后的值：\{\{type ? val : ''\}\}</p>
 
     <f-pagination
         :total="total"

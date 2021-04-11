@@ -93,6 +93,7 @@ import {
     defineComponent,
     reactive,
     toRefs,
+    watch,
     onMounted,
     computed,
     watchEffect,
@@ -199,12 +200,14 @@ export default defineComponent({
             }
         })
 
+        // 获取页码数量
         const getAllPage = computed(() => {
-            if (!props.total || props.total <= props.pageSize) return 1
+            if (!props.total || props.total <= data.currentSize) return 1
             // 向上取整
-            return Math.ceil(props.total / props.pageSize)
+            return Math.ceil(props.total / data.currentSize)
         })
 
+        // 初始化传入的展示按钮数
         const showNumBtn = computed(() => {
             return (num: number) => {
                 // 为空表示展示全部
@@ -213,6 +216,7 @@ export default defineComponent({
             }
         })
 
+        // 展示省略号
         const showEllipsisBtn = computed(() => {
             return (num: number) => {
                 return data.showEllipsis.includes(num)
@@ -223,22 +227,26 @@ export default defineComponent({
             handleChange('pageSize', data)
         }
 
+        // 快进、快退操作
         const handleFastStep = (str: string) => {
             if (str.startsWith('向前')) {
                 handleChange(
                     'page',
                     data.currentPage - fastStep > 1
                         ? data.currentPage - fastStep
-                        : 1)
+                        : 1
+                )
             } else {
                 handleChange(
                     'page',
                     data.currentPage + fastStep > getAllPage.value
                         ? getAllPage.value
-                        : data.currentPage + fastStep)
+                        : data.currentPage + fastStep
+                )
             }
         }
 
+        // 处理按钮摆放
         const updateBtnList = () => {
             data.showNum = []
             data.showEllipsis = []
@@ -281,13 +289,14 @@ export default defineComponent({
         // 初始化按钮列表排列
         updateBtnList()
 
-        // 处理页码或者一页大小变化
+        // 处理页码或者一页大小
         const handleChange = (type: 'page' | 'pageSize', val: number) => {
             if (props.disabled) return
             // 变化后的页码或分页大小一致就不在执行该函数
             if (type === 'page') data.currentPage = val > getAllPage.value ? getAllPage.value : val
             else {
                 data.currentSize = val
+                if (data.currentPage >= getAllPage.value) data.currentPage = getAllPage.value
                 if (Math.ceil(props.total / val) === 1) data.currentPage = 1
             }
             updateBtnList()
@@ -350,7 +359,7 @@ export default defineComponent({
         font-size: calc(1em);
         color: #333;
         user-select: none;
-        transition: all .1s;
+        transition: all .05s;
         &:not(.f-pagination-pre):not(.f-pagination-next):not(.f-pagination__total):not(.f-pagination__elevator):not(.f-pagination__size-array):not(.f-pagination-is-active):hover{
             transition: all .05s;
             box-shadow: 0 0 0 .15em #1661ab33;

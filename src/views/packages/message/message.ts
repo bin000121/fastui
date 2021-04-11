@@ -111,8 +111,10 @@ interface MessageType {
     closeAll: () => void;
 }
 
-export default {
-    install(app: App) {
-        app.provide('$message', MsgInstance as MessageType)
-    }
-}
+// export default {
+//     install(app: App) {
+//         app.provide('$message', MsgInstance as MessageType)
+//     }
+// }
+
+export default MsgInstance as MessageType
