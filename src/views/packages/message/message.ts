@@ -57,10 +57,6 @@ const MsgInstance: any = (options: optionsType) => {
         let height = instanceList[i].el.offsetHeight || 0
         options.top += height + msgGap
     }
-    // if (instanceList.length > 0) {
-    //     let lastMsgVnode = instanceList.slice(-1)[0]
-    //     options.top = parseInt(lastMsgVnode.component.props.top, 10) + lastMsgVnode.el.offsetHeight + msgGap + 'px'
-    // }
     const vnode = h(MsgComponent, options as any)
     // vnode.props.onDestroy = () => {
     //     console.log(1111)
