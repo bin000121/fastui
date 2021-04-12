@@ -1,5 +1,9 @@
 <template>
-    <transition name="f-message-slider-in" @before-leave="onClose" @after-leave="$emit('destroy')">
+    <transition
+            name="f-message-slider-in"
+            @before-leave="onClose"
+            @after-leave="removeDom"
+    >
         <div
             v-show="isShow"
             :class="{
@@ -24,12 +28,12 @@ import {
     ref,
     computed,
     onMounted,
-    getCurrentInstance,
-    PropType
+    onUnmounted,
 } from 'vue'
 
+import type { PropType } from 'vue'
 export default defineComponent({
-    emits: ['destroy'],
+    inheritAttrs: false,
     props: {
         top: Number,
         isShow: Boolean,
@@ -48,7 +52,7 @@ export default defineComponent({
             required: true
         },
         removeDom: {
-            type: Function as PropType<(id: string) => void>,
+            type: Function as PropType<() => void>,
             required: true
         },
         onClose: {
@@ -86,12 +90,16 @@ export default defineComponent({
             startClose()
         })
 
+        onUnmounted(() => {
+            props.removeDom()
+        })
+
         return{
             isShow,
+            getTop,
             closeMsg,
             stopClose,
             startClose,
-            getTop
         }
     }
 })
@@ -105,14 +113,14 @@ export default defineComponent({
     padding: 12px 10px 12px 15px;
     min-width: 250px;
     background-color: #fff;
-    box-shadow: 0 0 3px #999;
+    box-shadow: 0 0 3px #ccc;
     border: 1px solid #eee;
     border-radius: 5px;
     overflow: hidden;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    transition: all .15s;
+    transition: all .25s ease-in-out, top .25s ease-in-out;
     color: #333;
     z-index: 999;
     div{
@@ -133,7 +141,7 @@ export default defineComponent({
 .f-message__info{
     background-color: #6c757d;
     border-color: transparent;
-    box-shadow: 0 0 5px #000;
+    box-shadow: 0 0 5px #aaa;
     &, .f-message-icon, i.close{
         color: #fff;
     }

@@ -107,9 +107,11 @@ export default defineComponent({
                 fSpinDom.style.setProperty('--snowflake-bar-transform-origin', `0 ${props.size / 2}px`)
                 return
             }
+            // 开始先画1个长度的轮廓
             let start = '1, ' + 2 * C
+            // 动画到一半时画出90%的圆周长轮廓，并
             let halfDasharray = `${0.9 * C}, ${2 * C}`
-            let halfDashoffset = `${2 * radius * -1}`
+            let halfDashoffset = `${.4 * C * -1}`
             let endDashoffset = `${(0.9 * C + radius) * -1}`
             fSpinDom.style.setProperty('--start-stroke-dasharray', start)
             fSpinDom.style.setProperty('--half-stroke-dasharray', halfDasharray)
@@ -176,6 +178,7 @@ export default defineComponent({
     height: var(--snowflake-bar-height) !important;
     width: 1.5px!important;
     background-color: var(--primary);
+    box-sizing: border-box;
     transform-origin: var(--snowflake-bar-transform-origin);
 }
 @for $i from 1 through 8{

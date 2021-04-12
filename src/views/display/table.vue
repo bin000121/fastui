@@ -10,6 +10,7 @@
             <p>表格的最基础呈现方式。</p>
 
             <div class="demo-table">
+                <button @click="openMsg">打开</button>
             </div>
         </div>
     </div>
@@ -19,7 +20,8 @@
 import {
     defineComponent,
     reactive,
-    toRefs
+    toRefs,
+    inject
 } from 'vue'
 import FTable from '/@/views/packages/table/Table.vue'
 
@@ -28,11 +30,18 @@ export default defineComponent({
         FTable,
     },
     setup () {
+        const message = inject('$message')
+
         const data = reactive({
 
         })
+        const openMsg = () => {
+            message.success('666')
+        }
+
         return{
-            ...toRefs(data)
+            ...toRefs(data),
+            openMsg
         }
     }
 })
