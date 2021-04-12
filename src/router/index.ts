@@ -234,6 +234,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/table.vue')
             },
             {
+                path: '/doc/menu',
+                name: 'menu',
+                component: () => import('/@/views/display/menu.vue')
+            },
+            {
                 path: '/doc/tooltip',
                 name: 'tooltip',
                 component: () => import('/@/views/display/tooltip.vue'),

@@ -36,4 +36,8 @@ export default {
     TimelineItem: 'fTimelineItem',
     Tooltip: 'fTooltip',
     ToTop: 'fToTop',
+    Menu: 'fMenu',
+    SubMenu: 'fSubMenu',
+    MenuItem: 'fMenuItem',
+    MenuGroup: 'fMenuGroup',
 } as const
