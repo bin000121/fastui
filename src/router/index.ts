@@ -234,6 +234,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/message.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '消息类型': 'xiao_xi_lei_xing',
+                    '可关闭': 'ke_guan_bi',
+                    '自定义展示模板': 'zi_ding_yi_zhan_shi_mu_ban',
+                    '自定义时长': 'zi_ding_yi_shi_chang',
+                    '关闭所有消息': 'guan_bi_suo_you_xiao_xi',
                 }
             },
             {

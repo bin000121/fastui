@@ -104,7 +104,7 @@ export default defineComponent( {
     box-sizing: border-box;
 }
 .f-btn + .f-btn{
-    margin-left: 6px;
+    margin-left: 10px;
 }
 .f-btn-icon{
     font-size: 14px;
