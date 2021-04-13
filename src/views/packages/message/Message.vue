@@ -131,10 +131,10 @@ export default defineComponent({
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    transition: all .25s ease-in-out, top .25s ease-in-out;
+    transition: all .2s ease-in-out, top .2s ease-in-out;
     color: #333;
     z-index: 999;
-    div{
+    & > div{
         font-size: 14px;
         height: 100%;
         flex-grow: 1;

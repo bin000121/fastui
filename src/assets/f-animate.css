@@ -72,7 +72,7 @@
 }
 .f-message-slider-in-enter-active,
 .f-message-slider-in-leave-active{
-    transition: all .25s ease-in-out, opacity .35s ease-in-out;
+    transition: all .25s ease-in-out;
 }
 
 /*f-model*/
