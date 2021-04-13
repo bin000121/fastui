@@ -300,10 +300,10 @@
 <script lang="ts">
 import {
     defineComponent,
-    nextTick
+    inject
 } from 'vue'
 import fButton from '/@/views/packages/button/Button.vue'
-import $msg from '/@/views/packages/message/message'
+import $msg from '/@/views/packages/message'
 export default defineComponent({
     components: {
         fButton,
@@ -312,7 +312,6 @@ export default defineComponent({
         const openMsg = () => {
             $msg('我是一条消息')
         }
-
         const openMsgType = (type: string) => {
             $msg({
                 type,

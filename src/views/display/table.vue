@@ -9,9 +9,6 @@
             </h3>
             <p>表格的最基础呈现方式。</p>
 
-            <div class="demo-table">
-                <button @click="openMsg">打开</button>
-            </div>
         </div>
     </div>
 </template>
@@ -30,18 +27,12 @@ export default defineComponent({
         FTable,
     },
     setup () {
-        const message = inject('$message')
-
         const data = reactive({
 
         })
-        const openMsg = () => {
-            message.success('666')
-        }
 
         return{
-            ...toRefs(data),
-            openMsg
+            ...toRefs(data)
         }
     }
 })

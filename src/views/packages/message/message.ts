@@ -1,4 +1,4 @@
-import { h, render } from 'vue'
+import { h, render, App } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 import MsgComponent from './Message.vue'
 
@@ -73,7 +73,7 @@ MsgInstance.closeAll = () => {
     instanceList = []
 }
 
-interface optType {
+export interface optType {
     message: string | number;
     id?: string;
     top?: string | number;
@@ -86,9 +86,9 @@ interface optType {
     template?: string;
 }
 
-type optionsType = optType | string
+export type optionsType = optType | string
 
-interface MessageType {
+export interface MessageType {
     (options: optionsType):  () => void;
     default: (options: optionsType) => void;
     info: (options: optionsType) => void;
@@ -97,12 +97,7 @@ interface MessageType {
     warning: (options: optionsType) => void;
     loading: (options: optionsType) => void;
     closeAll: () => void;
+    install: (app: App) => void;
 }
-
-// export default {
-//     install(app: App) {
-//         app.provide('$message', MsgInstance as MessageType)
-//     }
-// }
 
 export default MsgInstance as MessageType
