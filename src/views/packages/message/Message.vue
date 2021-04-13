@@ -71,10 +71,12 @@ export default defineComponent({
 
         const closeMsg = () => {
             isShow.value = false
+            props.onClose()
         }
 
         const stopClose = () => {
             clearTimeout(timer)
+
             timer = null
         }
 

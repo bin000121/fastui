@@ -4,35 +4,26 @@ import { getRandomId } from '/@/utils/getRandomId'
 import MsgComponent from './Message.vue'
 
 const instanceList: any[] = []
+const closeTimeoutList: string[] = []
 const msgGap = 15
 const initOffsetTop = 20
-let heightTop = 0
 const close = (id: string) => {
     const index = instanceList.findIndex((value: any) => value.el.id === id)
     if (index < 0) return
     let vnode = instanceList[index]
     let height = vnode.el.offsetHeight
-    heightTop += height + msgGap
     instanceList.splice(index, 1)
     for (let item of instanceList) {
         let itemTop = item.el.offsetTop
-        item.el.style.top = (itemTop - heightTop) + 'px'
+        let timeoutIndex = closeTimeoutList.indexOf(id)
+        if (timeoutIndex !== -1) {
+            item.el.style.top = initOffsetTop + 'px'
+            continue
+        }
+        item.el.style.top = (itemTop - height - msgGap) + 'px'
         console.log(item.el.style.top)
     }
-    heightTop = 0
 }
-// const handleTop = (index: number) => {
-//     if (index === -1) return
-//     // 记录该条消息的高度，为后续每一个消息都减去这个高度
-//     const removeHeight = instanceList[index].el.offsetHeight
-//     instanceList.splice(index, 1)
-//     if (instanceList.length > 1) {
-//         for (let i = 0; i< instanceList.length; i++) {
-//             const topNum = parseInt(instanceList[i].component.props.top, 10)
-//             instanceList[i].component.props.top = topNum - removeHeight - msgGap + 'px'
-//         }
-//     }
-// }
 const MsgInstance: any = (options: optionsType) => {
     // 页面上最多10条信息
     if (instanceList.length > 10) return
@@ -52,9 +43,14 @@ const MsgInstance: any = (options: optionsType) => {
             close(id)
         },
         id,
+        isCloseTimeout: () => {
+            closeTimeoutList.push(id)
+        },
         removeDom: () => {
             const dom: any = document.getElementById(id)
             dom && dom?.parentNode.removeChild(dom)
+            let index = closeTimeoutList.indexOf(id)
+            index >= 0 &&closeTimeoutList.splice(index, 1)
         },
     }
     // 防止每一条消息重叠
@@ -95,6 +91,7 @@ interface optionType {
     isShowClose?: boolean;
     handleTop?: () => void;
     removeDom?: (id: string) => void;
+    isCloseTimeout?: () => void;
     onClose?: () => void;
 }
 
