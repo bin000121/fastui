@@ -359,7 +359,6 @@ export default defineComponent({
         const closeAllMsg = () => {
             $msg.closeAll()
         }
-
         return {
             openMsg,
             openMsgType,
