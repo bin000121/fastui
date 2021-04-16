@@ -90,6 +90,102 @@
         </div>
 
         <div>
+            <h3 id="yuan_su_shun_xu">元素顺序
+                <a href="#yuan_su_shun_xu" class="f-icon-anchor"></a>
+            </h3>
+            <p>您可以自定义分页器内部元素的摆放顺序。</p>
+
+            <div class="desc">
+                配置属性 <b>order</b> 即可完成自定义。
+            </div>
+            <div class="desc">
+                默认顺序：[ 'pagination', 'total', 'pages', 'elevator' ]
+            </div>
+            <div class="demo-pagination">
+                <f-pagination
+                    :total="50"
+                    :page-size="10"
+                    :page="1"
+                    show-elevator
+                    show-size-array
+                    show-total
+                    :order="['pagination', 'total', 'pages', 'elevator']"
+                />
+
+                <f-pagination
+                    :total="50"
+                    :page-size="10"
+                    :page="1"
+                    show-elevator
+                    show-size-array
+                    show-total
+                    :order="['total', 'pagination', 'pages', 'elevator']"
+                />
+
+                <f-pagination
+                    :total="50"
+                    :page-size="10"
+                    :page="1"
+                    show-elevator
+                    show-size-array
+                    show-total
+                    :order="['total', 'pages', 'pagination', 'elevator']"
+                />
+                <f-pagination
+                    :total="50"
+                    :page-size="10"
+                    :page="1"
+                    show-elevator
+                    show-size-array
+                    show-total
+                    :order="['total', 'pages', 'elevator', 'pagination']"
+                />
+            </div>
+            <div v-highlight>
+                <pre><code>
+    {{`<f-pagination
+        :total="50"
+        :page-size="10"
+        :page="1"
+        show-elevator
+        show-size-array
+        show-total
+        :order="['pagination', 'total', 'pages', 'elevator']"
+    />
+
+    <f-pagination
+        :total="50"
+        :page-size="10"
+        :page="1"
+        show-elevator
+        show-size-array
+        show-total
+        :order="['total', 'pagination', 'pages', 'elevator']"
+    />
+
+    <f-pagination
+        :total="50"
+        :page-size="10"
+        :page="1"
+        show-elevator
+        show-size-array
+        show-total
+        :order="['total', 'pages', 'pagination', 'elevator']"
+    />
+    <f-pagination
+        :total="50"
+        :page-size="10"
+        :page="1"
+        show-elevator
+        show-size-array
+        show-total
+        :order="['total', 'pages', 'elevator', 'pagination']"
+    />`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
             <h3 id="jin_yong">禁用
                 <a href="#jin_yong" class="f-icon-anchor"></a>
             </h3>
@@ -125,7 +221,6 @@
                 <a href="#yuan_xing" class="f-icon-anchor"></a>
             </h3>
             <p>添加分页器按钮变成的圆形样式。</p>
-
 
             <div class="demo-pagination">
                 <f-pagination

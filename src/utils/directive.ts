@@ -1,5 +1,6 @@
 import { App, ObjectDirective, DirectiveBinding } from 'vue'
 import { highlightBlock } from 'highlight.js'
+import $msg from '/@/views/packages/message'
 
 // v-clickOutside
 
@@ -67,10 +68,10 @@ const copy: ObjectDirective = {
             inputDom.select()
             try {
                 if (document.execCommand('copy', false)) {
-                    console.log('复制完成')
+                    $msg.success('复制成功！')
                 }
             } catch (e) {
-                console.log('复制失败！')
+                $msg.error('复制失败！')
             } finally {
                 inputDom.parentNode.removeChild(inputDom)
             }

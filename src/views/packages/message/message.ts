@@ -39,19 +39,19 @@ const MsgInstance: any = (options: optionsType) => {
         },
     }
     // 防止每一条消息重叠，第一条消息高度为默认初始化高度
-    if (instanceList.length > 0) {
-        let last = instanceList.slice(-1)[0]
-        let lastTop = last.el.offsetTop
-        let lastHeight = last.el.offsetHeight
-        // 下一条消息的高度为最后一条消息的顶部距离 + 自身高度 + 间隔高度
-        options.top = lastTop + lastHeight + msgGap
-    }
-    // if (instanceList.length) {
-    //     for (let i = 0; i< instanceList.length; i++) {
-    //         let height = instanceList[i].el.offsetHeight || 0
-    //         options.top += height + msgGap
-    //     }
+    // if (instanceList.length > 0) {
+    //     let last = instanceList.slice(-1)[0]
+    //     let lastTop = last.el.offsetTop
+    //     let lastHeight = last.el.offsetHeight
+    //     // 下一条消息的高度为最后一条消息的顶部距离 + 自身高度 + 间隔高度
+    //     options.top = lastTop + lastHeight + msgGap
     // }
+    if (instanceList.length) {
+        for (let i = 0; i< instanceList.length; i++) {
+            let height = instanceList[i].el.offsetHeight || 0
+            options.top += height + msgGap
+        }
+    }
     const vnode = h(MsgComponent, options as any)
     instanceList.push(vnode)
     render(vnode, document.createElement('div'))
@@ -60,7 +60,7 @@ const MsgInstance: any = (options: optionsType) => {
 let msgTypeList = ['default', 'info', 'success', 'error', 'warning', 'loading'] as const
 msgTypeList.forEach((type: string) => {
     MsgInstance[type] = (options: optionsType): void => {
-        options = typeof options === 'string' ? { message: options } : options
+        options = typeof options === 'string' ? { type, message: options } : { type, ...options }
         return MsgInstance(options)
     }
 })

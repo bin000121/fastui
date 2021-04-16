@@ -35,6 +35,7 @@
                         v-show="showNumBtn(num)"
                         @click.stop="handleChange('page', num)"
                 >{{num}}</li>
+                <!--省略号-->
                 <li class="f-pagination-ellipsis" v-if="showEllipsisBtn(num)">
                     <span>&hellip;</span>
                     <i
@@ -45,7 +46,6 @@
                 </li>
             </template>
         </template>
-
         <li
             :class="{
                 'f-pagination-next': true,
@@ -56,11 +56,11 @@
             <i class="f-icon-arrow-right-bold"></i>
         </li>
 
-        <li class="f-pagination__total" v-if="showTotal">
+        <li class="f-pagination__total" v-if="showTotal" ref="totalEle">
             共 {{total}} 条
         </li>
 
-        <li class="f-pagination__size-array" v-if="showSizeArray">
+        <li class="f-pagination__size-array" v-if="showSizeArray" ref="sizeArrayEle">
             <f-select
                 @change="sizeArrayChange"
                 v-model:value="currentSize"
@@ -75,7 +75,7 @@
             </f-select>
         </li>
 
-        <li class="f-pagination__elevator" v-if="showElevator">
+        <li class="f-pagination__elevator" v-if="showElevator" ref="elevatorEle">
             跳至
             <input
                 type="text"
@@ -97,7 +97,8 @@ import {
     onMounted,
     computed,
     watchEffect,
-    PropType
+    PropType,
+    nextTick
 } from 'vue'
 import fSelect from '/@/views/packages/select/Select.vue'
 import fOption from '/@/views/packages/select/Select-option.vue'
@@ -106,8 +107,10 @@ interface dataType {
     currentSize: number;
     showNum: number[];
     showEllipsis: number[];
+    totalEle: HTMLElement | any;
+    sizeArrayEle: HTMLElement | any;
+    elevatorEle: HTMLElement | any;
 }
-type orderType = 'pagination' | 'total' | 'elevator' | 'pages'[]
 
 export default defineComponent({
     components: {
@@ -142,8 +145,8 @@ export default defineComponent({
             validator: (value: string) => ['flex-start', 'flex-end', 'center'].includes(value)
         },
         order: {
-           type: Array as PropType<orderType>,
-           default: ['pagination', 'total', 'elevator', 'pages']
+           type: Array as PropType<string[]>,
+           default: ['pagination', 'total', 'pages', 'elevator']
         },
         limit: {
             type: Number,
@@ -192,8 +195,12 @@ export default defineComponent({
             currentPage: props.page,
             currentSize: props.pageSize,
             showNum: [],
-            showEllipsis: []
+            showEllipsis: [],
+            totalEle: null,
+            sizeArrayEle: null,
+            elevatorEle: null
         })
+
         const getFastIcon = computed(() => {
             return (num: number) => {
                 return num === 2 ? ['f-icon-backward', `向前${fastStep}页`] : ['f-icon-forward', `向后${fastStep}页`]
@@ -286,9 +293,6 @@ export default defineComponent({
             }
         }
 
-        // 初始化按钮列表排列
-        updateBtnList()
-
         // 处理页码或者一页大小
         const handleChange = (type: 'page' | 'pageSize', val: number) => {
             if (props.disabled) return
@@ -318,6 +322,32 @@ export default defineComponent({
             handleChange('page', data.currentPage)
         }
 
+        const initOrder = () => {
+            const orderObj: { [key: string]: number } = {}
+            let paginationIdx = props.order.findIndex((value: string) => value === 'pagination')
+            if (paginationIdx < 0) {
+                console.warn('[fast-ui]: pagination is required in the order array!')
+                return
+            }
+            let num = paginationIdx === 0 ? 1 : -1 * paginationIdx
+            for (let i = 0; i< props.order.length; i++) {
+                let key = props.order[i] as string
+                orderObj[key] = i + num
+            }
+            if (props.showTotal && orderObj['total']) data.totalEle.style.order = orderObj['total']
+            if (props.showElevator && orderObj['elevator']) data.elevatorEle.style.order = orderObj['elevator']
+            if (props.showSizeArray && orderObj['pages']) data.sizeArrayEle.style.order = orderObj['pages']
+        }
+
+        watch(() => [props.order, props.showSizeArray, props.showElevator, props.showTotal], () => {
+            nextTick(() => initOrder())
+        }, { deep: true })
+
+        onMounted(() => {
+            initOrder()
+            // 初始化按钮列表排列
+            updateBtnList()
+        })
         return{
             getAllPage,
             handleChange,

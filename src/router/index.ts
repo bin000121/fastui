@@ -170,6 +170,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/pagination.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '元素顺序': 'yuan_su_shun_xu',
                     '禁用': 'jin_yong',
                     '圆形': 'yuan_xing',
                     '位置': 'wei_zhi',
