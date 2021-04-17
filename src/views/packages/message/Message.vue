@@ -84,12 +84,13 @@ export default defineComponent({
         }
 
         const stopTimer = () => {
+            if (props.duration <= 0) return
             clearTimeout(timer)
             timer = null
         }
 
         const startTimer = () => {
-            if (!props.duration) return
+            if (!props.duration || props.duration <= 0) return
             timer = setTimeout(() => {
                 if (isShow.value) isShow.value = false
             }, props.duration)

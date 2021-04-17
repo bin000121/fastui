@@ -18,7 +18,7 @@ const closeMsg = (id: string) => {
         instanceList[i].el.style.top = (itemTop - height - msgGap) + 'px'
     }
 }
-const MsgInstance: any = (options: optionsType) => {
+function MsgInstance (options: optionsType){
     // 页面上最多10条信息
     if (instanceList.length >= 10) return
     if (typeof options === 'string') {
@@ -59,7 +59,7 @@ const MsgInstance: any = (options: optionsType) => {
 }
 let msgTypeList = ['default', 'info', 'success', 'error', 'warning', 'loading'] as const
 msgTypeList.forEach((type: string) => {
-    MsgInstance[type] = (options: optionsType): void => {
+    MsgInstance.prototype[type] = (options: optionsType): void => {
         options = typeof options === 'string' ? { type, message: options } : { type, ...options }
         return MsgInstance(options)
     }

@@ -322,6 +322,7 @@ export default defineComponent({
             handleChange('page', data.currentPage)
         }
 
+        // 初始化元素顺序
         const initOrder = () => {
             const orderObj: { [key: string]: number } = {}
             let paginationIdx = props.order.findIndex((value: string) => value === 'pagination')

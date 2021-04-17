@@ -340,6 +340,9 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: center;
+    .f-popconfirm + .f-popconfirm{
+        margin-left: 15px;
+    }
     .demo-popconfirm-top, .demo-popconfirm-center, .demo-popconfirm-footer{
         box-sizing: border-box;
         padding: 0 70px;
