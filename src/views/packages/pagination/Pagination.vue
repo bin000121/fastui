@@ -510,12 +510,12 @@ li.f-pagination__elevator input{
     }
 }
 .f-pagination__circle{
-   li{
+   & > li{
        border-radius: 50% !important;
    }
 }
 .f-pagination__simple{
-   li {
+   & > li {
        cursor: default;
        &.f-pagination-pre,&.f-pagination-next{
            cursor: pointer;

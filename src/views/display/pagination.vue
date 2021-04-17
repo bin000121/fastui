@@ -230,6 +230,7 @@
                     circle
                     show-elevator
                     show-total
+                    show-size-array
                 ></f-pagination>
             </div>
 
@@ -240,6 +241,9 @@
         :pageSize="10"
         :page="1"
         circle
+        show-elevator
+        show-total
+        show-size-array
     ></f-pagination>`}}
                 </code></pre>
             </div>
@@ -646,6 +650,8 @@
         text
         simple
         placement="flex-start"
+        show-elevator
+        show-total
     >
     </f-pagination>
 
@@ -666,6 +672,7 @@
         simple
         circle
         placement="flex-end"
+        show-elevator
     >
     </f-pagination>`}}
                 </code></pre>
