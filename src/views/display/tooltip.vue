@@ -234,7 +234,7 @@
             </h3>
             <p>提示组件拥有2种不同的主题样式。</p>
 
-            <div class="demo-tooltip">
+            <div class="demo-tooltip-ml">
                 <f-tooltip theme="dark" tooltip="深色主题">
                     <f-button>深色主题</f-button>
                 </f-tooltip>
@@ -267,7 +267,7 @@
                 通过设置属性 <b>delay-show</b> 、<b>delay-hide</b> 可以延时显示、消失提示内容，单位为毫秒。
             </div>
 
-            <div class="demo-tooltip">
+            <div class="demo-tooltip-ml">
                 <f-tooltip tooltip="我延迟1s显示" :delay-show="1000">
                     <f-button>我延迟1s显示</f-button>
                 </f-tooltip>
@@ -353,6 +353,14 @@ export default defineComponent({
         .demo-tooltip-center-right{
             justify-content: flex-end;
         }
+    }
+}
+.demo-tooltip-ml{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .f-tooltip + .f-tooltip{
+        margin-left: 15px;
     }
 }
 </style>
