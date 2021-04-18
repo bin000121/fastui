@@ -144,7 +144,7 @@ export default defineComponent({
             const translate = `transform: translate(${p1IsAtXAxis ? '0, -50%' : '-50%, 0'})`
             const yAxis = p1IsAtXAxis? 'top' : 'left'
             const dark = props.theme === 'dark'
-            let cssText = `${p1}: ${ distance + 5 }px;display: none;`
+            let cssText = `${p1}: ${ distance + 6 }px;display: none;`
             let color = dark ? '#272624' : '#fff'
             let arrowCssText = `${p1}: -10px;border-${originP1}-color: ${color};`
             let lightArrowCssText = `${p1}: -10px;border-${originP1}-color: #333;`

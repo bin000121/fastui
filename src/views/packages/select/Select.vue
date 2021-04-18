@@ -65,6 +65,9 @@
             <div
                  v-show="showOptionList"
                  class="f-option-list"
+                 :class="{
+                     ['f-option-list__' + placement]: true
+                 }"
                  ref="selectOptions"
                  @click.stop
             >
@@ -115,6 +118,10 @@ export default defineComponent({
         placeholder: {
             type: String,
             default: '请选择内容'
+        },
+        placement: {
+            type: String,
+            default: 'x-bottom'
         },
         emptyText: {
             type: String,
@@ -350,6 +357,18 @@ export default defineComponent({
             } else selectIptDom.value = collectionData[props.value as string] || ''
         }
 
+        const initTranslateY = () => {
+            let p = 15
+            let placement = 'top'
+            if (props.placement ==='x-top') {
+                p = -1 * p
+                placement = 'bottom'
+                selectOptionsDom.style.top = 'initial'
+            }
+            selectOptionsDom.style[placement] = selectRootDom.offsetHeight + 10 + 'px'
+            selectRootDom.style.setProperty('--translateY', p + 'px')
+        }
+
         watch(() => showOptionList.value, (newV: boolean) => {
             isFocus.value = newV
             if (newV) {
@@ -358,9 +377,7 @@ export default defineComponent({
         })
 
         watch(() => currentData.value, () => {
-            nextTick(() => {
-                selectOptionsDom.style.top = selectRootDom.offsetHeight + 10 + 'px'
-            })
+            nextTick(() => initTranslateY())
         }, { deep: true })
 
         watch(() => props.value, (newV: any) => {
@@ -374,6 +391,10 @@ export default defineComponent({
                 }
             } else selectIptDom.value = collectionData[props.value as string] || ''
         }, { deep: true })
+
+        // watch(() => props.placement, () => {
+        //     nextTick(() => initTranslateY())
+        // })
 
         provide('parent', reactive({
             collection,
@@ -391,9 +412,9 @@ export default defineComponent({
             selectIptDom.style.flexBasis = 'calc(2em)'
             // 如果没有f-option，那就是空数组
             hasChildren = !!selectOptionsDom.children[0].children.length
-            selectOptionsDom.style.top = selectRootDom.offsetHeight + 10 + 'px'
             isEmpty.value = !hasChildren
             initInputValue()
+            initTranslateY()
             if (props.filterable) {
                 selectIptDom.removeAttribute('readonly')
                 selectIptDom.style.cursor = 'text'
@@ -409,6 +430,9 @@ export default defineComponent({
             currentData,
             getLabelList,
             getValueList,
+            handleInput,
+            inputValue,
+            isEmpty,
             handleClose,
             getChose,
             toggleView,
@@ -417,11 +441,8 @@ export default defineComponent({
             collection,
             focus,
             blur,
-            handleInput,
             compositionStart,
-            compositionEnd,
-            inputValue,
-            isEmpty,
+            compositionEnd
         }
     }
 })
@@ -429,6 +450,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-select{
+    --translateY: 15px;
     position: relative;
     border: 1px solid #ccc;
     min-height: calc(2.5em);
@@ -552,15 +574,7 @@ export default defineComponent({
 .f-icon-rotate{
     transform: translateY(-50%) rotate(180deg);
 }
-.f-option-list{
-    box-sizing: border-box;
-    position: absolute;
-    left: 0;
-    z-index: 100;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 5px 0;
+.f-option-list__x-top,.f-option-list__x-bottom{
     &::before, &::after{
         content: '';
         display: block;
@@ -574,17 +588,34 @@ export default defineComponent({
         z-index: 2;
     }
     &::after{
-        content: '';
-        display: block;
-        position: absolute;
-        width: 0;
-        height: 0;
-        border: 6px solid transparent;
         border-bottom-color: #ddd;
         left: 12px;
         top: -13px;
         z-index: 1;
     }
+}
+.f-option-list__x-top{
+    &::before, &::after{
+        border-color: transparent;
+        border-top-color: #fff;
+        top: initial;
+        bottom: -12px;
+    }
+    &::after{
+        border-top-color: #ddd;
+        top: initial;
+        bottom: -13px;
+    }
+}
+.f-option-list{
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    z-index: 100;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 0;
 }
 .f-option-list-ul{
     box-sizing: border-box;

@@ -34,7 +34,7 @@
 /*f-select*/
 .f-select-fade-enter-from,
 .f-select-fade-leave-to{
-    transform: translateY(15px);
+    transform: translateY(var(--translateY));
     opacity: 0;
 }
 .f-select-fade-enter-active,
