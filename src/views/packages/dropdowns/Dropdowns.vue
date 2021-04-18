@@ -131,6 +131,7 @@ export default defineComponent({
         const handleClose = () => {
             if (props.disabled) return
             showMenu.value = false
+            if (timer) clearTimeout(timer)
         }
 
         const animateShow = (status: string) => {
@@ -189,6 +190,7 @@ export default defineComponent({
 
         provide('parent', reactive({
             toggleHideAndShow: toggleFn,
+            handleClose,
             ctx,
             props,
             hoverClose

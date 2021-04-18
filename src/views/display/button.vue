@@ -18,6 +18,14 @@
                 <MnButton type="danger">危险（danger）</MnButton>
                 <MnButton type="info">一般消息（info）</MnButton>
             </div>
+
+            <div class="desc">
+                设置属性 <b>icon</b> 即可让按钮带有图标
+            </div>
+
+            <div>
+                <MnButton type="info">一般消息（info）</MnButton>
+            </div>
             <div v-highlight>
                 <pre><code>
     {{`<f-button>默认样式（default）</f-button>

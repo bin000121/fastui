@@ -1,6 +1,7 @@
 <template>
     <button
         :class="['f-btn', ...getClassName, ...isRounded, ...btnSize, ...isOutline]"
+        :style="`padding: ${icon ? '12px' : '12px 16px'};`"
         type="button"
         :disabled="disabled ? 'disabled' : ''"
         ref="buttonDom"
@@ -88,7 +89,6 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .f-btn{
-    padding: 12px 16px;
     user-select: none;
     cursor: pointer;
     border: 1px solid transparent;
@@ -107,7 +107,7 @@ export default defineComponent( {
     margin-left: 10px;
 }
 .f-btn-icon{
-    font-size: 14px;
+    font-size: 16px;
     color: inherit;
 }
 .f-btn--default{

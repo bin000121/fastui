@@ -18,7 +18,8 @@ const closeMsg = (id: string) => {
         instanceList[i].el.style.top = (itemTop - height - msgGap) + 'px'
     }
 }
-function MsgInstance (options: optionsType){
+
+const MsgInstance: MessageType = ((options: optionsType) => {
     // 页面上最多10条信息
     if (instanceList.length >= 10) return
     if (typeof options === 'string') {
@@ -38,14 +39,6 @@ function MsgInstance (options: optionsType){
             dom && dom?.parentNode.removeChild(dom)
         },
     }
-    // 防止每一条消息重叠，第一条消息高度为默认初始化高度
-    // if (instanceList.length > 0) {
-    //     let last = instanceList.slice(-1)[0]
-    //     let lastTop = last.el.offsetTop
-    //     let lastHeight = last.el.offsetHeight
-    //     // 下一条消息的高度为最后一条消息的顶部距离 + 自身高度 + 间隔高度
-    //     options.top = lastTop + lastHeight + msgGap
-    // }
     if (instanceList.length) {
         for (let i = 0; i< instanceList.length; i++) {
             let height = instanceList[i].el.offsetHeight || 0
@@ -56,10 +49,10 @@ function MsgInstance (options: optionsType){
     instanceList.push(vnode)
     render(vnode, document.createElement('div'))
     document.body.appendChild(vnode.el as HTMLElement)
-}
+}) as any
 let msgTypeList = ['default', 'info', 'success', 'error', 'warning', 'loading'] as const
-msgTypeList.forEach((type: string) => {
-    MsgInstance.prototype[type] = (options: optionsType): void => {
+msgTypeList.forEach(type => {
+    MsgInstance[type] = (options: optionsType) => {
         options = typeof options === 'string' ? { type, message: options } : { type, ...options }
         return MsgInstance(options)
     }
@@ -77,7 +70,7 @@ export interface optType {
     message: string | number;
     id?: string;
     top?: string | number;
-    type?: 'default' | 'info' | 'success' | 'error' | 'warning' | 'loading' | string;
+    type?: 'default' | 'info' | 'success' | 'error' | 'warning' | 'loading';
     duration?: number;
     isShowClose?: boolean;
     isShowIcon?: boolean;
@@ -89,7 +82,7 @@ export interface optType {
 export type optionsType = optType | string
 
 export interface MessageType {
-    (options: optionsType):  () => void;
+    (options: optionsType): void
     default: (options: optionsType) => void;
     info: (options: optionsType) => void;
     success: (options: optionsType) => void;
@@ -100,4 +93,4 @@ export interface MessageType {
     install: (app: App) => void;
 }
 
-export default MsgInstance as MessageType
+export default MsgInstance

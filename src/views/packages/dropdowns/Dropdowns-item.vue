@@ -33,13 +33,13 @@ export default defineComponent({
             toggleHideAndShow,
             props: parentProps,
             ctx,
-            hoverClose
+            handleClose
         }: any = root
         const dropdownsItem = ref(null)
         const size = ref(parentProps.size)
         const handleClick = () => {
             if (props.disabled || parentProps.clickNotClose) return
-            parentProps.trigger === 'hover' ? hoverClose() : toggleHideAndShow()
+            parentProps.trigger === 'hover' ? handleClose() : toggleHideAndShow()
             props.value && ctx.emit('action', props.value)
         }
         return{
