@@ -282,7 +282,7 @@
                 }
             }
             const closeAllMsg = () => {
-                $msg.closeAll()
+                $msg.closeAllMsg()
             }
             return {
                 closeAllMsg,
@@ -356,7 +356,7 @@ export default defineComponent({
         }
 
         const closeAllMsg = () => {
-            $msg.closeAll()
+            $msg.closeAllMsg()
         }
         return {
             openMsg,

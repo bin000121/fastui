@@ -58,7 +58,7 @@ msgTypeList.forEach(type => {
     }
 })
 
-MsgInstance.closeAll = () => {
+MsgInstance.closeAllMsg = () => {
     if (!instanceList.length) return
     for (let item of instanceList) {
         item.props.removeDom()
@@ -89,7 +89,7 @@ export interface MessageType {
     error: (options: optionsType) => void;
     warning: (options: optionsType) => void;
     loading: (options: optionsType) => void;
-    closeAll: () => void;
+    closeAllMsg: () => void;
     install: (app: App) => void;
 }
 
