@@ -360,10 +360,11 @@ export default defineComponent({
         const initTranslateY = () => {
             let p = 15
             let placement = 'top'
+            selectOptionsDom.style.top = 'unset'
+            selectOptionsDom.style.bottom = 'unset'
             if (props.placement ==='x-top') {
                 p = -1 * p
                 placement = 'bottom'
-                selectOptionsDom.style.top = 'initial'
             }
             selectOptionsDom.style[placement] = selectRootDom.offsetHeight + 10 + 'px'
             selectRootDom.style.setProperty('--translateY', p + 'px')
@@ -392,9 +393,9 @@ export default defineComponent({
             } else selectIptDom.value = collectionData[props.value as string] || ''
         }, { deep: true })
 
-        // watch(() => props.placement, () => {
-        //     nextTick(() => initTranslateY())
-        // })
+        watch(() => props.placement, () => {
+            nextTick(() => initTranslateY())
+        })
 
         provide('parent', reactive({
             collection,
