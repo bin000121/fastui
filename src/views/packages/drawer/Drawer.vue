@@ -5,11 +5,12 @@
             :id="id"
             ref="fDrawer"
         >
+<!--            遮罩-->
             <transition name="f-drawer-mask-fade">
                 <div
-                        class="f-drawer-mask"
-                        v-show="showDrawer"
-                        @click.stop="hide(true)"
+                    class="f-drawer-mask"
+                    v-show="showDrawer"
+                    @click.stop="hide(true)"
                 ></div>
             </transition>
             <transition name="f-drawer-content-slide" @after-leave="remove">
@@ -260,7 +261,8 @@ export default defineComponent({
     }
 }
 .f-drawer-content__rtl{
-    height: 100%;
+    top: 0;
+    bottom: 0;
     right: 0;
 }
 .f-drawer-content__ltr{

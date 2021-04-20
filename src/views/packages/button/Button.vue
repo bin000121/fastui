@@ -77,7 +77,6 @@ export default defineComponent( {
             return [sizeObj[size]]
         })
 
-        console.log(slots)
         const isOneIcon = computed(() => {
             return icon && !slots.default ? ['f-btn-icon'] : []
         })

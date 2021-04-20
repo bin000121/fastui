@@ -116,7 +116,6 @@
             </div>
         </div>
 
-
         <div>
             <h3 id="huan_hang">栅格换行
                 <a href="#huan_hang" class="f-icon-anchor"></a>
@@ -207,7 +206,7 @@
         <f-col :span="6" :order="4"><div class="demo-col-content demo-col-light">第三块</div></f-col>
         <f-col :span="6" :order="1"><div class="demo-col-content demo-col-dark">第四块</div></f-col>
     </f-row>`}}
-            </div>
+            </code></pre></div>
         </div>
 
         <div>
