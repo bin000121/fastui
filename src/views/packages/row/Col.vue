@@ -25,9 +25,10 @@ export default defineComponent({
         offset: {
             type: [Number, String],
             default: 0
-        }
+        },
+        order: Number
     },
-    setup ({ span, offset }) {
+    setup ({ span, offset, order }) {
         const colDom: any = ref(null)
         const getCol = computed(() => {
             const spanNum = parseInt(span as string)
@@ -42,7 +43,8 @@ export default defineComponent({
         const gutter: any = inject('gutter')
         const gutterNum = gutter.value
         onMounted(() => {
-            colDom.value.style.padding = `0 ${gutterNum / 2 || 0}px`
+            if (gutterNum) colDom.value.style.padding = `0 ${gutterNum / 2 || 0}px`
+            if (typeof order !== 'undefined') colDom.value.style.order = Math.ceil(order)
         })
         return{
             getCol,

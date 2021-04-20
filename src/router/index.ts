@@ -74,6 +74,7 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     '基本布局': 'ji_ben_bu_ju',
                     '栅格换行': 'huan_hang',
+                    '栅格顺序': 'shun_xu',
                     '栅格间隔': 'jian_ge',
                     '栅格偏移': 'pian_yi',
                     '横向对齐方式': 'heng_xiang_dui_qi_fang_shi',

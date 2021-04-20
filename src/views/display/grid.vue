@@ -184,6 +184,33 @@
         </div>
 
         <div>
+            <h3 id="shun_xu">栅格顺序
+                <a href="#shun_xu" class="f-icon-anchor"></a>
+            </h3>
+            <p>自定义栅格的排列顺序。</p>
+            <div class="desc">
+                你可以对 <b>f-col</b> 使用 <b>order</b> 属性来设置顺序。
+            </div>
+
+            <MnRow>
+                <MnCol :span="6" :order="3"><div class="demo-col-content demo-col-dark">第一块</div></MnCol>
+                <MnCol :span="6" :order="2"><div class="demo-col-content demo-col-light">第二块</div></MnCol>
+                <MnCol :span="6" :order="4"><div class="demo-col-content demo-col-light">第三块</div></MnCol>
+                <MnCol :span="6" :order="1"><div class="demo-col-content demo-col-dark">第四块</div></MnCol>
+            </MnRow>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-row>
+        <f-col :span="6" :order="3"><div class="demo-col-content demo-col-dark">第一块</div></f-col>
+        <f-col :span="6" :order="2"><div class="demo-col-content demo-col-light">第二块</div></f-col>
+        <f-col :span="6" :order="4"><div class="demo-col-content demo-col-light">第三块</div></f-col>
+        <f-col :span="6" :order="1"><div class="demo-col-content demo-col-dark">第四块</div></f-col>
+    </f-row>`}}
+            </div>
+        </div>
+
+        <div>
             <h3 id="jian_ge">栅格间隔
                 <a href="#jian_ge" class="f-icon-anchor"></a>
             </h3>

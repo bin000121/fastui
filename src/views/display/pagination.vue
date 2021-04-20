@@ -18,7 +18,7 @@
             </div>
 
             <div class="demo-pagination">
-                <p>变化类型： {{type}}，变化值后的值：{{type && val}}</p>
+                <p>变化类型： {{type}}，变化值后的值：{{val || ''}}</p>
 <!--                <f-pagination-->
 <!--                    :total="total"-->
 <!--                    :pageSize="pageSize"-->
@@ -42,7 +42,7 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<p>变化类型： \{\{type\}\}，变化值后的值：\{\{type ? val : ''\}\}</p>
+    {{`<p>变化类型： \{\{type\}\}，变化值后的值：\{\{val || ''\}\}</p>
 
     <f-pagination
         :total="total"
@@ -70,7 +70,7 @@
                 pageSize: 10,
                 total: 50,
                 type: '',
-                val: 1
+                val: 0
             })
             const updatePage = (type: string, val: number) => {
                 data.type = type
@@ -699,7 +699,7 @@ export default defineComponent({
             pageSize: 10,
             total: 50,
             type: '',
-            val: 1
+            val: 0
         })
 
         const updatePage = (type: string, val: number) => {
