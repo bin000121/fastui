@@ -1,9 +1,9 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Select from '/@/views/packages/select/Select.vue'
-import SelectGroup from '/@/views/packages/select/Select-group.vue'
-import SelectOption from '/@/views/packages/select/Select-option.vue'
+import Select from './Select.vue'
+import SelectGroup from './Select-group.vue'
+import SelectOption from './Select-option.vue'
 
 export default {
     install (app: App): void {

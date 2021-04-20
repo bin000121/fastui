@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Model from '/@/views/packages/model/Model.vue'
+import Model from './Model.vue'
 
 export default {
     install (app: App): void {

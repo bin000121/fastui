@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Button from '/@/views/packages/button/Button.vue'
+import Button from './Button.vue'
 
 export default {
     install (app: App): void {

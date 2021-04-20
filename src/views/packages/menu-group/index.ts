@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import MenuGroup from '/@/views/packages/menu-group/Menu-group.vue'
+import MenuGroup from './Menu-group.vue'
 
 export default {
     install (app: App): void {

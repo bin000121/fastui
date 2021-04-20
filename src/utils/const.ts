@@ -10,6 +10,7 @@ export default {
     Dropdowns: 'fDropdowns',
     DropdownsItem: 'fDropdownsItem',
     Input: 'fInput',
+    InputNumber: 'fInputNumber',
     Aside: 'fAside',
     Content: 'fContent',
     Footer: 'fFooter',
@@ -40,4 +41,5 @@ export default {
     SubMenu: 'fSubMenu',
     MenuItem: 'fMenuItem',
     MenuGroup: 'fMenuGroup',
+    Table: 'fTable',
 } as const

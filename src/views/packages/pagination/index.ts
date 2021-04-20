@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Pagination from '/@/views/packages/pagination/Pagination.vue'
+import Pagination from './Pagination.vue'
 
 export default {
     install (app: App): void {

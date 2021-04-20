@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import MenuItem from '/@/views/packages/menu-item/Menu-item.vue'
+import MenuItem from './Menu-item.vue'
 
 export default {
     install (app: App): void {

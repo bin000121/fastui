@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Slider from '/@/views/packages/slider/Slider.vue'
+import Slider from './Slider.vue'
 
 export default {
     install (app: App): void {

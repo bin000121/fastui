@@ -1,8 +1,8 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Tabs from '/@/views/packages/tabs/Tabs.vue'
-import TabsPane from '/@/views/packages/tabs/Tabs-pane.vue'
+import Tabs from './Tabs.vue'
+import TabsPane from './Tabs-pane.vue'
 
 export default {
     install (app: App): void {

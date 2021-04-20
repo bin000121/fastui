@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Tag from '/@/views/packages/tag/Tag.vue'
+import Tag from './Tag.vue'
 
 export default {
     install (app: App): void {

@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Box from '/@/views/packages/box/Box.vue'
+import Box from './Box.vue'
 
 export default {
     install (app: App): void {

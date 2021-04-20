@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Progress from '/@/views/packages/progress/Progress.vue'
+import Progress from './Progress.vue'
 
 export default {
     install (app: App): void {

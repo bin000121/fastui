@@ -1,8 +1,8 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Dropdowns from '/@/views/packages/dropdowns/Dropdowns.vue'
-import DropdownsItem from '/@/views/packages/dropdowns/Dropdowns-item.vue'
+import Dropdowns from './Dropdowns.vue'
+import DropdownsItem from './Dropdowns-item.vue'
 
 export default {
     install (app: App): void {

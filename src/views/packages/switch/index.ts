@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Switch from '/@/views/packages/switch/Switch.vue'
+import Switch from './Switch.vue'
 
 export default {
     install (app: App): void {

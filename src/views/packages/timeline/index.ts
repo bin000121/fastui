@@ -1,8 +1,8 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Timeline from '/@/views/packages/timeline/Timeline.vue'
-import TimelineItem from '/@/views/packages/timeline/Timeline-item.vue'
+import Timeline from './Timeline.vue'
+import TimelineItem from './Timeline-item.vue'
 
 export default {
     install (app: App): void {

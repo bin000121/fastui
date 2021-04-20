@@ -135,6 +135,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/input_number',
+                name: 'input_number',
+                component: () => import('/@/views/display/input-number.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
+            },
+            {
                 path: '/doc/select',
                 name: 'select',
                 component: () => import('/@/views/display/select.vue'),

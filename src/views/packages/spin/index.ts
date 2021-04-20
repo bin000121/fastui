@@ -1,7 +1,7 @@
 import { App } from 'vue'
 import componentName from '/@/utils/const'
 
-import Spin from '/@/views/packages/spin/Spin.vue'
+import Spin from './Spin.vue'
 
 export default {
     install (app: App): void {

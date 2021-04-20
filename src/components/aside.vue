@@ -32,6 +32,7 @@ export default defineComponent( {
             '/doc/dropdowns': 'Dropdowns 下拉菜单',
             '/doc/slider': 'Slider 滑块',
             '/doc/input': 'Input 输入框',
+            '/doc/input_number': 'InputNumber 步进器',
             '/doc/select': 'Select 下拉框',
             '/doc/tabs': 'Tabs 标签页',
             '/doc/pagination': 'Pagination 分页器',
