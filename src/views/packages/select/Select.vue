@@ -622,15 +622,18 @@ export default defineComponent({
     box-sizing: border-box;
     list-style: none;
     margin: 0;
-    padding: 0;
-    overflow: auto;
+    /*padding: 0 5px 0 0;*/
+    /*overflow: hidden;*/
     max-height: 240px;
     width: 100%;
     min-width: 250px;
+    /*&:hover{*/
+        overflow: auto;
+        padding: 0;
+    /*}*/
     &::-webkit-scrollbar{
         width: 5px;
     }
-
     &::-webkit-scrollbar-track{
         background-color: #f2f2f2;
     }

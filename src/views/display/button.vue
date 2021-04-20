@@ -24,7 +24,11 @@
             </div>
 
             <div>
-                <MnButton type="info">一般消息（info）</MnButton>
+                <MnButton icon="f-icon-clock" type="primary" size="large"></MnButton>
+                <MnButton icon="f-icon-setup_fill" type="danger" rounded></MnButton>
+                <MnButton icon="f-icon-search" type="warning" disabled></MnButton>
+                <MnButton icon="f-icon-arrow-right-bold" type="success" size="small"></MnButton>
+                <MnButton icon="f-icon-copy" size="mini"></MnButton>
             </div>
             <div v-highlight>
                 <pre><code>
@@ -33,7 +37,13 @@
     <f-button type="success">成功（success）</f-button>
     <f-button type="warning">警告（warning）</f-button>
     <f-button type="danger">危险（danger）</f-button>
-    <f-button type="info">一般消息（info）</f-button>`}}
+    <f-button type="info">一般消息（info）</f-button>
+
+    <f-button icon="f-icon-clock" type="primary" size="large"></f-button>
+    <f-button icon="f-icon-setup_fill" type="danger" rounded></f-button>
+    <f-button icon="f-icon-search" type="warning" disabled></f-button>
+    <f-button icon="f-icon-arrow-right-bold" type="success" size="small"></f-button>
+    <f-button icon="f-icon-copy" size="mini"></f-button>`}}
                 </code></pre>
             </div>
         </div>

@@ -8,7 +8,17 @@
 .doc-sliderTo-enter-active{
     transition: all .15s ease-out;
 }
+/*f-tag-close*/
 
+.f-tag-close-enter-from,
+.f-tag-close-leave-to{
+    transform: scaleX(.05);
+    opacity: 0;
+}
+.f-tag-close-enter-active,
+.f-tag-close-leave-active{
+    transition: all .25s ease-in-out;
+}
 /*f-dropdowns*/
 .f-zoom-in__center-enter-from,
 .f-zoom-in__center-leave-to{

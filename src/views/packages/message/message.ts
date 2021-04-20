@@ -50,6 +50,7 @@ const MsgInstance: MessageType = ((options: optionsType) => {
     render(vnode, document.createElement('div'))
     document.body.appendChild(vnode.el as HTMLElement)
 }) as any
+
 let msgTypeList = ['default', 'info', 'success', 'error', 'warning', 'loading'] as const
 msgTypeList.forEach(type => {
     MsgInstance[type] = (options: optionsType) => {
@@ -70,7 +71,7 @@ export interface optType {
     message: string | number;
     id?: string;
     top?: string | number;
-    type?: 'default' | 'info' | 'success' | 'error' | 'warning' | 'loading';
+    type?: 'default' | 'info' | 'success' | 'error' | 'warning' | 'loading' | string;
     duration?: number;
     isShowClose?: boolean;
     isShowIcon?: boolean;

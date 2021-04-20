@@ -1,7 +1,13 @@
 <template>
     <button
-        :class="['f-btn', ...getClassName, ...isRounded, ...btnSize, ...isOutline]"
-        :style="`padding: ${icon ? '12px' : '12px 16px'};`"
+        :class="[
+            'f-btn',
+            ...getClassName,
+            ...isRounded,
+            ...btnSize,
+            ...isOutline,
+            ...isOneIcon
+        ]"
         type="button"
         :disabled="disabled ? 'disabled' : ''"
         ref="buttonDom"
@@ -36,7 +42,7 @@ export default defineComponent( {
             default: 'normal'
         }
     },
-    setup ({ type, disabled, rounded, size, outline }) {
+    setup ({ type, disabled, rounded, size, outline, icon }, { slots }) {
         const buttonDom = ref(null)
 
         const getClassName = computed(() => {
@@ -52,7 +58,6 @@ export default defineComponent( {
             if (disabled) return [color[type], 'is-disabled']
             return [color[type]]
         })
-
 
         const isOutline = computed(() => {
             return outline ? ['f-btn--outline'] : []
@@ -72,6 +77,11 @@ export default defineComponent( {
             return [sizeObj[size]]
         })
 
+        console.log(slots)
+        const isOneIcon = computed(() => {
+            return icon && !slots.default ? ['f-btn-icon'] : []
+        })
+
         onMounted(() => {
             const dom: HTMLElement = buttonDom.value as any
             !disabled && dom.removeAttribute('disabled')
@@ -81,6 +91,7 @@ export default defineComponent( {
             buttonDom,
             isRounded,
             btnSize,
+            isOneIcon,
             isOutline
         }
     }
@@ -89,6 +100,7 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .f-btn{
+    padding: 12px 16px;
     user-select: none;
     cursor: pointer;
     border: 1px solid transparent;
@@ -102,6 +114,9 @@ export default defineComponent( {
     line-height: 1;
     transition: all .1s;
     box-sizing: border-box;
+}
+.f-btn-icon.f-btn{
+    padding: 12px;
 }
 .f-btn + .f-btn{
     margin-left: 10px;
@@ -310,14 +325,23 @@ export default defineComponent( {
     border-radius: 20px;
 }
 .f-btn--mini{
-    padding: 6px 12px;
-    font-size: 12px;
+    padding: 6px 12px!important;
+    font-size: 12px!important;
+    .f-btn-icon{
+        font-size: 14px;
+    }
 }
 .f-btn--small{
-    padding: 9px 15px;
-    font-size: 12px;
+    padding: 9px 15px!important;
+    font-size: 12px!important;
+    .f-btn-icon{
+        font-size: 14px;
+    }
 }
 .f-btn--large{
-    padding: 15px 21px;
+    .f-btn-icon{
+        font-size: 18px;
+    }
+    padding: 15px 21px!important;
 }
 </style>

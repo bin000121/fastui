@@ -39,6 +39,8 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/tag.vue'),
                 meta: {
                     '基本用法': 'ji_ben_shi_yong',
+                    '幽灵样式': 'you_ling_yang_shi',
+                    '可关闭': 'ke_guan_bi',
                     '尺寸': 'cicun'
                 }
             },
