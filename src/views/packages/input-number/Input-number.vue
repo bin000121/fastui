@@ -1,13 +1,26 @@
 <template>
     <div
         class="f-input-number"
+        :class="{
+            'f-input-number__disabled': disabled,
+            'f-input-number__readonly': readonly,
+            ['f-input-number__' + size]: size !== 'default'
+        }"
+        :id="id"
+        v-clickOutside="handleFocus"
     >
         <div
             class="f-input-number-icon"
             ref="iconBox"
         >
-            <i class="f-icon-arrow-up-bold f-input-number-add" @click="increase"></i>
-            <i class="f-icon-arrow-down-bold f-input-number-minus" @click="decrease"></i>
+            <i
+                class="f-icon-arrow-up-bold f-input-number-add"
+                @click="handleValueChange('increase')"
+            ></i>
+            <i
+                class="f-icon-arrow-down-bold f-input-number-minus"
+                @click="handleValueChange('decrease')"
+            ></i>
         </div>
         <input
             :class="{
@@ -19,13 +32,12 @@
             type="text"
             autocomplete="off"
             :autofocus="autoFocus"
-            :readonly="readonly"
+            :readonly="readonly || disabled"
             :disabled="disabled"
             :max="max"
             :min="min"
-            @focus="isFocus = true"
-            @blur="isFocus = false"
             :value="currentValue"
+            @focus="isFocus = true"
         >
     </div>
 </template>
@@ -38,16 +50,20 @@ import {
     watch,
     nextTick
 } from 'vue'
-
 import type { PropType } from 'vue'
+import { getRandomId } from '/@/utils/getRandomId'
 type Formatter = (value: number | string) => string
 export default defineComponent({
     emits: ['update:value', 'change'],
     props: {
+        id: {
+            type: String,
+            default: () => getRandomId('f-input-number')
+        },
         value: Number,
         width: {
             type: String,
-            default: '200px'
+            default: '120px'
         },
         disabled: Boolean,
         readonly: Boolean,
@@ -72,36 +88,63 @@ export default defineComponent({
     setup (props, { emit }) {
         const input = ref(null)
         let inputDom: HTMLElement | any
+        const iconBox = ref(null)
+        let iconBoxDom: HTMLElement | any
 
-        const currentValue = ref(0)
+        let isHasMin = props.min ?? false
+        let isHasMax = props.max ?? false
+        let isHasValue = props.value ?? false
+        const currentValue = ref(isHasValue || 1)
         const isFocus = ref(false)
-        const increase = () => {
-            if (!isFocus.value) inputDom.focus()
+        const disabledChange = ref(false)
+
+        const handleFocus = () => {
+            if (props.disabled) return
+            isFocus.value = false
+        }
+
+        const handleValueChange = (type: 'increase' | 'decrease') => {
+            if (props.disabled || props.readonly) return
             isFocus.value = true
-            let oldVal = currentValue.value
-            currentValue.value++
+            const step = parseInt(props.step as string)
+            const oldVal = currentValue.value
+            if (type === 'increase') {
+                if (isHasMax && currentValue.value >= isHasMax) return
+                currentValue.value += step
+            }
+            else {
+                if (isHasMin && currentValue.value <= isHasMin) return
+                currentValue.value -= step
+            }
             emit('update:value', currentValue.value)
             emit('change', oldVal, currentValue.value)
         }
 
-        const decrease = () => {
-            if (!isFocus.value) inputDom.focus()
-            isFocus.value = true
-            let oldVal = currentValue.value
-            currentValue.value--
-            emit('update:value', currentValue.value)
-            emit('change', oldVal, currentValue.value)
+        const initValue = () => {
+            if (isHasValue && isHasMin && isHasMax) {
+                if (currentValue.value >= isHasMax) currentValue.value = isHasMax as number
+                if (currentValue.value <= isHasMin) currentValue.value = isHasMin as number
+            } else if (isHasValue && isHasMin && !isHasMax) {
+                currentValue.value = currentValue.value <= isHasMin ? isHasMin as number : currentValue.value
+            } else if (isHasValue && !isHasMin && isHasMax) {
+                currentValue.value = currentValue.value >= isHasMax ? isHasMin as number : currentValue.value
+            }
         }
 
         onMounted(() => {
             inputDom = input.value as any
+            iconBoxDom = iconBox.value as any
+            inputDom.style.padding = `0 ${iconBoxDom.offsetWidth}px 0 1em`
+            initValue()
         })
+
         return{
             isFocus,
             input,
+            iconBox,
             currentValue,
-            increase,
-            decrease,
+            handleValueChange,
+            handleFocus,
         }
     }
 })
@@ -113,15 +156,29 @@ export default defineComponent({
     position: relative;
     font-size: 14px;
 }
+.f-input-number__small{
+    .f-input-number-input{
+        height: 30px;
+    }
+}
+.f-input-number__large{
+    .f-input-number-input{
+        height: 38px;
+    }
+}
 .f-input-number-input{
     display: inline-block;
     box-sizing: border-box;
     outline: 0;
-    height: 36px;
-    padding: 0 2em 0 10px;
+    height: 34px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    transition: all .15s ease-in-out;
+    transition: box-shadow .15s ease-in-out, border-color .15s ease-in-out;
+}
+.f-input-number__disabled{
+    pointer-events: none;
+    background-color: #eee;
+    opacity: .8;
 }
 .f-input-number-input__focus{
     border-color: var(--primary);
@@ -146,8 +203,10 @@ export default defineComponent({
     align-items: center;
     font-size: 12px;
     padding: 0 8px;
+    transition: all .15s ease-in-out;
     &:hover{
         color: var(--primary);
+        background-color: rgba(var(--primary-rgba), .15);
         cursor: pointer;
     }
 }
