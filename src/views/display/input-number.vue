@@ -1,7 +1,7 @@
 <template>
     <div>
         <h2>InputNumber 步进器</h2>
-        <p>一个表单中常见的数字输入框。</p>
+        <p>一个表单中常见的数字输入框，用于处理数字的输入。</p>
 
         <div>
             <h3 id="ji_ben_yong_fa">基本用法
@@ -99,9 +99,78 @@
                     :formatter="val => '$' + val"
                 />
             </div>
+
+            <div class="desc">
+                您还可以设置属性 <b>return-formatter</b> 来获得格式化后的返回值，它只能在你监听的 <b>change</b> 事件参数中去获取。
+            </div>
+
+            <div class="demo-input-number">
+                <p>旧值: {{oldV}}，新值： {{newV}}</p>
+                <f-input-number
+                    v-model:value="num6"
+                    :formatter="val => val + '%'"
+                    return-formatter
+                    @change="handleChange"
+                />
+            </div>
+
             <div v-highlight>
                 <pre><code>
     {{`<f-input-number v-model:value="num"></f-input-number>
+
+    <p>旧值: \{\{oldVal\}\}，新值： \{\{newVal\}\}</p>
+    <f-input-number
+        v-model:value="num2"
+        :formatter="val => val + '%'"
+        return-formatter
+        @change="handleChange"
+    />
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref
+    } from 'vue'
+    export default defineComponent({
+        setup() {
+            const oldVal = ref('')
+            const newVal = ref('')
+            const handleChange = (oldV: any, newV: any) => {
+                oldVal.value = oldV
+                newVal.value = newV
+            }
+            const num = ref(1)
+            const num2 = ref(1)
+            return{
+                num,
+                num2,
+                newVal,
+                oldVal,
+                handleChange
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="bu_chang">步长
+                <a href="#bu_chang" class="f-icon-anchor"></a>
+            </h3>
+            <p>步进器的步长可以自定义，默认是1。</p>
+
+            <div class="demo-input-number">
+                <f-input-number v-model:value="num10" :step="2"></f-input-number>
+                <f-input-number v-model:value="num11" :step="-3"></f-input-number>
+                <f-input-number v-model:value="num12" :step="0.01"></f-input-number>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-input-number v-model:value="num" :step="2"></f-input-number>
+    <f-input-number v-model:value="num2" :step="-3"></f-input-number>
+    <f-input-number v-model:value="num3" :step="0.01"></f-input-number>
 
     <script lang="ts">
     import {
@@ -111,7 +180,13 @@
     export default defineComponent({
         setup() {
             const num = ref(1)
-            return{ num }
+            const num2 = ref(1)
+            const num3 = ref(1)
+            return{
+                num,
+                num2,
+                num3
+            }
         }
     })
     </script>`}}
@@ -127,17 +202,17 @@
 
             <div class="demo-input-number">
                 <f-input-number
-                    v-model:value="num6"
+                    v-model:value="num7"
                     size="small"
                 />
 
                 <f-input-number
-                    v-model:value="num7"
+                    v-model:value="num8"
                     size="default"
                 />
 
                 <f-input-number
-                    v-model:value="num8"
+                    v-model:value="num9"
                     size="large"
                 />
             </div>
@@ -206,8 +281,19 @@ export default defineComponent({
             num7: 1,
             num8: 1,
             num9: 1,
+            num10: 1,
+            num11: 1,
+            num12: 1,
+            oldV: '',
+            newV: ''
         })
+
+        const handleChange = (oldV: any, newV: any) => {
+            data.oldV = oldV
+            data.newV = newV
+        }
         return{
+            handleChange,
             ...toRefs(data)
         }
     }

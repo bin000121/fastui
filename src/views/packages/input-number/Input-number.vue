@@ -89,7 +89,8 @@ export default defineComponent({
             default: 'default',
             validator: (val: string) => ['default', 'small', 'large'].includes(val)
         },
-        formatter: Function as PropType<Formatter>
+        formatter: Function as PropType<Formatter>,
+        returnFormatter: Boolean
     },
     setup (props, { emit }) {
         const input = ref(null)
@@ -102,6 +103,7 @@ export default defineComponent({
         let isHasValue = props.value ?? false
         const currentValue = ref(isHasValue || 1)
         const isFocus = ref(false)
+        const isFloat = props.step.toString().includes('.')
         const disabledChange = ref(false)
 
         const getValue = computed(() => {
@@ -119,21 +121,39 @@ export default defineComponent({
             console.log(str)
         }, 150)
 
+        const _valueChangeHandler = (type: 'increase' | 'decrease') => {
+            let step: number
+            let num: number
+            const baseNum = type === 'increase' ? 1 : -1
+            if (isFloat) {
+                step = parseFloat(props.step as string)
+                const pointNum = props.step.toString().split('.')[1].length
+                let powerNum = Math.pow(10, pointNum)
+                step = step * baseNum * powerNum
+                num = currentValue.value * powerNum + step
+                currentValue.value = num / powerNum
+            } else {
+                step = parseInt(props.step as string)
+                currentValue.value += step * baseNum
+            }
+        }
+
         const handleValueChange = (type: 'increase' | 'decrease') => {
             if (props.disabled || props.readonly) return
             isFocus.value = true
-            const step = parseInt(props.step as string)
-            const oldVal = currentValue.value
+            const oldVal = props.returnFormatter ? getValue.value : currentValue.value
             if (type === 'increase') {
                 if (isHasMax && currentValue.value >= isHasMax) return
-                currentValue.value += step
+                _valueChangeHandler(type)
             }
             else {
                 if (isHasMin && currentValue.value <= isHasMin) return
-                currentValue.value -= step
+                _valueChangeHandler(type)
             }
+            console.log(currentValue.value)
             emit('update:value', currentValue.value)
-            emit('change', oldVal, currentValue.value)
+            const newVal = props.returnFormatter ? getValue.value : currentValue.value
+            emit('change', oldVal, newVal)
         }
 
         const initValue = () => {
