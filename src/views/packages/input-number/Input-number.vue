@@ -15,11 +15,11 @@
         >
             <i
                 class="f-icon-arrow-up-bold f-input-number-add"
-                @click="handleValueChange('increase')"
+                v-longPress="() => handleValueChange('increase')"
             ></i>
             <i
                 class="f-icon-arrow-down-bold f-input-number-minus"
-                @click="handleValueChange('decrease')"
+                v-longPress="() => handleValueChange('decrease')"
             ></i>
         </div>
         <input
@@ -36,8 +36,12 @@
             :disabled="disabled"
             :max="max"
             :min="min"
-            :value="currentValue"
+            :value="getValue"
             @focus="isFocus = true"
+            @blur="isFocus = false"
+            @input="handleInput"
+            @keydown.up.prevent="handleValueChange('increase')"
+            @keydown.down.prevent="handleValueChange('decrease')"
         >
     </div>
 </template>
@@ -48,10 +52,12 @@ import {
     ref,
     onMounted,
     watch,
-    nextTick
+    nextTick,
+    computed
 } from 'vue'
 import type { PropType } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
+import { debounce } from '/@/utils/debounce'
 type Formatter = (value: number | string) => string
 export default defineComponent({
     emits: ['update:value', 'change'],
@@ -98,10 +104,20 @@ export default defineComponent({
         const isFocus = ref(false)
         const disabledChange = ref(false)
 
+        const getValue = computed(() => {
+            if (props.formatter) return props.formatter(currentValue.value)
+            return currentValue.value
+        })
+
         const handleFocus = () => {
             if (props.disabled) return
             isFocus.value = false
         }
+
+        const handleInput = debounce((e: any) => {
+            let str = e.target.value.replace(/^[0-9]\.[0-9]+&/g)
+            console.log(str)
+        }, 150)
 
         const handleValueChange = (type: 'increase' | 'decrease') => {
             if (props.disabled || props.readonly) return
@@ -131,6 +147,10 @@ export default defineComponent({
             }
         }
 
+        // watch(() => currentValue.value, (newV: number | string) => {
+        //     console.log(newV)
+        // })
+
         onMounted(() => {
             inputDom = input.value as any
             iconBoxDom = iconBox.value as any
@@ -143,8 +163,10 @@ export default defineComponent({
             input,
             iconBox,
             currentValue,
+            getValue,
             handleValueChange,
             handleFocus,
+            handleInput,
         }
     }
 })
@@ -155,6 +177,7 @@ export default defineComponent({
     display: inline-block;
     position: relative;
     font-size: 14px;
+    user-select: none;
 }
 .f-input-number__small{
     .f-input-number-input{
@@ -206,7 +229,7 @@ export default defineComponent({
     transition: all .15s ease-in-out;
     &:hover{
         color: var(--primary);
-        background-color: rgba(var(--primary-rgba), .15);
+        background-color: rgba(var(--primary-rgba), .1);
         cursor: pointer;
     }
 }

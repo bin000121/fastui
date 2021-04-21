@@ -54,7 +54,7 @@
             <h3 id="zhi_du">只读
                 <a href="#zhi_du" class="f-icon-anchor"></a>
             </h3>
-            <p>当前步进器输入框状态为只读，同时您不能与之进行交互，但他看起来和正常没什么两样。</p>
+            <p>当前步进器输入框状态为只读，同时您不能与之进行交互，他看起来和正常没什么两样。</p>
 
             <div class="demo-input-number">
                 <f-input-number v-model:value="num3" readonly></f-input-number>
@@ -73,6 +73,106 @@
         setup() {
             const num = ref(1)
             return{ num }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="ge_shi_hua">格式化呈现
+                <a href="#ge_shi_hua" class="f-icon-anchor"></a>
+            </h3>
+            <p>自定义文本框中数据的呈现样式。</p>
+
+            <div class="demo-input-number">
+                <f-input-number
+                    v-model:value="num4"
+                    :min="2"
+                    :formatter="val => val + '%'"
+                />
+
+                <f-input-number
+                    v-model:value="num5"
+                    :min="2"
+                    :formatter="val => '$' + val"
+                />
+            </div>
+            <div v-highlight>
+                <pre><code>
+    {{`<f-input-number v-model:value="num"></f-input-number>
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref
+    } from 'vue'
+    export default defineComponent({
+        setup() {
+            const num = ref(1)
+            return{ num }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="chi_cun">尺寸
+                <a href="#ge_shi_hua" class="f-icon-anchor"></a>
+            </h3>
+            <p>步进器拥有三种不同大小，默认大小为default。</p>
+
+            <div class="demo-input-number">
+                <f-input-number
+                    v-model:value="num6"
+                    size="small"
+                />
+
+                <f-input-number
+                    v-model:value="num7"
+                    size="default"
+                />
+
+                <f-input-number
+                    v-model:value="num8"
+                    size="large"
+                />
+            </div>
+            <div v-highlight>
+                <pre><code>
+    {{`<f-input-number
+        v-model:value="num"
+        size="small"
+    />
+
+    <f-input-number
+        v-model:value="num2"
+        size="default"
+    />
+
+    <f-input-number
+        v-model:value="num3"
+        size="large"
+    />
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref
+    } from 'vue'
+    export default defineComponent({
+        setup() {
+            const num = ref(1)
+            const num2 = ref(1)
+            const num3 = ref(1)
+            return{
+                num,
+                num2,
+                num3
+            }
         }
     })
     </script>`}}
@@ -99,7 +199,13 @@ export default defineComponent({
         const data = reactive({
             num: 1,
             num2: 1,
-            num3: 1
+            num3: 1,
+            num4: 1,
+            num5: 1,
+            num6: 1,
+            num7: 1,
+            num8: 1,
+            num9: 1,
         })
         return{
             ...toRefs(data)
@@ -110,6 +216,8 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .demo-input-number{
-
+    .f-input-number + .f-input-number{
+        margin-left: 15px;
+    }
 }
 </style>

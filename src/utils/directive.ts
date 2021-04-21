@@ -90,10 +90,45 @@ const copy: ObjectDirective = {
 }
 
 
+// v-longPress
+
+const longPress: ObjectDirective = {
+    beforeMount: (el, binding) => {
+        const { value: handler } = binding
+        el.__timer = 0
+        el.__start = 0
+        el.handleDown = (e: MouseEvent) => {
+            e.stopPropagation()
+            // 必须是鼠标左键
+            if (e.button !== 0) return
+            el.__start = Date.now()
+            if (el.__timer) clearInterval(el.__timer)
+            el.__timer = setInterval(handler, 100)
+        }
+        el.handleUp = (e: MouseEvent) => {
+            e.stopPropagation()
+            if (Date.now() - el.__start < 100) handler()
+            clearInterval(el.__timer)
+            el.__timer = null
+        }
+    },
+    mounted: el => {
+        el.addEventListener('mousedown', el.handleDown)
+        document.addEventListener('mouseup', el.handleUp)
+    },
+    unmounted: el => {
+        el.removeEventListener('mousedown', el.handleDown)
+        document.removeEventListener('mouseup', el.handleUp)
+        delete el.__timer
+        delete el.__start
+    }
+}
+
 export default {
     install (app: App) {
         app.directive('clickOutside', clickOutside)
         app.directive('highlight', highlight)
         app.directive('copy', copy)
+        app.directive('longPress', longPress)
     }
 }
