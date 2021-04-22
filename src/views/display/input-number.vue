@@ -254,6 +254,45 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="jian_jie_bu_jin_qi">简洁步进器
+                <a href="#jian_jie_bu_jin_qi" class="f-icon-anchor"></a>
+            </h3>
+            <p>为步进器应用简洁样式。</p>
+
+            <div class="demo-input-number">
+                <f-input-number v-model:value="num13" simple size="small"></f-input-number>
+                <f-input-number v-model:value="num14" simple></f-input-number>
+                <f-input-number v-model:value="num15" simple size="large"></f-input-number>
+            </div>
+            <div v-highlight>
+                <pre><code>
+    {{`<f-input-number v-model:value="num" simple size="small"></f-input-number>
+    <f-input-number v-model:value="num2" simple></f-input-number>
+    <f-input-number v-model:value="num3" simple size="large"></f-input-number>
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref
+    } from 'vue'
+    export default defineComponent({
+        setup() {
+            const num = ref(1)
+            const num2 = ref(1)
+            const num3 = ref(1)
+            return{
+                num,
+                num2,
+                num3
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -284,6 +323,9 @@ export default defineComponent({
             num10: 1,
             num11: 1,
             num12: 1,
+            num13: 1,
+            num14: 1,
+            num15: 1,
             oldV: '',
             newV: ''
         })

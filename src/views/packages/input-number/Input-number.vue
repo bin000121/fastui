@@ -4,10 +4,11 @@
         :class="{
             'f-input-number__disabled': disabled,
             'f-input-number__readonly': readonly,
+            'f-input-number__simple': simple,
             ['f-input-number__' + size]: size !== 'default'
         }"
         :id="id"
-        v-clickOutside="handleFocus"
+        v-clickOutside="handleBlur"
     >
         <div
             class="f-input-number-icon"
@@ -37,8 +38,7 @@
             :max="max"
             :min="min"
             :value="getValue"
-            @focus="isFocus = true"
-            @blur="isFocus = false"
+            @focus="handleFocus"
             @input="handleInput"
             @keydown.up.prevent="handleValueChange('increase')"
             @keydown.down.prevent="handleValueChange('decrease')"
@@ -53,6 +53,7 @@ import {
     onMounted,
     watch,
     nextTick,
+    watchEffect,
     computed
 } from 'vue'
 import type { PropType } from 'vue'
@@ -90,21 +91,22 @@ export default defineComponent({
             validator: (val: string) => ['default', 'small', 'large'].includes(val)
         },
         formatter: Function as PropType<Formatter>,
-        returnFormatter: Boolean
+        returnFormatter: Boolean,
+        simple: Boolean
     },
     setup (props, { emit }) {
-        const input = ref(null)
+        let input = ref(null)
         let inputDom: HTMLElement | any
-        const iconBox = ref(null)
+        let iconBox = ref(null)
         let iconBoxDom: HTMLElement | any
 
         let isHasMin = props.min ?? false
         let isHasMax = props.max ?? false
         let isHasValue = props.value ?? false
-        const currentValue = ref(isHasValue || 1)
-        const isFocus = ref(false)
+        let currentValue = ref(isHasValue || 1)
+        let isFocus = ref(false)
         const isFloat = props.step.toString().includes('.')
-        const disabledChange = ref(false)
+        let disabledChange = ref(false)
 
         const getValue = computed(() => {
             if (props.formatter) return props.formatter(currentValue.value)
@@ -112,6 +114,12 @@ export default defineComponent({
         })
 
         const handleFocus = () => {
+            if (props.disabled) return
+            isFocus.value = true
+            console.log(isFocus.value)
+        }
+
+        const handleBlur = () => {
             if (props.disabled) return
             isFocus.value = false
         }
@@ -123,15 +131,11 @@ export default defineComponent({
 
         const _valueChangeHandler = (type: 'increase' | 'decrease') => {
             let step: number
-            let num: number
             const baseNum = type === 'increase' ? 1 : -1
             if (isFloat) {
                 step = parseFloat(props.step as string)
                 const pointNum = props.step.toString().split('.')[1].length
-                let powerNum = Math.pow(10, pointNum)
-                step = step * baseNum * powerNum
-                num = currentValue.value * powerNum + step
-                currentValue.value = num / powerNum
+                currentValue.value = Number((currentValue.value + step).toFixed(pointNum))
             } else {
                 step = parseInt(props.step as string)
                 currentValue.value += step * baseNum
@@ -150,7 +154,6 @@ export default defineComponent({
                 if (isHasMin && currentValue.value <= isHasMin) return
                 _valueChangeHandler(type)
             }
-            console.log(currentValue.value)
             emit('update:value', currentValue.value)
             const newVal = props.returnFormatter ? getValue.value : currentValue.value
             emit('change', oldVal, newVal)
@@ -167,9 +170,11 @@ export default defineComponent({
             }
         }
 
-        // watch(() => currentValue.value, (newV: number | string) => {
-        //     console.log(newV)
-        // })
+        watch(() => props.value, (newV: number | unknown) => {
+            if (newV ?? false) {
+                currentValue.value = newV as number
+            }
+        })
 
         onMounted(() => {
             inputDom = input.value as any
@@ -184,9 +189,10 @@ export default defineComponent({
             iconBox,
             currentValue,
             getValue,
+            handleInput,
             handleValueChange,
             handleFocus,
-            handleInput,
+            handleBlur,
         }
     }
 })
@@ -246,6 +252,7 @@ export default defineComponent({
     align-items: center;
     font-size: 12px;
     padding: 0 8px;
+    color: inherit;
     transition: all .15s ease-in-out;
     &:hover{
         color: var(--primary);
@@ -255,5 +262,23 @@ export default defineComponent({
 }
 .f-input-number-add{
     border-bottom: 1px solid #ccc;
+}
+.f-input-number__simple{
+    .f-input-number-input{
+        border: 0;
+        border-radius: 5px!important;
+        background-color: rgba(var(--primary-rgba), .01);
+        transition: background-color .2s ease-in-out!important;
+    }
+    .f-input-number-icon{
+        right: 0;
+    }
+    .f-input-number-icon, .f-input-number-minus, .f-input-number-add{
+        border: 0;
+    }
+    .f-input-number-input__focus{
+        box-shadow: none;
+        background-color: rgba(var(--primary-rgba), .06);
+    }
 }
 </style>
