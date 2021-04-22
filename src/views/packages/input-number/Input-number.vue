@@ -81,10 +81,6 @@ export default defineComponent({
             type: [Number, String],
             default: 1
         },
-        placeholder: {
-            type: String,
-            default: '请输入...'
-        },
         size: {
             type: String,
             default: 'default',

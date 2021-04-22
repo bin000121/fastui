@@ -1,5 +1,9 @@
 <template>
-    <div class="f-spin" ref="fSpin">
+    <div
+        class="f-spin"
+        :class="{ 'f-spin__inline': inline }"
+        ref="fSpin"
+    >
         <svg
             xmlns="http://www.w3.org/2000/svg"
             class="f-svg"
@@ -43,8 +47,6 @@
 <script lang="ts">
 import {
     defineComponent,
-    reactive,
-    toRefs,
     ref,
     watch,
     computed,
@@ -82,7 +84,8 @@ export default defineComponent({
             type: String,
             default: 'default',
             validator: (val: string) => ['ring', 'snowflake', 'default'].includes(val)
-        }
+        },
+        inline: Boolean
     },
     setup (props) {
         const pi = Math.PI
@@ -148,6 +151,13 @@ export default defineComponent({
     display: inline-block;
     padding: 10px;
     text-align: center;
+}
+.f-spin__inline{
+    display: inline-flex;
+    align-items: center;
+    .f-spin-tip{
+        margin: 0 0 0 .75em;
+    }
 }
 .f-spin-tip{
     font-size: 14px;

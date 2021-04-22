@@ -140,6 +140,12 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/input-number.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '禁用': 'jin_yong',
+                    '只读': 'zhi_du',
+                    '格式化呈现': 'ge_shi_hua',
+                    '步长': 'bu_chang',
+                    '尺寸': 'chi_cun',
+                    '简洁步进器': 'jian_jie_bu_jin_qi'
                 }
             },
             {

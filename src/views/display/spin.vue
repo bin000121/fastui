@@ -88,13 +88,69 @@
                 <f-spin type="snowflake" tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>
             </div>
 
+            <div class="desc">
+                设置属性 <b>inline</b> 可以让图标和文字提示在同一行。
+            </div>
+
+            <div class="demo-spin">
+                <f-spin
+                    tip="正在拼命加载..."
+                    inline
+                    :size="36"
+                    :tip-style="{
+                        'font-size': '16px',
+                        color: '#1661ab'
+                    }"
+                />
+
+                <f-spin
+                    tip="资源正在路上..."
+                    inline
+                    :size="36"
+                    type="ring"
+                    :tip-style="{
+                        'font-size': '16px',
+                        color: '#1661ab'
+                    }"
+                />
+            </div>
+
             <div v-highlight>
                 <pre><code>
-    {{`<f-spin tip="正在拼命加载..."></f-spin>
+    {{`<f-spin tip="正在拼命加载..."/>
 
-    <f-spin type="ring" tip="加载中..." :tip-style="{ color: '#333' }"></f-spin>
+    <f-spin
+        type="ring"
+        tip="加载中..."
+        :tip-style="{ color: '#333' }"
+    />
 
-    <f-spin type="snowflake" tip="资源正在路上..." :tip-style="{ fontSize: '12px' }"></f-spin>`}}
+    <f-spin
+        type="snowflake"
+        tip="资源正在路上..."
+        :tip-style="{ fontSize: '12px' }"
+    />
+
+    <f-spin
+        tip="正在拼命加载..."
+        inline
+        :size="36"
+        :tip-style="{
+            'font-size': '16px',
+            color: '#1661ab'
+        }"
+    />
+
+    <f-spin
+        tip="资源正在路上..."
+        inline
+        :size="36"
+        type="ring"
+        :tip-style="{
+            'font-size': '16px',
+            color: '#1661ab'
+        }"
+    />`}}
                 </code></pre>
             </div>
         </div>
