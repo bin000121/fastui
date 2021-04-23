@@ -40,8 +40,7 @@
 import Header from '/@/components/header.vue'
 import Aside from '/@/components/aside.vue'
 import FTop from '/@/views/packages/toTop/ToTop.vue'
-import { debounce } from '/@/utils/debounce'
-import { throttle } from '/@/utils/throttle'
+import { debounce, throttle } from '/@/utils/utils'
 
 import {
     defineComponent,

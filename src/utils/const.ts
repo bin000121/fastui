@@ -42,4 +42,5 @@ export default {
     MenuItem: 'fMenuItem',
     MenuGroup: 'fMenuGroup',
     Table: 'fTable',
+    Img: 'fImg',
 } as const

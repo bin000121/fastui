@@ -60,7 +60,7 @@ import {
 } from 'vue'
 import type { PropType } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
-import { debounce } from '/@/utils/debounce'
+import { debounce } from '/@/utils/utils'
 type Formatter = (value: number | string) => string
 export default defineComponent({
     emits: ['update:value', 'change'],
@@ -220,6 +220,7 @@ export default defineComponent({
     position: relative;
     font-size: 14px;
     user-select: none;
+    overflow: hidden;
 }
 .f-input-number__small{
     .f-input-number-input{
@@ -271,9 +272,11 @@ export default defineComponent({
     color: inherit;
     transition: all .15s ease-in-out;
     &:hover{
+        cursor: pointer;
+    }
+    &:active{
         color: var(--primary);
         background-color: rgba(var(--primary-rgba), .1);
-        cursor: pointer;
     }
 }
 .f-input-number-add{
@@ -281,13 +284,17 @@ export default defineComponent({
 }
 .f-input-number-minus__disabled, .f-input-number-add__disabled {
     cursor: not-allowed!important;
-    &:hover{
+    &:active{
         color: #fff;
         background-color: var(--error);
         border-color: var(--error);
     }
 }
 .f-input-number__simple{
+    &:hover .f-input-number-icon{
+        opacity: 1;
+        transform: translate(0, -50%);
+    }
     .f-input-number-input{
         border: 0;
         border-radius: 5px!important;
@@ -296,6 +303,9 @@ export default defineComponent({
     }
     .f-input-number-icon{
         right: 0;
+        opacity: 0;
+        transform: translate(.3em, -50%);
+        transition: opacity .15s ease-in-out, transform .2s;
     }
     .f-input-number-icon, .f-input-number-minus, .f-input-number-add{
         border: 0;

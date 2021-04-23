@@ -147,6 +147,18 @@
     transition: all .3s ease-out;
 }
 
+
+/*f-img-*/
+.f-img-show-big-enter-from,
+.f-img-show-big-leave-to{
+    transform: scale(.2);
+    opacity: 0;
+}
+.f-img-show-big-enter-active,
+.f-img-show-big-leave-active{
+    transition: all .18s ease-in-out;
+}
+
 /*f-spin*/
 @keyframes loading-rotate {
     0%{

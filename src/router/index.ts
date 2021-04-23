@@ -344,6 +344,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/img',
+                name: 'img',
+                component: () => import('/@/views/display/img.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
+            },
+            {
                 path: '/doc/layout',
                 name: 'layout',
                 component: () => import('/@/views/display/layout.vue'),

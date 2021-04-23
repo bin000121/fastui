@@ -36,7 +36,7 @@ import {
     ref,
     toRef
 } from 'vue'
-import { throttle } from '../../../utils/throttle'
+import { throttle } from '/@/utils/utils'
 
 export default defineComponent({
     props: {
