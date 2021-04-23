@@ -16,10 +16,12 @@
         >
             <i
                 class="f-icon-arrow-up-bold f-input-number-add"
+                :class="{ 'f-input-number-add__disabled': disabledAdd }"
                 v-longPress="() => handleValueChange('increase')"
             ></i>
             <i
                 class="f-icon-arrow-down-bold f-input-number-minus"
+                :class="{ 'f-input-number-minus__disabled': disabledMinus }"
                 v-longPress="() => handleValueChange('decrease')"
             ></i>
         </div>
@@ -102,7 +104,14 @@ export default defineComponent({
         let currentValue = ref(isHasValue || 1)
         let isFocus = ref(false)
         const isFloat = props.step.toString().includes('.')
-        let disabledChange = ref(false)
+        let disabledAdd = ref(false)
+        let disabledMinus = ref(false)
+
+        const checkIsHasValue = (data: number | string | unknown) => {
+            if (typeof data === 'number' && data === 0) return true
+            if (typeof data === 'string') return !!data
+            return !!data
+        }
 
         const getValue = computed(() => {
             if (props.formatter) return props.formatter(currentValue.value)
@@ -112,7 +121,6 @@ export default defineComponent({
         const handleFocus = () => {
             if (props.disabled) return
             isFocus.value = true
-            console.log(isFocus.value)
         }
 
         const handleBlur = () => {
@@ -121,35 +129,45 @@ export default defineComponent({
         }
 
         const handleInput = debounce((e: any) => {
-            let str = e.target.value.replace(/^[0-9]\.[0-9]+&/g)
-            console.log(str)
+            let value = e.target.value
+            const reg = /^[0-9]+\.?[0-9]+$/
+            if (!reg.test(value)) return
+            let num = parseFloat(value as string)
+            if (checkIsHasValue(props.max) && num >= props.max!) value = props.max
+            else if (checkIsHasValue(props.min) && num <= props.min!) value = props.min
+            currentValue.value = parseFloat(value as string)
+            emit('update:value', currentValue.value)
         }, 150)
 
         const _valueChangeHandler = (type: 'increase' | 'decrease') => {
             let step: number
             const baseNum = type === 'increase' ? 1 : -1
             if (isFloat) {
-                step = parseFloat(props.step as string)
+                step = props.step as number * baseNum
                 const pointNum = props.step.toString().split('.')[1].length
                 currentValue.value = Number((currentValue.value + step).toFixed(pointNum))
             } else {
-                step = parseInt(props.step as string)
-                currentValue.value += step * baseNum
+                step = props.step as number * baseNum
+                currentValue.value += step
             }
         }
 
         const handleValueChange = (type: 'increase' | 'decrease') => {
             if (props.disabled || props.readonly) return
             isFocus.value = true
+            disabledAdd.value = disabledMinus.value = false
             const oldVal = props.returnFormatter ? getValue.value : currentValue.value
-            if (type === 'increase') {
-                if (isHasMax && currentValue.value >= isHasMax) return
-                _valueChangeHandler(type)
+            if (type === 'increase' && checkIsHasValue(props.max) && currentValue.value >= props.max!) {
+                currentValue.value = props.max!
+                disabledAdd.value = true
+                return
             }
-            else {
-                if (isHasMin && currentValue.value <= isHasMin) return
-                _valueChangeHandler(type)
+            if (type === 'decrease' && checkIsHasValue(props.min) && currentValue.value <= props.min!) {
+                currentValue.value = props.min!
+                disabledMinus.value = true
+                return
             }
+            _valueChangeHandler(type)
             emit('update:value', currentValue.value)
             const newVal = props.returnFormatter ? getValue.value : currentValue.value
             emit('change', oldVal, newVal)
@@ -186,9 +204,11 @@ export default defineComponent({
             currentValue,
             getValue,
             handleInput,
+            disabledAdd,
+            disabledMinus,
             handleValueChange,
             handleFocus,
-            handleBlur,
+            handleBlur
         }
     }
 })
@@ -218,7 +238,7 @@ export default defineComponent({
     height: 34px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    transition: box-shadow .15s ease-in-out, border-color .15s ease-in-out;
+    transition: box-shadow .15s ease-in-out, border-color .12s ease-in-out;
 }
 .f-input-number__disabled{
     pointer-events: none;
@@ -259,12 +279,20 @@ export default defineComponent({
 .f-input-number-add{
     border-bottom: 1px solid #ccc;
 }
+.f-input-number-minus__disabled, .f-input-number-add__disabled {
+    cursor: not-allowed!important;
+    &:hover{
+        color: #fff;
+        background-color: var(--error);
+        border-color: var(--error);
+    }
+}
 .f-input-number__simple{
     .f-input-number-input{
         border: 0;
         border-radius: 5px!important;
         background-color: rgba(var(--primary-rgba), .01);
-        transition: background-color .2s ease-in-out!important;
+        transition: background-color .12s ease-in-out!important;
     }
     .f-input-number-icon{
         right: 0;

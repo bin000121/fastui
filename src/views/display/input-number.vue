@@ -161,7 +161,7 @@
             <p>步进器的步长可以自定义，默认是1。</p>
 
             <div class="demo-input-number">
-                <f-input-number v-model:value="num10" :step="2"></f-input-number>
+                <f-input-number v-model:value="num10" :step="2" :max="20"></f-input-number>
                 <f-input-number v-model:value="num11" :step="-3"></f-input-number>
                 <f-input-number v-model:value="num12" :step="0.01"></f-input-number>
             </div>
@@ -262,7 +262,7 @@
             <p>为步进器应用简洁样式。</p>
 
             <div class="demo-input-number">
-                <f-input-number v-model:value="num13" simple size="small"></f-input-number>
+                <f-input-number v-model:value="num13" simple size="small" :max="50"></f-input-number>
                 <f-input-number v-model:value="num14" simple></f-input-number>
                 <f-input-number v-model:value="num15" simple size="large"></f-input-number>
             </div>
