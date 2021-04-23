@@ -224,11 +224,14 @@ export default defineComponent({
 }
 .f-dropdowns__small{
     font-size: 12px!important;
-    padding: 4px 12px!important;
+    padding: 5px 12px!important;
 }
 .f-dropdowns__large{
     font-size: 20px!important;
-    padding: 12px 20px!important;
+    padding: 10px 20px!important;
+    .f-dropdowns-control{
+        font-size: 16px;
+    }
 }
 .f-dropdowns-control{
     cursor: pointer;
