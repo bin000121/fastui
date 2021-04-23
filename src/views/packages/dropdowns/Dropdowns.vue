@@ -217,16 +217,18 @@ export default defineComponent({
 .f-dropdowns{
     box-sizing: border-box;
     white-space: nowrap;
-    padding: calc(.35em) calc(1em);
+    padding: 8px 16px;
     display: inline-block;
     position: relative;
     font-size: 16px;
 }
 .f-dropdowns__small{
     font-size: 12px!important;
+    padding: 4px 12px!important;
 }
 .f-dropdowns__large{
     font-size: 20px!important;
+    padding: 12px 20px!important;
 }
 .f-dropdowns-control{
     cursor: pointer;
