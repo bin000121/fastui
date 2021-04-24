@@ -349,6 +349,10 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/img.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '容错处理': 'rong_cuo_chu_li',
+                    '加载中占位': 'ji_ben_yong_fa',
+                    '查看大图': 'cha_kan_da_tu',
+                    '多图预览': 'duo_tu_yu_lan',
                 }
             },
             {

@@ -24,7 +24,7 @@ export function isEmpty(data: any) {
     if (resObj[_getType(data)]) return true
 
     // 只有对象和数组会往下执行
-    if (Array.isArray(data)) return !!data.length
+    if (Array.isArray(data)) return !data.length
 
     // 最后是对象
     if (JSON.stringify(data) === '{}') return true
@@ -60,5 +60,9 @@ export function debounce(fn: Function, delay: number) {
             timer = null
         }, delay)
     }
+}
+
+export function isFirefox() {
+    return window.navigator.userAgent.indexOf('Firefox') !== -1
 }
 

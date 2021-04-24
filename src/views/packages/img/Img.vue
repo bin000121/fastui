@@ -2,15 +2,36 @@
     <div
         class="f-img-container"
         :class="{
-            'f-img-container__fail': !isHasImg
+            'f-img-container__fail': isError
         }"
         :style="`width: ${width};height: ${height};`"
         ref="fImgContainer"
         :title="title || ''"
     >
+        <img
+            v-if="!isError"
+            :src="src"
+            :alt="alt || ''"
+            :style="`height: 100%;width: 100%;object-fit: ${objectFit}`"
+            :title="title || ''"
+            class="f-img"
+            ref="img"
+            @load="imgLoad"
+            @error="imgError"
+        >
+        <div
+            class="f-img-loading"
+            v-if="loading"
+        >
+            <template v-if="$slots.loading">
+                <slot name="loading"></slot>
+            </template>
+            <f-spin v-else :size="30" tip="加载中..." inline></f-spin>
+        </div>
+
         <div
             class="f-img-fail"
-            v-if="!isHasImg"
+            v-if="isError"
         >
             <template v-if="$slots.fail">
                 <slot name="fail"></slot>
@@ -19,7 +40,7 @@
         </div>
         <div
             class="f-img-preview"
-            v-if="isHasImg && showPreviewIcon"
+            v-if="!isError && preview"
             @click="showBigImg"
         >
             <span>
@@ -29,18 +50,56 @@
         </div>
     </div>
     <transition name="f-img-show-big">
-        <div
-            class="f-img-show-big"
-            v-show="isShowBig"
-            ref="fImgShowBig"
-        >
-            <i class="f-icon-close-bold closeIcon" title="关闭查看大图" @click="closeShowBig"></i>
-            <img :src="src" alt="">
-            <div class="option-container">
-                <i class="f-icon-zoom-in"></i>
-                <i class="f-icon-zoom-out"></i>
+        <template v-if="preview">
+            <div
+                class="f-img-show-big"
+                v-show="isShowBig"
+                ref="fImgShowBig"
+            >
+                <div class="mask" @click="clickMask"></div>
+                <i
+                    class="f-icon-close-bold closeIcon"
+                    title="关闭查看大图"
+                    @click="closeShowBig"
+                    v-if="showCloseIcon"
+                ></i>
+                <template v-if="isShowArrow">
+                    <i
+                        class="f-icon-arrow-left-bold arrow-left"
+                        :class="{'arrow__disabled': previewIndex === 0}"
+                        title="上一张"
+                        @click="prev"
+                    ></i>
+                    <i
+                        class="f-icon-arrow-right-bold arrow-right"
+                        :class="{'arrow__disabled': previewIndex === previewList.length - 1}"
+                        title="下一张"
+                        @click="next"
+                    ></i>
+                </template>
+                <img
+                    :src="isShowArrow ? previewList[previewIndex] : src"
+                    alt=""
+                    ref="bigImg"
+                    style="transform: scale(1) translate3d(0, 0, 0) rotate(0deg)"
+                    @mousedown="handleTranslateStart"
+                    @mouseup="handleTranslateEnd"
+                    @mousemove="handleMove"
+                    @load="bigImgLoad"
+                    @error="bigImgError"
+                >
+                <div class="option-container">
+                    <i class="f-icon-zoom-in" @click="handleZoom('zoomIn')"></i>
+                    <i class="f-icon-zoom-out" @click="handleZoom('zoomOut')"></i>
+                    <i class="current-num" v-if="isShowArrow">
+                        {{previewIndex + 1}} / {{previewList.length}}
+                    </i>
+                    <i class="f-icon-rotate-left" @click="handleRotate('left')"></i>
+                    <i class="f-icon-rotate-right" @click="handleRotate('right')"></i>
+                </div>
+
             </div>
-        </div>
+        </template>
     </transition>
 </template>
 
@@ -49,15 +108,27 @@ import {
     defineComponent,
     ref,
     onMounted,
+    onUnmounted,
+    watch,
+    nextTick,
+    computed,
     PropType
 } from 'vue'
-import { getScrollbarWidth } from '/@/utils/utils'
-
+import {
+    getScrollbarWidth,
+    isFirefox,
+    isEmpty
+} from '/@/utils/utils'
+import fSpin from '/@/views/packages/spin/Spin.vue'
 export default defineComponent({
+    components: {
+        fSpin
+    },
+    emits: ['error', 'load', 'error-big', 'load-big'],
     props: {
         lazyLoad: Boolean,
         objectFit: {
-            type: String,
+            type: String as PropType<'fill' | 'contain' | 'none' | 'cover' | 'scale-down'>,
             default: 'fill',
             validator: (val: string) => ['fill', 'contain', 'none', 'cover', 'scale-down'].includes(val)
         },
@@ -66,6 +137,7 @@ export default defineComponent({
             required: true
         },
         title: String,
+        alt: String,
         width: {
             type: String,
             default: '100%',
@@ -76,50 +148,85 @@ export default defineComponent({
             default: '100%',
             required: true
         },
-        preview: Boolean,
-        showPreviewIcon: {
+        clickMaskNotClose: Boolean,
+        pressEscNotClose: Boolean,
+        showCloseIcon: {
             type: Boolean,
             default: true
         },
-        previewList: Array as PropType<string[]>
+        preview: Boolean,
+        previewList: {
+            type: Array as PropType<string[]>,
+            default: []
+        },
+        previewIndex: {
+            type: Number,
+            default: 0
+        }
     },
-    setup (props) {
-        const isHasImg = ref(false)
+    setup (props, { emit }) {
+        const isError = ref(false)
         const isShowBig = ref(false)
+        const loading = ref(true)
         const fImgContainer = ref(null)
         const fImgShowBig = ref(null)
+        const img = ref(null)
+        const bigImg = ref(null)
         let fImgContainerDom: HTMLElement
         let fImgShowBigDom: HTMLElement
+        let imgDom: HTMLImageElement
+        let bigImgDom: HTMLImageElement
         let scrollbarWidth: number
-        const checkIsHasImg = () => {
-            if (!props.src) return
-            let imgInstance = new Image() as HTMLImageElement
-            imgInstance.src = props.src
-            imgInstance.onerror = () => {
-                isHasImg.value = false
+        const isShowArrow = ref(!isEmpty(props.previewList))
+
+        const initIndex = () => {
+            if (!isEmpty(props.previewList)) {
+                let idx = props.previewList.indexOf(props.src)
+                return idx !== -1 ? idx : 0
             }
-            imgInstance.onload = () => {
-                isHasImg.value = true
-                createImg(imgInstance)
-            }
+            return props.previewIndex || 0
         }
 
-        const createImg = (instance: HTMLImageElement) => {
-            instance.style.width = '100%'
-            instance.style.height = '100%'
-            instance.style.objectFit = props.objectFit
-            instance.title = props.title || ''
-            instance.alt = ''
-            instance.className = 'f-img'
-            fImgContainerDom.appendChild(instance)
+        const previewIndex = ref(initIndex())
+        const imgLoad = () => {
+            emit('load')
+            loading.value = false
+            isError.value = false
+        }
+
+        const imgError = () => {
+            emit('error')
+            loading.value = false
+            isError.value = true
         }
 
         const showBigImg = () => {
             document.body.style.cssText = `overflow: hidden; width: calc(100% - ${scrollbarWidth}px)`
-            // const left = fImgContainerDom.style.left + fImgContainerDom.offsetWidth / 2
-            // const top = fImgContainerDom.style.top + fImgContainerDom.offsetHeight / 2
-            // document.body.style.setProperty('--transform-origin', `${left}px ${top}px`)
+            bigImgDom.style.transform = 'scale(1) rotate(0)'
             isShowBig.value = true
+        }
+
+        const prev = () => {
+            previewIndex.value--
+            if (previewIndex.value < 0) previewIndex.value = 0
+            bigImgDom.style.transform = 'scale(1) rotate(0)'
+        }
+
+        const next = () => {
+            previewIndex.value++
+            let max = props.previewList.length -1
+            if (previewIndex.value > max) previewIndex.value = max
+            bigImgDom.style.transform = 'scale(1) rotate(0)'
+        }
+
+        const bigImgLoad = () => {
+            emit('load-big', previewIndex.value, props.previewList[previewIndex.value])
+            console.log('ok')
+        }
+
+        const bigImgError = () => {
+            emit('error-big', previewIndex.value, props.previewList[previewIndex.value])
+            console.log('fail')
         }
 
         const closeShowBig = () => {
@@ -129,18 +236,130 @@ export default defineComponent({
             }, 100)
         }
 
+        const clickMask = () => {
+            if (props.clickMaskNotClose) return
+            closeShowBig()
+        }
+
+        const getTransformProp = (target: string, props: 'scale' | 'rotate' | 'translate') => {
+            let regObj = {
+                scale: [/scale\([0-5]\.?[0-9]*\)/, /\d\.?\d*/],
+                rotate: [/rotate\(-?[0-9]+deg\)/, /-?\d+/],
+                translate: [/translate3d\(.*?\)/, /[0-9]\.?[0-9]*/g]
+            }
+            const [reg, numReg] = regObj[props]
+            return target.match(reg)![0].match(numReg)![0]
+        }
+
+        const _handleZoom = (num: number) => {
+            const target = bigImgDom.style.transform
+            let scaleNum: string | number = getTransformProp(target, 'scale')
+            let currentRotate = getTransformProp(target, 'rotate')
+            scaleNum = parseFloat(scaleNum) + num
+            if (scaleNum <= 0.3) scaleNum = .3
+            if (scaleNum >= 4) scaleNum = 4
+            bigImgDom.style.transform = `scale(${scaleNum}) rotate(${currentRotate}deg)`
+        }
+
+        const _handleRotate = (num: number) => {
+            const target = bigImgDom.style.transform
+            let rotateNum: number | string = getTransformProp(target, 'rotate')
+            let currentScale = getTransformProp(target, 'scale')
+            rotateNum = Number(rotateNum) + num
+            bigImgDom.style.transform  = `scale(${currentScale}) rotate(${rotateNum}deg) `
+        }
+
+        const handleZoom = (type: 'zoomIn' | 'zoomOut') => {
+            let step = .2
+            let baseNum = type === 'zoomOut' ? 1 : -1
+            _handleZoom(step * baseNum)
+        }
+
+        let eventName =  isFirefox() ? 'DOMMouseScroll' : 'mousewheel'
+
+        const mousewheel = (e: any) => {
+            if (!isShowBig.value || !props.preview) return
+            let zoomNum = e.deltaY / 1000
+            _handleZoom(zoomNum)
+        }
+
+        const handleRotate = (type: 'left' | 'right') => {
+            let base = type === 'right' ? 90 : -90
+            _handleRotate(base)
+        }
+
+        const handleTranslateStart = (e: MouseEvent) => {
+            console.log(e)
+        }
+
+        const handleTranslateEnd = (e: MouseEvent) => {
+            console.log(e)
+        }
+
+        const handleMove = (e) => {
+            console.log(e)
+        }
+
+        const onKeydownHandle = (e: KeyboardEvent) => {
+            e.stopPropagation()
+            if (e.key === 'Escape' && e.keyCode === 27 && !props.pressEscNotClose) closeShowBig()
+            else return
+        }
+
+        watch(() => props.src, (newV: string) => {
+            imgDom.src = newV
+        })
+
+        watch(() => props.previewList, (newV: string[]) => {
+            isShowArrow.value = !isEmpty(newV)
+        }, { deep: true })
+
+        watch(() => props.preview, (newV: boolean) => {
+            if (!newV) return
+            nextTick(() => bigImgDom = bigImg.value!)
+        })
+
+        watch(() => props.previewIndex, (newV: number) => {
+            if (isEmpty(props.previewList) || !props.preview) return
+            previewIndex.value = newV
+        })
+
         onMounted(() => {
             fImgContainerDom = fImgContainer.value!
             fImgShowBigDom = fImgShowBig.value!
+            imgDom = img.value!
+            bigImgDom = bigImg.value!
+            document.addEventListener(eventName, mousewheel)
             scrollbarWidth = getScrollbarWidth()
-            checkIsHasImg()
+            document.addEventListener('keydown', onKeydownHandle)
+        })
+        onUnmounted(() => {
+            document.removeEventListener(eventName, mousewheel)
+            document.removeEventListener('keydown', onKeydownHandle)
         })
         return{
-            isHasImg,
+            img,
+            loading,
+            isError,
             fImgContainer,
             isShowBig,
+            bigImg,
+            isShowArrow,
+            previewIndex,
+            imgLoad,
+            imgError,
             showBigImg,
             closeShowBig,
+            clickMask,
+            handleZoom,
+            handleRotate,
+            handleTranslateStart,
+            handleTranslateEnd,
+            handleMove,
+            prev,
+            next,
+            bigImgLoad,
+            bigImgError,
         }
     }
 })
@@ -148,6 +367,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-img-container{
+    box-sizing: border-box;
     position: relative;
     display: inline-block;
     overflow: hidden;
@@ -161,12 +381,25 @@ export default defineComponent({
     background-color: #eee;
 }
 .f-img{
+    overflow: hidden;
     display: block;
+    vertical-align: bottom;
+}
+.f-img-loading{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,.1);
 }
 .f-img-fail{
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
     transform: translate(-50%, -50%);
     color: #999;
 }
@@ -198,48 +431,90 @@ export default defineComponent({
     left: 0;
     height: 100vh;
     width: 100%;
-    background-color: rgba(0,0,0,.4);
     transform-origin: center;
-    z-index: 999;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .mask{
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,.4);
+    }
+    i{
+        color: #fff;
+        cursor: pointer;
+    }
     .closeIcon{
         position: absolute;
         right: 0;
         top: 0;
         color: #fff;
-        font-size: 40px;
-        background-color: rgba(0,0,0,.2);
+        font-size: 45px;
+        background-color: rgba(0,0,0,.35);
         cursor: pointer;
+        z-index: 1001;
     }
-    img{
-        position: relative;
+    .arrow-left, .arrow-right{
+        position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        z-index: 99;
+        font-size: 50px;
+        background-color: rgba(0,0,0,.35);
+        left: 15px;
+        padding: 0 5px 0 0;
+    }
+    .arrow-right{
+        left: unset;
+        right: 15px;
+        padding: 0 0 0 5px;
+    }
+    .arrow__disabled{
+        color: #999;
+        cursor: not-allowed;
+        background-color: rgba(0,0,0,.1);
+    }
+    img{
+        vertical-align: bottom;
         display: block;
         max-width: 100%;
         max-height: 100%;
         cursor: grab;
         margin: auto;
-        pointer-events: auto;
-    }
-    .option-container{
-        position: absolute;
-        bottom: 0;
-        height: 45px;
-        width: 100%;
-        background-color: rgba(0,0,0,.4);
+        user-select: none;
+        transition: transform .1s linear;
     }
     .option-container{
         display: flex;
         align-items: center;
-        justify-content: center;
+        position: absolute;
+        bottom: 45px;
+        padding: 12px 15px;
+        border-radius: 50px;
+        background-color: rgba(0,0,0,.35);
+    }
+    .option-container{
+        text-align: center;
         i{
-            font-size: 24px;
-            cursor: pointer;
-            color: #fff;
+            display: inline-block;
+            font-size: 30px;
+            width: 50px;
+            height: 100%;
+            text-align: center;
+            transition: all .1s;
+            &:not(.current-num):hover{
+                transform: scale(1.25);
+            }
         }
-        i + i{
-            margin-left: 15px;
-        }
+    }
+    .current-num{
+        font-style: normal;
+        font-size: 16px!important;
+        margin: 0 6px;
     }
 }
 </style>

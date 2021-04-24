@@ -93,6 +93,7 @@ import {
     nextTick
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
+import { isFirefox } from '/@/utils/utils'
 
 export default defineComponent({
     emits: ['update:value', 'change', 'tab-close'],
@@ -142,7 +143,7 @@ export default defineComponent({
         let position = 0
         let fTabsNavScrollDom: HTMLElement
         const instance = ref([] as any[])
-        const isFireFox = window.navigator.userAgent.indexOf('Firefox') !== -1
+        const isFireFox = isFirefox()
 
         const getInstance = (vnode: any) => {
             instance.value.push(vnode)

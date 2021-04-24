@@ -151,12 +151,12 @@
 /*f-img-*/
 .f-img-show-big-enter-from,
 .f-img-show-big-leave-to{
-    transform: scale(.2);
+    transform: translateY(100%);
     opacity: 0;
 }
 .f-img-show-big-enter-active,
 .f-img-show-big-leave-active{
-    transition: all .18s ease-in-out;
+    transition: all .25s ease-out;
 }
 
 /*f-spin*/
