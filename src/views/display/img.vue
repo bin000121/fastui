@@ -318,6 +318,63 @@
                     viewport-container="div.demo-lazy-load"
                 />
             </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<div class="demo-lazy-load">
+        <f-img
+            v-for="src in lazyLoadList"
+            :key="src"
+            :src="src"
+            width="700px"
+            height="500px"
+            object-fit="cover"
+            lazy-load
+            lazy-load-distance="250px"
+            viewport-container="div.demo-lazy-load"
+        />
+    </div>
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        ref,
+        reactive,
+        toRefs
+    } from 'vue'
+    export default defineComponent({
+        setup() {
+            const data = reactive({
+                lazyLoadList: [
+                    'https://unsplash.it/800/600?random',
+                    'https://unsplash.it/800/601?random',
+                    'https://unsplash.it/800/602?random',
+                    'https://unsplash.it/800/603?random',
+                    'https://unsplash.it/800/604?random',
+                    'https://unsplash.it/800/605?random',
+                    'https://unsplash.it/800/606?random',
+                    'https://unsplash.it/800/607?random',
+                ]
+            })
+            return{ ...toRefs(data) }
+        }
+    })
+    </script>
+
+    <style lang="scss">
+    .demo-lazy-load{
+        display: flex;
+        flex-wrap: wrap;
+        height: 450px;
+        overflow: auto;
+        .f-img-container:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }
+    </style>`}}
+                </code></pre>
+            </div>
         </div>
     </div>
 </template>
@@ -415,6 +472,7 @@ export default defineComponent({
         margin: 5px 0;
     }
 }
+
 .demo-lazy-load{
     display: flex;
     flex-wrap: wrap;
