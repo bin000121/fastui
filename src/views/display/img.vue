@@ -10,7 +10,7 @@
             <p>他看起来与直接使用img标签生成的图片没有任何区别。</p>
             <div class="demo-img">
                 <f-img
-                    src="/@/assets/img/demo2.jpg"
+                    src="https://unsplash.it/800/600?random"
                     width="150px"
                     height="150px"
                 />
@@ -27,7 +27,7 @@
             <div class="demo-img-object-fit">
                 <div>
                     <f-img
-                        src="/@/assets/img/demo.jpg"
+                        src="https://unsplash.it/800/600?random"
                         width="200px"
                         height="200px"
                         object-fit="fill"
@@ -36,7 +36,7 @@
                 </div>
                 <div>
                     <f-img
-                        src="/@/assets/img/demo.jpg"
+                        src="https://unsplash.it/800/600?random"
                         width="200px"
                         height="200px"
                         object-fit="contain"
@@ -45,7 +45,7 @@
                 </div>
                 <div>
                     <f-img
-                        src="/@/assets/img/demo.jpg"
+                        src="https://unsplash.it/800/600?random"
                         width="200px"
                         height="200px"
                         object-fit="none"
@@ -54,7 +54,7 @@
                 </div>
                 <div>
                     <f-img
-                        src="/@/assets/img/demo.jpg"
+                        src="https://unsplash.it/800/600?random"
                         width="200px"
                         height="200px"
                         object-fit="cover"
@@ -63,7 +63,7 @@
                 </div>
                 <div>
                     <f-img
-                        src="/@/assets/img/demo.jpg"
+                        src="https://unsplash.it/800/600?random"
                         width="200px"
                         height="200px"
                         object-fit="scale-down"
@@ -75,14 +75,14 @@
             <div v-highlight>
                 <pre><code>
     {{`<f-img
-        src="/@/assets/img/demo2.jpg"
+        src="https://unsplash.it/800/600?random"
         width="150px"
         height="150px"
     />
 
     <div>
         <f-img
-            src="/@/assets/img/demo.jpg"
+            src="https://unsplash.it/800/600?random"
             width="200px"
             height="200px"
             object-fit="fill"
@@ -91,7 +91,7 @@
     </div>
     <div>
         <f-img
-            src="/@/assets/img/demo.jpg"
+            src="https://unsplash.it/800/600?random"
             width="200px"
             height="200px"
             object-fit="contain"
@@ -100,7 +100,7 @@
     </div>
     <div>
         <f-img
-            src="/@/assets/img/demo.jpg"
+            src="https://unsplash.it/800/600?random"
             width="200px"
             height="200px"
             object-fit="none"
@@ -109,7 +109,7 @@
     </div>
     <div>
         <f-img
-            src="/@/assets/img/demo.jpg"
+            src="https://unsplash.it/800/600?random"
             width="200px"
             height="200px"
             object-fit="cover"
@@ -118,7 +118,7 @@
     </div>
     <div>
         <f-img
-            src="/@/assets/img/demo.jpg"
+            src="https://unsplash.it/800/600?random"
             width="200px"
             height="200px"
             object-fit="scale-down"
@@ -136,7 +136,7 @@
             <p>加载失败时展示的自定义占位图片，或符号、文本、自定义内容。</p>
             <div class="demo-img">
                 <f-img
-                    src="www.baidu666.com"
+                    src="http://www.baidu666.com"
                     width="150px"
                     height="150px"
                 />
@@ -146,7 +146,7 @@
             </div>
             <div class="demo-img">
                 <f-img
-                    src="www.baidu666.com"
+                    src="http://www.baidu666.com"
                     width="150px"
                     height="150px"
                 >
@@ -178,20 +178,33 @@
 
         <div>
             <h3 id="jia_zai_zhong_zhan_wei">加载中占位
-                <a href="#ji_ben_yong_fa" class="f-icon-anchor"></a>
+                <a href="#jia_zai_zhong_zhan_wei" class="f-icon-anchor"></a>
             </h3>
             <p>在图片加载的时候显示的加载中样式。</p>
-            <div class="demo-img">
+            <div class="demo-img demo-show-loading-box">
                 <f-img
-                    src="/@/assets/img/demo2.jpg"
+                    src="https://unsplash.it/800/600?random"
                     width="150px"
                     height="150px"
                 />
+                <template v-if="showLoadingMask">
+                    <div class="demo-show-loading-mask"></div>
+                    <div class="demo-show-loading">
+                        <f-spin :size="32" tip="加载中..." inline></f-spin>
+                    </div>
+                </template>
+                <f-button
+                    type="primary"
+                    size="small"
+                    @click="showLoading"
+                >
+                    显示loading
+                </f-button>
             </div>
             <div v-highlight>
                 <pre><code>
     {{`<f-img
-        src="/@/assets/img/demo2.jpg"
+        src="https://unsplash.it/800/600?random"
         width="150px"
         height="150px"
     />`}}
@@ -206,7 +219,7 @@
             <p>点击图片打开大图预览模式。</p>
             <div class="demo-img">
                 <f-img
-                    src="/@/assets/img/demo2.jpg"
+                    src="https://unsplash.it/800/600?random"
                     width="150px"
                     height="150px"
                     preview
@@ -215,7 +228,7 @@
             <div v-highlight>
                 <pre><code>
     {{`<f-img
-        src="/@/assets/img/demo2.jpg"
+        src="https://unsplash.it/800/600?random"
         width="150px"
         height="150px"
         preview
@@ -231,17 +244,17 @@
             <p>多图预览。</p>
             <div class="demo-img">
                 <f-img
-                    src="/@/assets/img/demo2.jpg"
+                    src="https://unsplash.it/800/600?random"
                     width="150px"
                     height="150px"
                     preview
-                    :preview-list="['/@/assets/img/demo.jpg', '/@/assets/img/demo2.jpg', '/@/assets/img/demo3.jpg']"
+                    :preview-list="previewList"
                 />
             </div>
             <div v-highlight>
                 <pre><code>
     {{`<f-img
-        src="/@/assets/img/demo2.jpg"
+        src="https://unsplash.it/800/600?random"
         width="150px"
         height="150px"
         preview
@@ -259,9 +272,9 @@
         setup() {
             const data = reactive({
                 previewList: [
-                    '/@/assets/img/demo.jpg',
-                    '/@/assets/img/demo2.jpg',
-                    '/@/assets/img/demo3.jpg'
+                    'https://unsplash.it/800/600?random',
+                    'https://unsplash.it/800/601?random',
+                    'https://unsplash.it/800/602?random'
                 ]
             })
             return{ ...toRefs(data) }
@@ -269,6 +282,41 @@
     })
     </script>`}}
                 </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="lan_jia_zai">懒加载
+                <a href="#lan_jia_zai" class="f-icon-anchor"></a>
+            </h3>
+            <p>在图片容器进入视口的时候才会去请求图片路径，这可以提升加快页面渲染的速度。</p>
+
+            <div class="desc">
+                对其设置属性 <b>lazy-load</b> 即可开启图片懒加载。
+            </div>
+
+            <div class="desc">
+                通常，我们希望图片容器能在快要达到视口时就去加载图片，从而能够在视口内呈现加载好的图片。
+                设置属性 <b>lazy-load-distance</b> 可以使图片容器在达到距离视口某个值时开始加载图片路径。
+                默认值为0px。详细请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/rootMargin" target="_blank">MDN</a>
+            </div>
+
+            <div class="desc">
+                使用属性 <b>lazy-load-distance</b> 时，请指定视口容器 <b>viewport-container</b>，如不指定则默认是浏览器视口。
+            </div>
+
+            <div class="demo-lazy-load">
+                <f-img
+                    v-for="src in lazyLoadList"
+                    :key="src"
+                    :src="src"
+                    width="700px"
+                    height="500px"
+                    object-fit="cover"
+                    lazy-load
+                    lazy-load-distance="250px"
+                    viewport-container="div.demo-lazy-load"
+                />
             </div>
         </div>
     </div>
@@ -282,16 +330,41 @@ import {
     toRefs
 } from 'vue'
 import fImg from '/@/views/packages/img/Img.vue'
-
+import fButton from '/@/views/packages/button/Button.vue'
+import fSpin from '/@/views/packages/spin/Spin.vue'
 export default defineComponent({
     components: {
         fImg,
+        fSpin,
+        fButton,
     },
     setup() {
         const data = reactive({
-            previewList: ['/@/assets/img/demo.jpg', '/@/assets/img/demo2.jpg', '/@/assets/img/demo3.jpg']
+            previewList: [
+                'https://unsplash.it/800/600?random',
+                'https://unsplash.it/800/601?random',
+                'https://unsplash.it/800/602?random'
+            ],
+            lazyLoadList: [
+                'https://unsplash.it/800/600?random',
+                'https://unsplash.it/800/601?random',
+                'https://unsplash.it/800/602?random',
+                'https://unsplash.it/800/603?random',
+                'https://unsplash.it/800/604?random',
+                'https://unsplash.it/800/605?random',
+                'https://unsplash.it/800/606?random',
+                'https://unsplash.it/800/607?random',
+            ],
+            showLoadingMask: false
         })
+        const showLoading = () => {
+            data.showLoadingMask = true
+            setTimeout(() => {
+                data.showLoadingMask = false
+            }, 2000)
+        }
         return{
+            showLoading,
             ...toRefs(data)
         }
     }
@@ -303,6 +376,27 @@ export default defineComponent({
     overflow: hidden;
     .f-img-container + .f-img-container{
         margin-left: 30px;
+    }
+}
+.demo-show-loading-box{
+    display: flex;
+    width: 300px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    .demo-show-loading, .demo-show-loading-mask{
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        left: 0;
+        top: 0;
+        background-color: rgba(0,0,0, .1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .demo-show-loading-mask{
+        background-color: #fff;
     }
 }
 .demo-img-object-fit{
@@ -319,6 +413,15 @@ export default defineComponent({
         font-size: 18px;
         text-align: center;
         margin: 5px 0;
+    }
+}
+.demo-lazy-load{
+    display: flex;
+    flex-wrap: wrap;
+    height: 450px;
+    overflow: auto;
+    &::v-deep(.f-img-container:not(:last-child)) {
+        margin-bottom: 15px;
     }
 }
 </style>

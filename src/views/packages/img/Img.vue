@@ -8,17 +8,19 @@
         ref="fImgContainer"
         :title="title || ''"
     >
-        <img
-            v-if="!isError"
-            :src="src"
-            :alt="alt || ''"
-            :style="`height: 100%;width: 100%;object-fit: ${objectFit}`"
-            :title="title || ''"
-            class="f-img"
-            ref="img"
-            @load="imgLoad"
-            @error="imgError"
-        >
+        <template v-if="isLazyLoadShow">
+            <img
+                v-if="!isError"
+                :src="src"
+                :alt="alt || ''"
+                :style="`height: 100%;width: 100%;object-fit: ${objectFit}`"
+                :title="title || ''"
+                class="f-img"
+                ref="img"
+                @load="imgLoad"
+                @error="imgError"
+            >
+        </template>
         <div
             class="f-img-loading"
             v-if="loading"
@@ -127,6 +129,14 @@ export default defineComponent({
     emits: ['error', 'load', 'error-big', 'load-big'],
     props: {
         lazyLoad: Boolean,
+        lazyLoadDistance: {
+            type: String,
+            default: '150px'
+        },
+        viewportContainer: {
+            type: String,
+            default: 'body'
+        },
         objectFit: {
             type: String as PropType<'fill' | 'contain' | 'none' | 'cover' | 'scale-down'>,
             default: 'fill',
@@ -162,9 +172,10 @@ export default defineComponent({
         previewIndex: {
             type: Number,
             default: 0
-        }
+        },
     },
     setup (props, { emit }) {
+        const isLazyLoadShow = ref(!props.lazyLoad)
         const isError = ref(false)
         const isShowBig = ref(false)
         const loading = ref(true)
@@ -188,10 +199,12 @@ export default defineComponent({
         }
 
         const previewIndex = ref(initIndex())
+
         const imgLoad = () => {
-            emit('load')
             loading.value = false
             isError.value = false
+            emit('load')
+
         }
 
         const imgError = () => {
@@ -221,19 +234,17 @@ export default defineComponent({
 
         const bigImgLoad = () => {
             emit('load-big', previewIndex.value, props.previewList[previewIndex.value])
-            console.log('ok')
         }
 
         const bigImgError = () => {
             emit('error-big', previewIndex.value, props.previewList[previewIndex.value])
-            console.log('fail')
         }
 
         const closeShowBig = () => {
             isShowBig.value = false
             setTimeout(() => {
                 document.body.removeAttribute('style')
-            }, 100)
+            }, 50)
         }
 
         const clickMask = () => {
@@ -300,6 +311,17 @@ export default defineComponent({
             console.log(e)
         }
 
+        const initLazyLoad = () => {
+            let root: HTMLElement = document.querySelector(props.viewportContainer) || document.body
+            const imgObserve = new IntersectionObserver((entires: IntersectionObserverEntry[]) => {
+                if (entires[0].isIntersecting) {
+                    isLazyLoadShow.value = true
+                    imgObserve.unobserve(entires[0].target)
+                }
+            }, { root, rootMargin: `0px 0px ${props.lazyLoadDistance} 0px` })
+            imgObserve.observe(fImgContainerDom)
+        }
+
         const onKeydownHandle = (e: KeyboardEvent) => {
             e.stopPropagation()
             if (e.key === 'Escape' && e.keyCode === 27 && !props.pressEscNotClose) closeShowBig()
@@ -308,6 +330,10 @@ export default defineComponent({
 
         watch(() => props.src, (newV: string) => {
             imgDom.src = newV
+        })
+
+        watch(() => props.lazyLoad, (newV: boolean) => {
+            if (newV) initLazyLoad()
         })
 
         watch(() => props.previewList, (newV: string[]) => {
@@ -332,6 +358,7 @@ export default defineComponent({
             document.addEventListener(eventName, mousewheel)
             scrollbarWidth = getScrollbarWidth()
             document.addEventListener('keydown', onKeydownHandle)
+            if (props.lazyLoad) initLazyLoad()
         })
         onUnmounted(() => {
             document.removeEventListener(eventName, mousewheel)
@@ -346,6 +373,7 @@ export default defineComponent({
             bigImg,
             isShowArrow,
             previewIndex,
+            isLazyLoadShow,
             imgLoad,
             imgError,
             showBigImg,
@@ -392,6 +420,10 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     background-color: rgba(0,0,0,.1);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
 }
 .f-img-fail{
     position: absolute;
@@ -506,15 +538,13 @@ export default defineComponent({
             height: 100%;
             text-align: center;
             transition: all .1s;
-            &:not(.current-num):hover{
-                transform: scale(1.25);
-            }
         }
     }
     .current-num{
         font-style: normal;
         font-size: 16px!important;
         margin: 0 6px;
+        cursor: default;
     }
 }
 </style>
