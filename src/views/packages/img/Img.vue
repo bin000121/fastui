@@ -8,19 +8,17 @@
         ref="fImgContainer"
         :title="title || ''"
     >
-        <template v-if="isLazyLoadShow">
-            <img
-                v-if="!isError"
-                :src="src"
-                :alt="alt || ''"
-                :style="`height: 100%;width: 100%;object-fit: ${objectFit}`"
-                :title="title || ''"
-                class="f-img"
-                ref="img"
-                @load="imgLoad"
-                @error="imgError"
-            >
-        </template>
+        <img
+            v-if="!isError && isLazyLoadShow"
+            :src="src"
+            :alt="alt || ''"
+            :style="`height: 100%;width: 100%;object-fit: ${objectFit}`"
+            :title="title || ''"
+            class="f-img"
+            ref="img"
+            @load="imgLoad"
+            @error="imgError"
+        >
         <div
             class="f-img-loading"
             v-if="loading"
@@ -85,8 +83,6 @@
                     ref="bigImg"
                     style="transform: scale(1) translate3d(0, 0, 0) rotate(0deg)"
                     @mousedown="handleTranslateStart"
-                    @mouseup="handleTranslateEnd"
-                    @mousemove="handleMove"
                     @load="bigImgLoad"
                     @error="bigImgError"
                 >
@@ -191,11 +187,9 @@ export default defineComponent({
         const isShowArrow = ref(!isEmpty(props.previewList))
 
         const initIndex = () => {
-            if (!isEmpty(props.previewList)) {
-                let idx = props.previewList.indexOf(props.src)
-                return idx !== -1 ? idx : 0
-            }
-            return props.previewIndex || 0
+            if (isEmpty(props.previewList)) return 0
+            let idx = props.previewList.indexOf(props.src)
+            return props.previewIndex || (idx !== -1 ? idx : 0)
         }
 
         const previewIndex = ref(initIndex())
@@ -299,15 +293,17 @@ export default defineComponent({
             _handleRotate(base)
         }
 
+
         const handleTranslateStart = (e: MouseEvent) => {
-            console.log(e)
+            bigImgDom.addEventListener('mousemove', handleMove)
         }
 
-        const handleTranslateEnd = (e: MouseEvent) => {
-            console.log(e)
+        const handleTranslateEnd = () => {
+            bigImgDom.removeEventListener('mousemove', handleMove)
+            bigImgDom.removeEventListener('mouseup', handleTranslateEnd)
         }
 
-        const handleMove = (e) => {
+        const handleMove = (e: MouseEvent) => {
             console.log(e)
         }
 
@@ -525,7 +521,7 @@ export default defineComponent({
         align-items: center;
         position: absolute;
         bottom: 45px;
-        padding: 12px 15px;
+        padding: 10px 15px;
         border-radius: 50px;
         background-color: rgba(0,0,0,.35);
     }
@@ -533,7 +529,7 @@ export default defineComponent({
         text-align: center;
         i{
             display: inline-block;
-            font-size: 30px;
+            font-size: 24px;
             width: 50px;
             height: 100%;
             text-align: center;
