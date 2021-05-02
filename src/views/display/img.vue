@@ -420,7 +420,7 @@ export default defineComponent({
     flex-wrap: wrap;
     height: 450px;
     overflow: auto;
-    &::v-deep(.f-img-container:not(:last-child)) {
+    & :deep(.f-img-container:not(:last-child)) {
         margin-bottom: 15px;
     }
 }
