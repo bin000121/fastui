@@ -66,18 +66,19 @@
                 <template v-if="isShowArrow">
                     <i
                         class="f-icon-arrow-left-bold arrow-left"
-                        :class="{'arrow__disabled': previewIndex === 0}"
+                        :class="{ 'arrow__disabled': previewIndex === 0 }"
                         title="上一张"
                         @click="prev"
                     ></i>
                     <i
                         class="f-icon-arrow-right-bold arrow-right"
-                        :class="{'arrow__disabled': previewIndex === previewList.length - 1}"
+                        :class="{ 'arrow__disabled': previewIndex === previewList.length - 1 }"
                         title="下一张"
                         @click="next"
                     ></i>
                 </template>
                 <img
+                    draggable="false"
                     :src="isShowArrow ? previewList[previewIndex] : src"
                     alt=""
                     ref="bigImg"
@@ -115,7 +116,8 @@ import {
 import {
     getScrollbarWidth,
     isFirefox,
-    isEmpty
+    isEmpty,
+    throttle
 } from '/@/utils/utils'
 import fSpin from '/@/views/packages/spin/Spin.vue'
 export default defineComponent({
@@ -209,7 +211,7 @@ export default defineComponent({
 
         const showBigImg = () => {
             document.body.style.cssText = `overflow: hidden; width: calc(100% - ${scrollbarWidth}px)`
-            bigImgDom.style.transform = 'scale(1) rotate(0)'
+            bigImgDom.style.transform = 'scale(1) rotate(0) translate3d(0, 0, 0)'
             isShowBig.value = true
         }
 
@@ -247,31 +249,30 @@ export default defineComponent({
         }
 
         const getTransformProp = (target: string, props: 'scale' | 'rotate' | 'translate') => {
-            let regObj = {
+            const [reg, numReg] = {
                 scale: [/scale\([0-5]\.?[0-9]*\)/, /\d\.?\d*/],
                 rotate: [/rotate\(-?[0-9]+deg\)/, /-?\d+/],
                 translate: [/translate3d\(.*?\)/, /[0-9]\.?[0-9]*/g]
-            }
-            const [reg, numReg] = regObj[props]
-            return target.match(reg)![0].match(numReg)![0]
+            }[props]
+            return target.match(reg)![0].match(numReg)!
         }
 
         const _handleZoom = (num: number) => {
             const target = bigImgDom.style.transform
-            let scaleNum: string | number = getTransformProp(target, 'scale')
-            let currentRotate = getTransformProp(target, 'rotate')
+            let scaleNum: string | number = getTransformProp(target, 'scale')[0]
+            let currentRotate = getTransformProp(target, 'rotate')[0]
             scaleNum = parseFloat(scaleNum) + num
             if (scaleNum <= 0.3) scaleNum = .3
             if (scaleNum >= 4) scaleNum = 4
-            bigImgDom.style.transform = `scale(${scaleNum}) rotate(${currentRotate}deg)`
+            bigImgDom.style.transform = `scale(${scaleNum}) rotate(${currentRotate}deg) translate3d(0, 0, 0)`
         }
 
         const _handleRotate = (num: number) => {
             const target = bigImgDom.style.transform
-            let rotateNum: number | string = getTransformProp(target, 'rotate')
-            let currentScale = getTransformProp(target, 'scale')
+            let rotateNum: number | string = getTransformProp(target, 'rotate')[0]
+            let currentScale = getTransformProp(target, 'scale')[0]
             rotateNum = Number(rotateNum) + num
-            bigImgDom.style.transform  = `scale(${currentScale}) rotate(${rotateNum}deg) `
+            bigImgDom.style.transform  = `scale(${currentScale}) rotate(${rotateNum}deg) translate3d(0, 0, 0)`
         }
 
         const handleZoom = (type: 'zoomIn' | 'zoomOut') => {
@@ -293,18 +294,40 @@ export default defineComponent({
             _handleRotate(base)
         }
 
+        const handleTranslate = (left: number, top: number) => {
+            const target = bigImgDom.style.transform
+            let rotateNum: number | string = getTransformProp(target, 'rotate')[0]
+            let scaleNum: number | string = getTransformProp(target, 'scale')[0]
+            // let [x, y] = getTransformProp(target, 'translate').slice(1, -1)
+            // let xValue = parseInt(x) + left
+            // let yValue = parseInt(y) + top
+            bigImgDom.style.transform  = `scale(${scaleNum}) rotate(${rotateNum}deg) translate3d(${left}px, ${top}px, 0)`
+        }
 
+        let currentX: number
+        let currentY: number
+        let currentTranslate: number[]
         const handleTranslateStart = (e: MouseEvent) => {
-            bigImgDom.addEventListener('mousemove', handleMove)
+            fImgShowBigDom.addEventListener('mousemove', handleMove)
+            fImgShowBigDom.addEventListener('mouseup', handleTranslateEnd)
+            currentX = e.pageX
+            currentY = e.pageY
+            const target = bigImgDom.style.transform
+            currentTranslate = getTransformProp(target, 'translate').slice(1, -1).map(value => parseInt(value))
+            bigImgDom.classList.add('img-isMoving')
         }
 
-        const handleTranslateEnd = () => {
-            bigImgDom.removeEventListener('mousemove', handleMove)
-            bigImgDom.removeEventListener('mouseup', handleTranslateEnd)
-        }
+        const handleMove = throttle((e: MouseEvent) => {
+            let left = currentTranslate[0] + e.pageX - currentX
+            let top = currentTranslate[1] + e.pageY - currentY
+            console.log('left ', left)
+            console.log('top ', top)
+            handleTranslate(left, top)
+        }, 30)
 
-        const handleMove = (e: MouseEvent) => {
-            console.log(e)
+        const handleTranslateEnd = (e: MouseEvent) => {
+            fImgShowBigDom.removeEventListener('mousemove', handleMove)
+            bigImgDom.classList.remove('img-isMoving')
         }
 
         const initLazyLoad = () => {
@@ -351,8 +374,8 @@ export default defineComponent({
             fImgShowBigDom = fImgShowBig.value!
             imgDom = img.value!
             bigImgDom = bigImg.value!
-            document.addEventListener(eventName, mousewheel)
             scrollbarWidth = getScrollbarWidth()
+            document.addEventListener(eventName, mousewheel)
             document.addEventListener('keydown', onKeydownHandle)
             if (props.lazyLoad) initLazyLoad()
         })
@@ -367,6 +390,7 @@ export default defineComponent({
             fImgContainer,
             isShowBig,
             bigImg,
+            fImgShowBig,
             isShowArrow,
             previewIndex,
             isLazyLoadShow,
@@ -470,7 +494,7 @@ export default defineComponent({
         right: 0;
         top: 0;
         bottom: 0;
-        background-color: rgba(0,0,0,.4);
+        background-color: rgba(0,0,0,.5);
     }
     i{
         color: #fff;
@@ -515,6 +539,9 @@ export default defineComponent({
         margin: auto;
         user-select: none;
         transition: transform .1s linear;
+    }
+    .img-isMoving{
+        cursor: grabbing;
     }
     .option-container{
         display: flex;

@@ -296,9 +296,9 @@
             </div>
 
             <div class="desc">
-                通常，我们希望图片容器能在快要达到视口时就去加载图片，从而能够在视口内呈现加载好的图片。
-                设置属性 <b>lazy-load-distance</b> 可以使图片容器在达到距离视口某个值时开始加载图片路径。
-                默认值为0px。详细请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/rootMargin" target="_blank">MDN</a>
+                通常，我们希望图片能在快要达到视口时就去加载图片，从而能够在视口内呈现加载好的图片。
+                设置属性 <b>lazy-load-distance</b> 可以使图片在达到距离视口某个值时开始加载图片路径。
+                默认值为150px。详细请参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver/rootMargin" target="_blank">MDN</a>
             </div>
 
             <div class="desc">
@@ -339,7 +339,6 @@
     <script lang="ts">
     import {
         defineComponent,
-        ref,
         reactive,
         toRefs
     } from 'vue'
