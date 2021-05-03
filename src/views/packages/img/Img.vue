@@ -40,7 +40,7 @@
         </div>
         <div
             class="f-img-preview"
-            v-if="!isError && preview"
+            v-if="!isError && !loading && preview"
             @click="showBigImg"
         >
             <span>
@@ -77,16 +77,22 @@
                         @click="next"
                     ></i>
                 </template>
-                <img
-                    draggable="false"
-                    :src="isShowArrow ? previewList[previewIndex] : src"
-                    alt=""
-                    ref="bigImg"
-                    style="transform: scale(1) translate3d(0, 0, 0) rotate(0deg)"
-                    @mousedown="handleTranslateStart"
-                    @load="bigImgLoad"
-                    @error="bigImgError"
+                <div
+                    class="translate-box"
+                    style="transform: translate(0, 0)"
+                    ref="translateBox"
                 >
+                    <img
+                        draggable="false"
+                        :src="isShowArrow ? previewList[previewIndex] : src"
+                        alt=""
+                        ref="bigImg"
+                        style="transform: scale(1) translate(0, 0) rotate(0deg)"
+                        @mousedown="handleTranslateStart"
+                        @load="bigImgLoad"
+                        @error="bigImgError"
+                    >
+                </div>
                 <div class="option-container">
                     <i class="f-icon-zoom-in" @click="handleZoom('zoomIn')"></i>
                     <i class="f-icon-zoom-out" @click="handleZoom('zoomOut')"></i>
@@ -117,7 +123,8 @@ import {
     getScrollbarWidth,
     isFirefox,
     isEmpty,
-    throttle
+    throttle,
+    debounce
 } from '/@/utils/utils'
 import fSpin from '/@/views/packages/spin/Spin.vue'
 export default defineComponent({
@@ -181,10 +188,12 @@ export default defineComponent({
         const fImgShowBig = ref(null)
         const img = ref(null)
         const bigImg = ref(null)
+        const translateBox = ref(null)
         let fImgContainerDom: HTMLElement
         let fImgShowBigDom: HTMLElement
         let imgDom: HTMLImageElement
         let bigImgDom: HTMLImageElement
+        let translateBoxDom: HTMLImageElement
         let scrollbarWidth: number
         const isShowArrow = ref(!isEmpty(props.previewList))
 
@@ -211,7 +220,8 @@ export default defineComponent({
 
         const showBigImg = () => {
             document.body.style.cssText = `overflow: hidden; width: calc(100% - ${scrollbarWidth}px)`
-            bigImgDom.style.transform = 'scale(1) rotate(0) translate3d(0, 0, 0)'
+            bigImgDom.style.transform = 'scale(1) rotate(0)'
+            translateBoxDom.style.transform = 'translate(0, 0)'
             isShowBig.value = true
         }
 
@@ -219,6 +229,7 @@ export default defineComponent({
             previewIndex.value--
             if (previewIndex.value < 0) previewIndex.value = 0
             bigImgDom.style.transform = 'scale(1) rotate(0)'
+            translateBoxDom.style.transform = 'translate(0, 0)'
         }
 
         const next = () => {
@@ -226,6 +237,7 @@ export default defineComponent({
             let max = props.previewList.length -1
             if (previewIndex.value > max) previewIndex.value = max
             bigImgDom.style.transform = 'scale(1) rotate(0)'
+            translateBoxDom.style.transform = 'translate(0, 0)'
         }
 
         const bigImgLoad = () => {
@@ -238,6 +250,7 @@ export default defineComponent({
 
         const closeShowBig = () => {
             isShowBig.value = false
+            if (bigImgDom?.classList.contains('img-isMoving')) handleTranslateEnd()
             setTimeout(() => {
                 document.body.removeAttribute('style')
             }, 50)
@@ -252,27 +265,27 @@ export default defineComponent({
             const [reg, numReg] = {
                 scale: [/scale\([0-5]\.?[0-9]*\)/, /\d\.?\d*/],
                 rotate: [/rotate\(-?[0-9]+deg\)/, /-?\d+/],
-                translate: [/translate3d\(.*?\)/, /[0-9]\.?[0-9]*/g]
+                translate: [/translate\(.*?\)/, /-?[0-9]\.?-?[0-9]*/g]
             }[props]
             return target.match(reg)![0].match(numReg)!
         }
 
         const _handleZoom = (num: number) => {
             const target = bigImgDom.style.transform
-            let scaleNum: string | number = getTransformProp(target, 'scale')[0]
-            let currentRotate = getTransformProp(target, 'rotate')[0]
+            let scaleNum: string | number = getTransformProp(target,'scale')[0]
+            let currentRotate = getTransformProp(target,'rotate')[0]
             scaleNum = parseFloat(scaleNum) + num
             if (scaleNum <= 0.3) scaleNum = .3
             if (scaleNum >= 4) scaleNum = 4
-            bigImgDom.style.transform = `scale(${scaleNum}) rotate(${currentRotate}deg) translate3d(0, 0, 0)`
+            bigImgDom.style.transform = `scale(${scaleNum}) rotate(${currentRotate}deg)`
         }
 
         const _handleRotate = (num: number) => {
             const target = bigImgDom.style.transform
-            let rotateNum: number | string = getTransformProp(target, 'rotate')[0]
-            let currentScale = getTransformProp(target, 'scale')[0]
+            let rotateNum: number | string = getTransformProp(target,'rotate')[0]
+            let currentScale = getTransformProp(target,'scale')[0]
             rotateNum = Number(rotateNum) + num
-            bigImgDom.style.transform  = `scale(${currentScale}) rotate(${rotateNum}deg) translate3d(0, 0, 0)`
+            bigImgDom.style.transform  = `scale(${currentScale}) rotate(${rotateNum}deg)`
         }
 
         const handleZoom = (type: 'zoomIn' | 'zoomOut') => {
@@ -281,11 +294,9 @@ export default defineComponent({
             _handleZoom(step * baseNum)
         }
 
-        let eventName =  isFirefox() ? 'DOMMouseScroll' : 'mousewheel'
-
         const mousewheel = (e: any) => {
             if (!isShowBig.value || !props.preview) return
-            let zoomNum = e.deltaY / 1000
+            let zoomNum = e.deltaY * -1 / 1000
             _handleZoom(zoomNum)
         }
 
@@ -294,40 +305,44 @@ export default defineComponent({
             _handleRotate(base)
         }
 
-        const handleTranslate = (left: number, top: number) => {
-            const target = bigImgDom.style.transform
-            let rotateNum: number | string = getTransformProp(target, 'rotate')[0]
-            let scaleNum: number | string = getTransformProp(target, 'scale')[0]
-            // let [x, y] = getTransformProp(target, 'translate').slice(1, -1)
-            // let xValue = parseInt(x) + left
-            // let yValue = parseInt(y) + top
-            bigImgDom.style.transform  = `scale(${scaleNum}) rotate(${rotateNum}deg) translate3d(${left}px, ${top}px, 0)`
-        }
-
         let currentX: number
         let currentY: number
         let currentTranslate: number[]
+
         const handleTranslateStart = (e: MouseEvent) => {
-            fImgShowBigDom.addEventListener('mousemove', handleMove)
-            fImgShowBigDom.addEventListener('mouseup', handleTranslateEnd)
-            currentX = e.pageX
-            currentY = e.pageY
-            const target = bigImgDom.style.transform
-            currentTranslate = getTransformProp(target, 'translate').slice(1, -1).map(value => parseInt(value))
+            const target = translateBoxDom.style.transform
+            document.addEventListener('mousemove', handleMove)
+            document.addEventListener('mouseup', handleTranslateEnd)
+            currentX = e.clientX
+            currentY = e.clientY
+            currentTranslate = getTransformProp(target,'translate').map(value => parseInt(value))
             bigImgDom.classList.add('img-isMoving')
         }
 
         const handleMove = throttle((e: MouseEvent) => {
-            let left = currentTranslate[0] + e.pageX - currentX
-            let top = currentTranslate[1] + e.pageY - currentY
-            console.log('left ', left)
-            console.log('top ', top)
-            handleTranslate(left, top)
-        }, 30)
+            let left = currentTranslate[0] + e.clientX - currentX
+            let top = currentTranslate[1] + e.clientY - currentY
+            translateBoxDom.style.transform  = `translate(${left}px, ${top}px)`
+        }, 25)
 
-        const handleTranslateEnd = (e: MouseEvent) => {
-            fImgShowBigDom.removeEventListener('mousemove', handleMove)
+        // 检查图片是否完全超出视口，是就放弃本次拖拽结果
+        const checkIsOverViewport = () => {
+            const { left, right, top, bottom } = bigImgDom.getBoundingClientRect()
+            let viewWidth = fImgShowBigDom.offsetWidth
+            let viewHeight = fImgShowBigDom.offsetHeight
+            let isOverWidth = left > viewWidth || right < 0
+            let isOverHeight = top > viewHeight || bottom < 0
+            if (isOverWidth || isOverHeight) {
+                translateBoxDom.style.transform = 'translate(0, 0)'
+                translateBoxDom.style.transition = 'transform .15s ease-in-out'
+                setTimeout(() => translateBoxDom.style.transition = 'none', 150)
+            }
+        }
+
+        const handleTranslateEnd = () => {
+            document.removeEventListener('mousemove', handleMove)
             bigImgDom.classList.remove('img-isMoving')
+            checkIsOverViewport()
         }
 
         const initLazyLoad = () => {
@@ -337,7 +352,7 @@ export default defineComponent({
                     isLazyLoadShow.value = true
                     imgObserve.unobserve(entires[0].target)
                 }
-            }, { root, rootMargin: `0px 0px ${props.lazyLoadDistance} 0px` })
+            }, { root, rootMargin: `0px 0px ${ props.lazyLoadDistance} 0px` })
             imgObserve.observe(fImgContainerDom)
         }
 
@@ -369,11 +384,14 @@ export default defineComponent({
             previewIndex.value = newV
         })
 
+        const eventName = isFirefox() ? 'DOMMouseScroll' : 'mousewheel'
+
         onMounted(() => {
             fImgContainerDom = fImgContainer.value!
             fImgShowBigDom = fImgShowBig.value!
             imgDom = img.value!
             bigImgDom = bigImg.value!
+            translateBoxDom = translateBox.value!
             scrollbarWidth = getScrollbarWidth()
             document.addEventListener(eventName, mousewheel)
             document.addEventListener('keydown', onKeydownHandle)
@@ -390,6 +408,7 @@ export default defineComponent({
             fImgContainer,
             isShowBig,
             bigImg,
+            translateBox,
             fImgShowBig,
             isShowArrow,
             previewIndex,
@@ -516,7 +535,7 @@ export default defineComponent({
         transform: translateY(-50%);
         z-index: 99;
         font-size: 50px;
-        background-color: rgba(0,0,0,.35);
+        background-color: rgba(0,0,0,.4);
         left: 15px;
         padding: 0 5px 0 0;
     }
@@ -529,6 +548,13 @@ export default defineComponent({
         color: #999;
         cursor: not-allowed;
         background-color: rgba(0,0,0,.1);
+    }
+    .translate-box{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
     img{
         vertical-align: bottom;
@@ -550,7 +576,7 @@ export default defineComponent({
         bottom: 45px;
         padding: 10px 15px;
         border-radius: 50px;
-        background-color: rgba(0,0,0,.35);
+        background-color: rgba(0,0,0,.4);
     }
     .option-container{
         text-align: center;
