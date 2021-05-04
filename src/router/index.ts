@@ -363,6 +363,17 @@ const routes: RouteRecordRaw[] = [
                 meta: {
                     '基本布局': 'ji_ben_bu_ju',
                 }
+            },
+            {
+                path: '/doc/collapse',
+                name: 'collapse',
+                component: () => import('/@/views/display/collapse.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                    '手风琴': 'shou_feng_qin',
+                    '禁用面板': 'jin_yong_mian_ban',
+                    '简洁样式': 'jian_jie_mian_ban',
+                }
             }
         ]
     },

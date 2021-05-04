@@ -1,8 +1,8 @@
 <template>
     <transition
-            name="f-message-slider-in"
-            @before-leave="closeMsg"
-            @after-leave="removeDom"
+        name="f-message-slider-in"
+        @before-leave="closeMsg"
+        @after-leave="removeDom"
     >
         <div
             v-show="isShow"

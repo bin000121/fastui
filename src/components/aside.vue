@@ -51,6 +51,7 @@ export default defineComponent( {
             '/doc/progress': 'Progress 进度条',
             '/doc/badge': 'Badge 徽章',
             '/doc/img': 'Img 图片容器',
+            '/doc/collapse': 'Collapse 折叠面板',
         }
 
         const Aside = ref(null)

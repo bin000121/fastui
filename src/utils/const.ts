@@ -43,4 +43,6 @@ export default {
     MenuGroup: 'fMenuGroup',
     Table: 'fTable',
     Img: 'fImg',
+    Collapse: 'fCollapse',
+    CollapseItem: 'fCollapseItem',
 } as const

@@ -159,6 +159,18 @@
     transition: all .25s ease-out;
 }
 
+/*f-collapse*/
+
+.f-collapse-scale-enter-from,
+.f-collapse-scale-leave-to{
+    height: 0;
+    opacity: 0;
+}
+.f-collapse-scale-enter-active,
+.f-collapse-scale-leave-active{
+    transition: all .25s !important;
+}
+
 /*f-spin*/
 @keyframes loading-rotate {
     0%{
