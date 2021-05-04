@@ -88,7 +88,7 @@
                         :src="isShowArrow ? previewList[previewIndex] : src"
                         alt=""
                         ref="bigImg"
-                        style="transform: scale(1) translate(0, 0) rotate(0deg)"
+                        style="transform: scale(1) rotate(0deg)"
                         @mousedown="handleTranslateStart"
                         @load="bigImgLoad"
                         @error="bigImgError"
@@ -118,7 +118,6 @@ import {
     onUnmounted,
     watch,
     nextTick,
-    computed,
     PropType
 } from 'vue'
 import {
@@ -255,7 +254,7 @@ export default defineComponent({
             if (bigImgDom?.classList.contains('img-isMoving')) handleTranslateEnd()
             setTimeout(() => {
                 document.body.removeAttribute('style')
-            }, 50)
+            }, 100)
         }
 
         const clickMask = () => {
@@ -360,7 +359,11 @@ export default defineComponent({
 
         const onKeydownHandle = (e: KeyboardEvent) => {
             e.stopPropagation()
-            if (e.key === 'Escape' && e.keyCode === 27 && !props.pressEscNotClose) closeShowBig()
+            if (e.key === 'Escape' &&
+                e.keyCode === 27 &&
+                !props.pressEscNotClose &&
+                isShowBig.value
+            ) closeShowBig()
             else return
         }
 
