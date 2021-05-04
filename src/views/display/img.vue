@@ -21,7 +21,7 @@
             </div>
 
             <div class="desc">
-                图片容器支持5种不同的方式，默认是，更多详情请前往 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit">MDN</a>。
+                图片容器支持5种不同的方式，默认是 fill，更多详情请前往 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank">MDN</a>。
             </div>
 
             <div class="demo-img-object-fit">
@@ -32,7 +32,7 @@
                         height="200px"
                         object-fit="fill"
                     />
-                    <h4>fill</h4>
+                    <h4>fill（默认）</h4>
                 </div>
                 <div>
                     <f-img
