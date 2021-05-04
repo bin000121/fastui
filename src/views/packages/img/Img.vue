@@ -81,6 +81,7 @@
                     class="translate-box"
                     style="transform: translate(0, 0)"
                     ref="translateBox"
+                    @click="clickMask"
                 >
                     <img
                         draggable="false"
@@ -91,6 +92,7 @@
                         @mousedown="handleTranslateStart"
                         @load="bigImgLoad"
                         @error="bigImgError"
+                        @click.stop
                     >
                 </div>
                 <div class="option-container">
@@ -323,7 +325,7 @@ export default defineComponent({
             let left = currentTranslate[0] + e.clientX - currentX
             let top = currentTranslate[1] + e.clientY - currentY
             translateBoxDom.style.transform  = `translate(${left}px, ${top}px)`
-        }, 25)
+        }, 15)
 
         // 检查图片是否完全超出视口，是就放弃本次拖拽结果
         const checkIsOverViewport = () => {
