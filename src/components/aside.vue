@@ -42,6 +42,7 @@ export default defineComponent( {
             '/doc/popconfirm': 'Popconfirm 气泡弹出框',
             // '/doc/menu': 'Menu 导航菜单',
             '/doc/message': 'Message 消息通知',
+            '/doc/notification': 'Notification 消息通知框',
             // '/doc/table': 'Table 表格',
             '/doc/tooltip': 'Tooltip 文字提示',
             '/doc/timeline': 'Timeline 时间线',

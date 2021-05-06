@@ -374,6 +374,14 @@ const routes: RouteRecordRaw[] = [
                     '禁用面板': 'jin_yong_mian_ban',
                     '简洁样式': 'jian_jie_mian_ban',
                 }
+            },
+            {
+                path: '/doc/notification',
+                name: 'notification',
+                component: () => import('/@/views/display/notification.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
             }
         ]
     },

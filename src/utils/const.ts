@@ -45,4 +45,5 @@ export default {
     Img: 'fImg',
     Collapse: 'fCollapse',
     CollapseItem: 'fCollapseItem',
+    Notification: 'fNotification',
 } as const
