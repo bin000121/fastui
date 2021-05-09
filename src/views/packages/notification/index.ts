@@ -1,10 +1,9 @@
-import { App } from 'vue'
-import componentName from '/@/utils/const'
+import type { App } from 'vue'
+import type { NotifyType } from './notification'
+import $notify from './notification'
 
-import Notification from './Notification.vue'
-
-export default {
-    install (app: App): void {
-        app.component(componentName.Notification, Notification)
-    }
+$notify.install = (app: App) => {
+    app.provide('$notify', $notify as NotifyType)
 }
+
+export default $notify

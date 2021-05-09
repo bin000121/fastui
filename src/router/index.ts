@@ -381,6 +381,9 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/notification.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '自定义显示时长': 'zi_ding_yi_xian_shi_shi_chang',
+                    '消息类型': 'xiao_xi_lei_xing',
+                    '弹出位置': 'tan_chu_wei_zhi',
                 }
             }
         ]

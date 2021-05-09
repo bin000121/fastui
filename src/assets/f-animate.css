@@ -85,6 +85,20 @@
     transition: all .25s ease-in-out;
 }
 
+/*f-notification*/
+.f-notification-slider-in-enter-from,
+.f-notification-slider-in-leave-to{
+    transform: translateX(100%);
+    opacity: 0;
+}
+.f-notification-slider-in-leave-to{
+    transform: translateY(-15px);
+}
+.f-notification-slider-in-enter-active,
+.f-notification-slider-in-leave-active{
+    transition: all .2s ease-in-out;
+}
+
 /*f-model*/
 .f-model-show-scale-enter-from,
 .f-model-show-scale-leave-to{
