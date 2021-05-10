@@ -92,11 +92,11 @@
     opacity: 0;
 }
 .f-notification-slider-in-leave-to{
-    transform: translateY(-15px);
+    transform: translateY(-5px);
 }
 .f-notification-slider-in-enter-active,
 .f-notification-slider-in-leave-active{
-    transition: all .2s ease-in-out;
+    transition: all .25s ease-in-out;
 }
 
 /*f-model*/

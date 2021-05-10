@@ -67,7 +67,7 @@ export default defineComponent({
         },
         width: {
             type: String,
-            default: '400px'
+            default: '350px'
         },
         top: {
             type: [Number, String],
@@ -179,13 +179,12 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-notification{
     position: fixed;
-    right: 50px;
-    width: 400px;
+    right: 30px;
     border-radius: 5px;
     box-shadow: 0 2px 15px #bbb;
     overflow: hidden;
     background-color: #fff;
-    transition: all .22s ease-in-out;
+    transition: all .2s ease-in-out;
     .bar{
         height: 8px;
     }
