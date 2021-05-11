@@ -7,10 +7,10 @@
         <div
             v-show="isShow"
             class="f-notification"
-            :style="`width: ${width};top: ${top}px;bottom: ${bottom}px`"
             :id="id"
             @mouseenter="stopTimer"
             @mouseleave="startTimer"
+            ref="fNotification"
         >
             <div class="f-notification-container">
                 <template v-if="isShowIcon">
@@ -37,7 +37,7 @@
             </div>
             <div
                 class="bar"
-                v-if="showBar"
+                v-if="isShowBar"
                 :style="`background-color: ${typeColor}`"
             ></div>
             <i
@@ -55,34 +55,21 @@ import {
     ref,
     onMounted,
     onUnmounted,
-    watch
 } from 'vue'
 
 export default defineComponent({
     inheritAttrs: false,
     props: {
-        id: {
-            type: String,
-            required: true
-        },
         width: {
             type: String,
             default: '350px'
-        },
-        top: {
-            type: [Number, String],
-            default: 'unset'
-        },
-        bottom: {
-            type: [Number, String],
-            default: 'unset'
         },
         content: {
             type: String,
             required: true
         },
         title: String,
-        showBar: {
+        isShowBar: {
             type: Boolean,
             default: true
         },
@@ -117,14 +104,16 @@ export default defineComponent({
             required: true
         },
     },
-    setup (props) {
+    setup (props, { attrs }) {
         let timer: any = null
         const isShow = ref(false)
         const contentRef = ref(null)
+        const fNotification = ref(null)
         const typeIcon = ref(null)
         const typeColor = ref('var(--primary)')
         let contentDom: HTMLElement
         let typeIconDom: HTMLElement
+        let fNotificationDom: HTMLElement
 
         const handleClose = () => {
             isShow.value = false
@@ -143,6 +132,15 @@ export default defineComponent({
             }, props.duration)
         }
 
+        const initStyle = () => {
+            const [directionY, directionX] = props.placement.split('-') as Array<'top' | 'bottom' | 'left' | 'right'>
+            fNotificationDom.style.cssText = `width: ${props.width};${directionY}:${attrs[directionY]}px;${directionX}:${attrs[directionX]}px;`
+            let yValue =  directionY === 'top' ? '-15' : '15'
+            let xValue =  directionX === 'left' ? '-100%' : '100%'
+            fNotificationDom.style.setProperty('--translateY', `translateY(${yValue}px)`)
+            fNotificationDom.style.setProperty('--translateX', `translateX(${xValue})`)
+        }
+
         const initTypeColor = () => {
             if (!['info', 'success', 'warning', 'error'].includes(props.type)) return
             typeIconDom = typeIcon.value!
@@ -150,13 +148,12 @@ export default defineComponent({
             typeColor.value = `var(--${type})`
         }
 
-        watch(() => props.type, (newV: string) => {
-            initTypeColor()
-        })
         onMounted(() => {
             isShow.value = true
             startTimer()
             contentDom = contentRef.value!
+            fNotificationDom = fNotification.value!
+            initStyle()
             initTypeColor()
         })
         onUnmounted(() => {
@@ -164,6 +161,8 @@ export default defineComponent({
             props.removeDom()
         })
         return{
+            id: attrs.id,
+            fNotification,
             contentRef,
             typeIcon,
             typeColor,
@@ -179,12 +178,12 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-notification{
     position: fixed;
-    right: 30px;
+    z-index: 9999;
     border-radius: 5px;
     box-shadow: 0 2px 15px #bbb;
     overflow: hidden;
     background-color: #fff;
-    transition: all .2s ease-in-out;
+    transition: all .28s ease-in-out;
     .bar{
         height: 8px;
     }

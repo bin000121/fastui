@@ -48,10 +48,12 @@ let instance: Instance = {
 }
 
 const msgGap = 15
-const initOffset = 20
+const initOffsetY = 20
+const initOffsetX = 30
 
 const closeNotify = (id: string, placement: Placement) => {
     const instanceList = instance[placement] || []
+    const [directionY] = placement.split('-')
     const index = instanceList.findIndex((value: any) => value.el.id === id)
     if (index < 0) return
     let { el } = instanceList[index]
@@ -59,8 +61,8 @@ const closeNotify = (id: string, placement: Placement) => {
         let height = el.offsetHeight
         instanceList.splice(index, 1)
         for (let i = index; i < instanceList.length; i++) {
-            let itemTop = parseInt(instanceList[i].el.style.top)
-            instanceList[i].el.style.top = (itemTop - height - msgGap) + 'px'
+            let itemTop = parseInt(instanceList[i].el.style[directionY])
+            instanceList[i].el.style[directionY] = (itemTop - height - msgGap) + 'px'
         }
     })
 }
@@ -72,10 +74,12 @@ const notifyInstance: NotifyType = ((options: Options) => {
     }
     const id = getRandomId('f-notification')
     const placement = options.placement || 'top-right'
-    const direction = placement.startsWith('top') ? 'top' : 'bottom'
+    // const direction = placement.startsWith('top') ? 'top' : 'bottom'
+    const [directionY, directionX] = placement.split('-')
     options = {
         ...options,
-        [direction]: initOffset,
+        [directionY]: initOffsetY,
+        [directionX]: initOffsetX,
         id,
         removeDom: () => {
             const dom: any = document.getElementById(id)
@@ -89,8 +93,8 @@ const notifyInstance: NotifyType = ((options: Options) => {
             let distance = instanceList[i].el.offsetHeight || 0
             // options.top = 'unset'
             // options.bottom = 'unset'
-            if (options[direction] === 'unset') options[direction] = 0
-            options[direction] += distance + msgGap
+            // if (options[directionY] === 'unset') options[directionY] = 0
+            options[directionY as 'top' | 'bottom'] += distance + msgGap
         }
     }
     const vnode = h(NotificationComponent, options as any)
@@ -101,8 +105,8 @@ const notifyInstance: NotifyType = ((options: Options) => {
 }) as any
 
 let notifyTypeList = ['info', 'success', 'error', 'warning'] as const
-notifyTypeList.forEach(type => {
+for (const type of notifyTypeList) {
     notifyInstance[type] = (options: Options) => notifyInstance({ ...options, type })
-})
+}
 
 export default notifyInstance

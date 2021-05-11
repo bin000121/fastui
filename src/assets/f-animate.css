@@ -88,11 +88,11 @@
 /*f-notification*/
 .f-notification-slider-in-enter-from,
 .f-notification-slider-in-leave-to{
-    transform: translateX(100%);
+    transform: var(--translateX);
     opacity: 0;
 }
 .f-notification-slider-in-leave-to{
-    transform: translateY(-5px);
+    transform: var(--translateY);
 }
 .f-notification-slider-in-enter-active,
 .f-notification-slider-in-leave-active{

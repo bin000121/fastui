@@ -139,6 +139,32 @@
                 <f-button @click="openPlacement('bottom-right')">bottom-right</f-button>
                 <f-button @click="openPlacement('bottom-left')">bottom-left</f-button>
             </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-button @click="openPlacement('top-right')">top-right</f-button>
+    <f-button @click="openPlacement('top-left')">top-left</f-button>
+    <f-button @click="openPlacement('bottom-right')">bottom-right</f-button>
+    <f-button @click="openPlacement('bottom-left')">bottom-left</f-button>
+
+
+    <script lang="ts">
+    import { defineComponent } from 'vue'
+    export default defineComponent({
+        setup() {
+            const openPlacement = (placement: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
+                $notify.info({
+                    placement,
+                    title: '弹出位置：' + placement,
+                    content: '这是一条从 \${placement} 出现的消息！'
+                })
+            }
+            return{ openPlacement }
+        }
+    })
+    </script>`}}
+    </code></pre>
+            </div>
         </div>
     </div>
 </template>
