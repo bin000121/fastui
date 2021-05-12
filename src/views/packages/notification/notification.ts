@@ -108,7 +108,6 @@ const notifyInstance: NotifyType = ((options: Options) => {
         }
         options[directionY] = `calc(${options[directionY]} + ${init}px)`
     }
-    console.log(options)
     const vnode = h(NotificationComponent, options as any)
     instance[placement].push(vnode)
     render(vnode, document.createElement('div'))
