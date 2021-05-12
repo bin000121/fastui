@@ -8,29 +8,23 @@
             v-show="isShow"
             class="f-notification"
             :id="id"
+            ref="fNotification"
             @mouseenter="stopTimer"
             @mouseleave="startTimer"
-            ref="fNotification"
         >
             <div class="f-notification-container">
-                <template v-if="isShowIcon">
-                    <slot name="icon" v-if="$slots.icon"></slot>
-                    <i
-                        :class="iconClass || [
-                            `f-icon-${type}`,
-                            'type-icon'
-                        ]"
-                        :style="iconClass ? {} : `color: ${typeColor}`"
-                        ref="typeIcon"
-                        v-else
-                    ></i>
-                </template>
+                <i
+                    v-if="isShowIcon"
+                    :class="icon || [
+                        `f-icon-${type}`,
+                        'type-icon'
+                    ]"
+                    :style="icon ? {} : `color: ${typeColor}`"
+                    ref="typeIcon"
+                ></i>
                 <div>
                     <h4 class="f-notification-title" v-if="title">{{title}}</h4>
-                    <div
-                        class="f-notification-content"
-                        ref="contentRef"
-                    >
+                    <div ref="contentRef">
                         {{content}}
                     </div>
                 </div>
@@ -73,7 +67,7 @@ export default defineComponent({
             type: Boolean,
             default: true
         },
-        iconClass: String,
+        icon: String,
         isShowIcon: {
             type: Boolean,
             default: true
@@ -115,6 +109,8 @@ export default defineComponent({
         let typeIconDom: HTMLElement
         let fNotificationDom: HTMLElement
 
+        const [directionY, directionX] = props.placement.split('-')
+
         const handleClose = () => {
             isShow.value = false
         }
@@ -134,7 +130,7 @@ export default defineComponent({
 
         const initStyle = () => {
             const [directionY, directionX] = props.placement.split('-') as Array<'top' | 'bottom' | 'left' | 'right'>
-            fNotificationDom.style.cssText = `width: ${props.width};${directionY}:${attrs[directionY]}px;${directionX}:${attrs[directionX]}px;`
+            fNotificationDom.style.cssText = `width: ${props.width};${directionY}:${attrs[directionY]};${directionX}:${attrs[directionX]};`
             let yValue =  directionY === 'top' ? '-15' : '15'
             let xValue =  directionX === 'left' ? '-100%' : '100%'
             fNotificationDom.style.setProperty('--translateY', `translateY(${yValue}px)`)
@@ -148,13 +144,21 @@ export default defineComponent({
             typeColor.value = `var(--${type})`
         }
 
+        const initTranslate = () => {
+            let translateY = `translateY(${directionY === 'top' ? '-12px' : '12px'})`
+            let translateX = `translateX(${directionX === 'left' ? '-100%' : '100%'})`
+            fNotificationDom.style.setProperty('--translateX', translateX)
+            fNotificationDom.style.setProperty('--translateY', translateY)
+        }
+
         onMounted(() => {
-            isShow.value = true
-            startTimer()
             contentDom = contentRef.value!
             fNotificationDom = fNotification.value!
-            initStyle()
+            initTranslate()
+            isShow.value = true
+            startTimer()
             initTypeColor()
+            initStyle()
         })
         onUnmounted(() => {
             stopTimer()
@@ -228,7 +232,5 @@ export default defineComponent({
         color: var(--primary);
         padding-right: 15px;
     }
-}
-.f-notification-content{
 }
 </style>

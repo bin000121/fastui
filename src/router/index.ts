@@ -384,6 +384,8 @@ const routes: RouteRecordRaw[] = [
                     '自定义显示时长': 'zi_ding_yi_xian_shi_shi_chang',
                     '消息类型': 'xiao_xi_lei_xing',
                     '弹出位置': 'tan_chu_wei_zhi',
+                    '自定义': 'zi_ding_yi',
+                    '横、纵向偏移量': 'pian_yi_liang',
                 }
             }
         ]

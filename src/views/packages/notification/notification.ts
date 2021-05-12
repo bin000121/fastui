@@ -29,11 +29,17 @@ export interface Options {
     title: string | number;
     top?: string | number;
     bottom?: string | number;
+    left?: string | number;
+    right?: string | number;
+    offsetX?: number | string;
+    offsetY?: number | string;
+    icon?: string;
     type?: 'info' | 'success' | 'error' | 'warning';
     placement?: Placement,
     duration?: number;
     isShowClose?: boolean;
     isShowIcon?: boolean;
+    isShowBar?: boolean;
     removeDom?: (id: string) => void;
     close?: (id: string, placement: Placement) => void;
     onClose?: () => void;
@@ -46,6 +52,8 @@ let instance: Instance = {
     'bottom-left': [],
     'bottom-right': []
 }
+
+type Direction = 'top' | 'bottom' | 'left' | 'right';
 
 const msgGap = 15
 const initOffsetY = 20
@@ -67,19 +75,23 @@ const closeNotify = (id: string, placement: Placement) => {
     })
 }
 
+const _formatValue = (val: string | number) => typeof val === 'number' ? val + 'px' : val
+
 const notifyInstance: NotifyType = ((options: Options) => {
     if (Object.prototype.toString.call(options) !== '[object Object]') {
         console.warn("[fast-ui]: property 'options' must be an object type!")
         return
     }
+    let placement = options?.placement || 'top-right'
+    if (!placement ||
+        !['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(placement)
+    ) placement = 'top-right'
     const id = getRandomId('f-notification')
-    const placement = options.placement || 'top-right'
-    // const direction = placement.startsWith('top') ? 'top' : 'bottom'
-    const [directionY, directionX] = placement.split('-')
+    const [directionY, directionX] = placement.split('-') as Array<Direction>
     options = {
+        [directionY]: _formatValue(options.offsetY || initOffsetY),
+        [directionX]: _formatValue(options.offsetX || initOffsetX),
         ...options,
-        [directionY]: initOffsetY,
-        [directionX]: initOffsetX,
         id,
         removeDom: () => {
             const dom: any = document.getElementById(id)
@@ -89,19 +101,19 @@ const notifyInstance: NotifyType = ((options: Options) => {
     options.close = () => closeNotify(id, placement)
     const instanceList = instance[placement] || []
     if (instanceList.length) {
+        let init = 0
         for (let i = 0; i< instanceList.length; i++) {
             let distance = instanceList[i].el.offsetHeight || 0
-            // options.top = 'unset'
-            // options.bottom = 'unset'
-            // if (options[directionY] === 'unset') options[directionY] = 0
-            options[directionY as 'top' | 'bottom'] += distance + msgGap
+            init += distance + msgGap
         }
+        options[directionY] = `calc(${options[directionY]} + ${init}px)`
     }
+    console.log(options)
     const vnode = h(NotificationComponent, options as any)
     instance[placement].push(vnode)
     render(vnode, document.createElement('div'))
     document.body.appendChild(vnode.el as HTMLElement)
-    return () => closeNotify(id, placement)
+    return options.close
 }) as any
 
 let notifyTypeList = ['info', 'success', 'error', 'warning'] as const
