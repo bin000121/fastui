@@ -65,14 +65,12 @@ const closeNotify = (id: string, placement: Placement) => {
     const index = instanceList.findIndex((value: any) => value.el.id === id)
     if (index < 0) return
     let { el } = instanceList[index]
-    setTimeout(() => {
-        let height = el.offsetHeight
-        instanceList.splice(index, 1)
-        for (let i = index; i < instanceList.length; i++) {
-            let itemTop = parseInt(instanceList[i].el.style[directionY])
-            instanceList[i].el.style[directionY] = (itemTop - height - msgGap) + 'px'
-        }
-    })
+    let height = el.offsetHeight
+    instanceList.splice(index, 1)
+    for (let i = index; i < instanceList.length; i++) {
+        let itemTopStr = instanceList[i].el.style[directionY].slice(4, -1)
+        instanceList[i].el.style[directionY] = `calc(${itemTopStr} - ${height + msgGap}px)`
+    }
 }
 
 const _formatValue = (val: string | number) => typeof val === 'number' ? val + 'px' : val
@@ -83,6 +81,11 @@ const notifyInstance: NotifyType = ((options: Options) => {
         return
     }
     let placement = options?.placement || 'top-right'
+    // 一个方向上的消息在页面中最多存在10条
+    if (instance[placement].length >= 5) {
+        console.warn(`[fast-ui]: There are up to 10 messages in the ${placement} corner of the page!`)
+        return
+    }
     if (!placement ||
         !['top-left', 'top-right', 'bottom-left', 'bottom-right'].includes(placement)
     ) placement = 'top-right'
