@@ -339,6 +339,7 @@ export default defineComponent({
         }
         const openPlacement = (placement: Placement) => {
             $notify.info({
+                placement,
                 title: '弹出位置：' + placement,
                 content: `这是一条从 ${placement} 出现的消息！`
             })

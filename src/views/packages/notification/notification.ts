@@ -81,8 +81,8 @@ const notifyInstance: NotifyType = ((options: Options) => {
         return
     }
     let placement = options?.placement || 'top-right'
-    // 一个方向上的消息在页面中最多存在5条
-    if (instance[placement].length >= 5) {
+    // 一个方向上的消息在页面中最多存在10条
+    if (instance[placement].length >= 10) {
         console.warn(`[fast-ui]: There are up to 10 messages in the ${placement} corner of the page!`)
         return
     }
