@@ -8,6 +8,7 @@
             v-show="isShow"
             class="f-notification"
             :id="id"
+            :name="name"
             ref="fNotification"
             @mouseenter="stopTimer"
             @mouseleave="startTimer"
@@ -24,9 +25,7 @@
                 ></i>
                 <div>
                     <h4 class="f-notification-title" v-if="title">{{title}}</h4>
-                    <div ref="contentRef">
-                        {{content}}
-                    </div>
+                    <div>{{content}}</div>
                 </div>
             </div>
             <div
@@ -101,11 +100,9 @@ export default defineComponent({
     setup (props, { attrs }) {
         let timer: any = null
         const isShow = ref(false)
-        const contentRef = ref(null)
         const fNotification = ref(null)
         const typeIcon = ref(null)
         const typeColor = ref('var(--primary)')
-        let contentDom: HTMLElement
         let typeIconDom: HTMLElement
         let fNotificationDom: HTMLElement
 
@@ -152,7 +149,6 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            contentDom = contentRef.value!
             fNotificationDom = fNotification.value!
             initTranslate()
             isShow.value = true
@@ -166,8 +162,8 @@ export default defineComponent({
         })
         return{
             id: attrs.id,
+            name: attrs.name || '',
             fNotification,
-            contentRef,
             typeIcon,
             typeColor,
             isShow,
@@ -181,6 +177,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-notification{
+    --translateX: 100%;
     position: fixed;
     z-index: 9999;
     border-radius: 5px;

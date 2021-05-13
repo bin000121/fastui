@@ -34,6 +34,7 @@ export interface Options {
     offsetX?: number | string;
     offsetY?: number | string;
     icon?: string;
+    name?: string;
     type?: 'info' | 'success' | 'error' | 'warning';
     placement?: Placement,
     duration?: number;
@@ -111,6 +112,7 @@ const notifyInstance: NotifyType = ((options: Options) => {
         }
         options[directionY] = `calc(${options[directionY]} + ${init}px)`
     }
+    console.log(options)
     const vnode = h(NotificationComponent, options as any)
     instance[placement].push(vnode)
     render(vnode, document.createElement('div'))
