@@ -386,6 +386,7 @@ const routes: RouteRecordRaw[] = [
                     '弹出位置': 'tan_chu_wei_zhi',
                     '自定义': 'zi_ding_yi',
                     '横、纵向偏移量': 'pian_yi_liang',
+                    '回调函数': 'hui_diao_han_shu',
                 }
             }
         ]

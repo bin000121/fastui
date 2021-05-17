@@ -1,6 +1,8 @@
 <template>
     <transition
         name="f-notification-slider-in"
+        @before-enter="handleOpen"
+        @after-enter="handleOpened"
         @before-leave="close"
         @after-leave="removeDom"
     >
@@ -108,6 +110,18 @@ export default defineComponent({
 
         const [directionY, directionX] = props.placement.split('-')
 
+        // 试探执行完全打开回调函数
+        const handleOpen = () => {
+            let fn = attrs.onOpen as Function
+            fn?.()
+        }
+
+        // 试探执行完全打开回调函数
+        const handleOpened = () => {
+            let fn = attrs.onOpened as Function
+            fn?.()
+        }
+
         const handleClose = () => {
             isShow.value = false
         }
@@ -167,6 +181,8 @@ export default defineComponent({
             typeIcon,
             typeColor,
             isShow,
+            handleOpen,
+            handleOpened,
             handleClose,
             stopTimer,
             startTimer

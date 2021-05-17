@@ -43,6 +43,8 @@ export interface Options {
     isShowBar?: boolean;
     removeDom?: (id: string) => void;
     close?: (id: string, placement: Placement) => void;
+    onOpen?: () => void;
+    onOpened?: () => void;
     onClose?: () => void;
     onClosed?: () => void;
 }
@@ -67,6 +69,8 @@ const closeNotify = (id: string, placement: Placement) => {
     if (index < 0) return
     let { el } = instanceList[index]
     let height = el.offsetHeight
+    // 试探执行关闭回调
+    instanceList[index].props.onClose?.()
     instanceList.splice(index, 1)
     for (let i = index; i < instanceList.length; i++) {
         let itemTopStr = instanceList[i].el.style[directionY].slice(4, -1)
@@ -99,6 +103,8 @@ const notifyInstance: NotifyType = ((options: Options) => {
         id,
         removeDom: () => {
             const dom: any = document.getElementById(id)
+            // 试探执行完全关闭回调
+            options.onClosed?.()
             dom && dom?.parentNode.removeChild(dom)
         },
     }
@@ -112,7 +118,6 @@ const notifyInstance: NotifyType = ((options: Options) => {
         }
         options[directionY] = `calc(${options[directionY]} + ${init}px)`
     }
-    console.log(options)
     const vnode = h(NotificationComponent, options as any)
     instance[placement].push(vnode)
     render(vnode, document.createElement('div'))

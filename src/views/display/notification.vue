@@ -196,6 +196,7 @@
             <div>
                 <f-button @click="hideCloseIcon">hide closeIcon</f-button>
             </div>
+
             <div v-highlight>
                 <pre><code>
     {{`<f-button @click="hideIcon">hide icon</f-button>
@@ -306,7 +307,58 @@
             <h3 id="hui_diao_han_shu">回调函数
                 <a href="#hui_diao_han_shu" class="f-icon-anchor"></a>
             </h3>
-            <p>最基本的使用方法。</p>
+            <p>消息通知框在处于某个特定状态时会向外触发的特定的回调函数。</p>
+
+            <div class="desc">
+                消息通知框会在总共可能会处于4种不同状态。<b>onOpen</b> 刚打开时立刻执行、 <b>onOpened</b> 被打开且等到入场动画结束后立刻执行、 <b>onClose</b> 刚关闭时立刻执行、 <b>onClosed</b> 被关闭且等到出场动画结束后立刻执行
+            </div>
+
+
+            <div class="desc">
+                下面是一个回调例子，请打开控制台查看。
+            </div>
+
+            <div class="demo-notification">
+                <f-button @click="openAndEmitEvent">打开消息并执行回调</f-button>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-button @click="openAndEmitEvent">打开消息并执行回调</f-button>
+
+
+    <script lang="ts">
+    import { defineComponent } from 'vue'
+    import $notify from "/@/views/packages/notification";
+    export default defineComponent({
+        setup() {
+            const openAndEmitEvent = () => {
+                $notify.info({
+                    title: '请前往控制台查看',
+                    content: '消息通知框将会执行这4种回调函数。',
+                    onOpen: () => {
+                        console.log('onOpen：执行于刚打开时！')
+                    },
+                    onOpened: () => {
+                        console.log('onOpened：执行于被打开且入场动画结束后！')
+                    },
+                    onClose: () => {
+                        console.log('onClose：执行于刚关闭时！')
+                    },
+                    onClosed: () => {
+                        console.log('onClosed：执行于被关闭且出场动画结束后！')
+                    }
+                })
+            }
+            return{
+                openAndEmitEvent
+            }
+        }
+    })
+    </script>`}}
+    </code></pre>
+            </div>
+
         </div>
     </div>
 </template>
@@ -386,6 +438,24 @@ export default defineComponent({
                 content: `这是一条具有纵向偏移量 ${value} 的消息！`
             })
         }
+        const openAndEmitEvent = () => {
+            $notify.info({
+                title: '请前往控制台查看',
+                content: '消息通知框将会执行这4种回调函数。',
+                onOpen: () => {
+                    console.log('onOpen：执行于刚打开时！')
+                },
+                onOpened: () => {
+                    console.log('onOpened：执行于被打开且入场动画结束后！')
+                },
+                onClose: () => {
+                    console.log('onClose：执行于刚关闭时！')
+                },
+                onClosed: () => {
+                    console.log('onClosed：执行于被关闭且出场动画结束后！')
+                }
+            })
+        }
         return{
             open,
             open2,
@@ -396,6 +466,7 @@ export default defineComponent({
             hideCloseIcon,
             openAtOffsetX,
             openAtOffsetY,
+            openAndEmitEvent,
         }
     }
 })
