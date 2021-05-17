@@ -257,17 +257,16 @@
             </div>
 
             <div>
-                <f-button @click="openAtOffsetY('5vh', 'top-right')">offsetY 100px</f-button>
-                <f-button @click="openAtOffsetY('15vh', 'top-left')">offsetY 200px</f-button>
+                <f-button @click="openAtOffsetY('5vh', 'top-right')">offsetY 5vh</f-button>
+                <f-button @click="openAtOffsetY('15vh', 'top-left')">offsetY 15vh</f-button>
             </div>
-        </div>
 
-        <div v-highlight>
+            <div v-highlight>
             <pre><code>
     {{ `<f-button @click="openAtOffsetX(100)">offsetX 100px</f-button>
     <f-button @click="openAtOffsetX(200)">offsetX 200px</f-button>
-    <f-button @click="openAtOffsetY('5vh', 'top-right')">offsetY 100px</f-button>
-    <f-button @click="openAtOffsetY('15vh', 'top-left')">offsetY 200px</f-button>
+    <f-button @click="openAtOffsetY('5vh', 'top-right')">offsetY 5vh</f-button>
+    <f-button @click="openAtOffsetY('15vh', 'top-left')">offsetY 15vh</f-button>
 
 
     <script lang="ts">
@@ -300,8 +299,15 @@
     })
     </script>` }}
             </code></pre>
+            </div>
         </div>
 
+        <div>
+            <h3 id="hui_diao_han_shu">回调函数
+                <a href="#hui_diao_han_shu" class="f-icon-anchor"></a>
+            </h3>
+            <p>最基本的使用方法。</p>
+        </div>
     </div>
 </template>
 

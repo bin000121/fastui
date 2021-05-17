@@ -1,7 +1,7 @@
 <template>
     <div
         class="f-spin"
-        :class="{ 'f-spin__inline': inline }"
+        :class="{ 'f-spin__inline': tip && inline }"
         ref="fSpin"
     >
         <svg

@@ -74,13 +74,7 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-img
-        src="https://unsplash.it/800/600?random"
-        width="150px"
-        height="150px"
-    />
-
-    <div>
+    {{`<div>
         <f-img
             src="https://unsplash.it/800/600?random"
             width="200px"

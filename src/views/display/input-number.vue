@@ -11,7 +11,7 @@
 
             <p style="user-select: none">当前值：{{num}}</p>
             <div class="demo-input-number">
-                <f-input-number v-model:value="num" :min="2"></f-input-number>
+                <f-input-number v-model:value="num"></f-input-number>
             </div>
             <div v-highlight>
                 <pre><code>

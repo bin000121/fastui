@@ -7,10 +7,7 @@
 <script lang="ts">
 import {
     defineComponent,
-    ref,
     provide,
-    onMounted,
-    watch,
     getCurrentInstance
 } from 'vue'
 import type { PropType, ComponentInternalInstance } from 'vue'
