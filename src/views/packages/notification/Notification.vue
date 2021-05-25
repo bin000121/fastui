@@ -149,10 +149,11 @@ export default defineComponent({
         }
 
         const initTypeColor = () => {
-            if (!['info', 'success', 'warning', 'error'].includes(props.type)) return
+            let type: string = props.type
+            if (!['info', 'success', 'warning', 'error'].includes(props.type)) type = 'info'
+            else if (type === 'info') type = 'primary'
             typeIconDom = typeIcon.value!
-            let type = props.type === 'info' ? 'primary' : props.type
-            typeColor.value = `var(--${type})`
+            typeColor.value = `var(--${ type })`
         }
 
         const initTranslate = () => {

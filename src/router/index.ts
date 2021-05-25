@@ -166,6 +166,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/cascader',
+                name: 'cascader',
+                component: () => import('/@/views/display/cascader.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
+            },
+            {
                 path: '/doc/tabs',
                 name: 'tabs',
                 component: () => import('/@/views/display/tabs.vue'),

@@ -25,6 +25,7 @@ export default {
     Col: 'fCol',
     Row: 'fRow',
     Select: 'fSelect',
+    Cascader: 'fCascader',
     SelectGroup: 'fSelectGroup',
     SelectOption: 'fSelectOption',
     Slider: 'fSlider',
