@@ -17,9 +17,8 @@
             ref="cascaderIpt"
             autocomplete="off"
             :placeholder="placeholder || '请选择内容'"
-            @focus="focus"
         >
-        <i class="f-icon-arrow-down-bold icon"></i>
+        <i class="f-icon-arrow-down-bold icon" :class="{'icon-rotate': isShowPanel}"></i>
 
         <template v-if="isRenderPanel">
             <transition
@@ -35,14 +34,28 @@
                     ref="cascaderPanel"
                     @click.stop
                 >
-                    <ul>
-                        <li
-                            v-for="item in options"
-                            :key="item[props.value]"
-                        >
-                            {{item[props.label]}}
-                            <i class="f-icon-arrow-right-bold right-icon"></i>
-                        </li>
+                    <ul
+                        v-for="(item, level) in treeData"
+                        :key="level"
+                    >
+                        <template v-if="item !== 'none'">
+                            <li
+                                v-for="subItem in item"
+                                :key="subItem[props.value]"
+                                @click="handleClick(subItem, level)"
+                                :class="{
+                                    'is-active': isActive(subItem[props.value]),
+                                    'options__disabled': subItem[props.disabled],
+                                }"
+                                :title="subItem[props.label]"
+                            >
+                                {{subItem[props.label]}}
+                                <i
+                                    class="f-icon-arrow-right-bold right-icon"
+                                    v-if="subItem[props.children]"
+                                ></i>
+                            </li>
+                        </template>
                     </ul>
                 </div>
             </transition>
@@ -72,7 +85,10 @@ import { isEmpty } from '/@/utils/utils'
 export default defineComponent({
     emits: ['update:value', 'change', 'show', 'showed', 'hide', 'hided'],
     props: {
-        value: Array as PropType<string[] | number[]>,
+        value: {
+            type: Array as PropType<string[] | number[]>,
+            required: true
+        },
         placeholder: String,
         disabled: Boolean,
         closeable: Boolean,
@@ -97,18 +113,46 @@ export default defineComponent({
             })
         },
         stopLevel: Number,
+        trigger: {
+            type: String,
+            default: 'click',
+            validator: (val: string) => ['click', 'hover'].includes(val)
+        },
+        format: Function as PropType<(labelList: string[]) => string>,
+        separator: {
+            type: String,
+            default: '/'
+        },
+        filterable: Boolean,
+        foldTag: Boolean,
     },
-    setup (props) {
+    setup (props, { emit }) {
         const id = getRandomId('f-cascader')
         const cascader = ref(null)
         const cascaderIpt = ref(null)
         const cascaderPanel = ref(null)
         let cascaderDom: HTMLElement
-        let cascaderIptDom: HTMLElement
+        let cascaderIptDom: HTMLInputElement
         let cascaderPanelDom: HTMLElement
         const isFocus = ref(false)
         const isShowPanel = ref(false)
         const isRenderPanel = ref(true)
+        const currentValue: any = ref([])
+        const currentLabel: any = ref([])
+        const treeData: any = ref(props.options ? [props.options] : [])
+
+        const {
+            label: labelKey,
+            value: valueKey,
+            children: childKey,
+            disabled: disabledKey
+        } = props.props
+
+        let level = 0
+
+        const isActive = computed(() => {
+            return (val: number | string) => currentValue.value.includes(val)
+        })
 
         const togglePanel = () => {
             if (props.disabled) return
@@ -120,6 +164,29 @@ export default defineComponent({
             isShowPanel.value = false
         }
 
+        const handleClick = (data: OptionsData, level: number) => {
+            if (data.disabled) return
+            currentLabel.value[level] = data[labelKey]
+            currentValue.value[level] = data[valueKey]
+            if (data?.[childKey]?.length) treeData.value[level + 1] = data[childKey]
+            else {
+                cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
+                console.log(currentLabel.value)
+                handleHidePanel()
+                emit('update:value', currentValue.value)
+            }
+        }
+
+        const getOptions = (data: OptionsData[]) => {
+            // level++
+            // let options =  data.reduce((pre, cur) => {
+            //     const { children, ...options} = cur
+            //     pre.push(options)
+            //     return pre
+            // }, [] as OptionsData[])
+            // treeData.value.push(options)
+        }
+
         // 初始化是否展示级联面板
         const initIsRenderPanel = () => {
             isRenderPanel.value = !props.disabled && !isEmpty(props.options)
@@ -129,17 +196,19 @@ export default defineComponent({
         const initCascaderPanelPosition = () => {
             if (!isRenderPanel.value) return
             const [y] = props.placement.split('-')
-            const height = cascaderDom.offsetHeight
-            let yValue: number
-            if (y === 'top') {
-                cascaderPanelDom.style.cssText = `top: unset;bottom: ${height}px`
-                yValue = -15
-            } else {
-                cascaderPanelDom.style.cssText = `bottom: unset;top: ${height}px`
-                yValue = 15
-            }
+            // 增加一点距离是因为要留出三角箭头的位置
+            const height = cascaderDom.offsetHeight + 6
+            let yValue = y === 'top' ? -15 : 15
+            cascaderPanelDom.classList.add('f-cascader-panel__' + y)
             cascaderDom.style.setProperty('--translateY', `${yValue}px`)
+            cascaderDom.style.setProperty('--height', `${height}px`)
         }
+
+        watch(() => isShowPanel.value, (newV: boolean) => {
+            setTimeout(() => {
+                if (!newV) treeData.value = props.options ? [props.options] : []
+            }, 150)
+        })
 
         watch(() => props.options, () => {
             initIsRenderPanel()
@@ -148,12 +217,12 @@ export default defineComponent({
         watch(() => props.placement, () => {
             initCascaderPanelPosition()
         })
-        console.log(props.options)
 
         onMounted(() => {
             cascaderDom = cascader.value!
             cascaderIptDom = cascaderIpt.value!
             cascaderPanelDom = cascaderPanel.value!
+            if (props.options) getOptions(props.options)
             initIsRenderPanel()
             initCascaderPanelPosition()
         })
@@ -165,8 +234,12 @@ export default defineComponent({
             isFocus,
             isShowPanel,
             isRenderPanel,
+            treeData,
+            currentValue,
+            isActive,
             togglePanel,
             handleHidePanel,
+            handleClick,
         }
     }
 })
@@ -175,6 +248,7 @@ export default defineComponent({
 <style scoped lang="scss">
 .f-cascader{
     --translateY: 15px;
+    --height: 20px;
     position: relative;
     height: 40px;
     border: 1px solid #ccc;
@@ -192,7 +266,11 @@ export default defineComponent({
         position: absolute;
         top: 50%;
         right: calc(.45em);
+        transition: transform .2s ease-in-out;
         transform: translateY(-50%);
+    }
+    i.icon-rotate{
+        transform: translateY(-50%) rotate(180deg);
     }
 }
 .f-cascader__disabled{
@@ -225,28 +303,47 @@ export default defineComponent({
     padding: 6px 24px 6px 12px;
 }
 .f-cascader-panel{
+    display: flex;
     box-sizing: border-box;
-    height: 150px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     background-color: #fff;
     position: absolute;
     left: 0;
     border-radius: 5px;
-    padding: 4px 0;
     ul{
+        padding: 4px 0;
+        min-height: 150px;
+        max-height: 200px;
         margin: 0;
-        padding: 0;
+        &:not(:last-child){
+            border-right: 1px solid #ddd;
+        }
         li{
+            min-width: 100px;
+            max-width: 150px;
+            user-select: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             box-sizing: border-box;
             font-size: 14px;
-            padding: 6px 25px 6px 12px;
+            padding: 6px 26px 6px 10px;
             position: relative;
             cursor: pointer;
             color: #333;
-            transition: all .2s ease-in-out;
+            transition: all .15s ease-in-out;
             &:not(.options__disabled):hover{
                 background-color: #f2f2f2;
             }
+        }
+        li.options__disabled{
+            opacity: .35;
+            cursor: not-allowed;
+        }
+        li.is-active{
+            color: var(--primary);
+            background-color: #f2f2f2;
+            font-weight: bold;
         }
         i.right-icon{
             font-size: 12px;
@@ -256,5 +353,28 @@ export default defineComponent({
             right: calc(.4em);
         }
     }
+}
+.f-cascader-panel__top{
+    bottom: var(--height)
+}
+.f-cascader-panel__bottom{
+    &::before, &::after{
+        content: '';
+        position: absolute;
+        left: calc(.8em);
+        top: -12px;
+        display: block;
+        width: 0;
+        height: 0;
+        border: 6px solid transparent;
+        border-bottom-color: #fff;
+        z-index: 2;
+    }
+    &::after{
+        top: -13px;
+        border-bottom-color: #ddd;
+        z-index: 1;
+    }
+    top: var(--height)
 }
 </style>

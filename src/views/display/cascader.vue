@@ -8,6 +8,7 @@
 
             <div class="demo-cascader">
                 <f-cascader
+                    v-model:value="data"
                     :options="options"
                 />
             </div>
@@ -30,6 +31,7 @@ export default defineComponent({
     },
     setup () {
         const data = reactive({
+            data: [],
             options: [
                 {
                     label: '福建省',
@@ -37,7 +39,8 @@ export default defineComponent({
                     children: [
                         {
                             label: '厦门市',
-                            value: 'xiamen'
+                            value: 'xiamen',
+                            disabled: true
                         },
                         {
                             label: '福州市',
