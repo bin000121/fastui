@@ -3,6 +3,7 @@
         :id="id"
         :class="{
             'f-cascader': true,
+            'f-cascader__focus': isShowPanel,
             'f-cascader__disabled': disabled,
             ['f-cascader__' + size]: size !== 'default'
         }"
@@ -72,6 +73,13 @@ interface OptionsData {
     [key: string]: any;
 }
 
+interface Props{
+    label: string;
+    value: string;
+    disabled: string;
+    children: string;
+}
+
 import {
     defineComponent,
     ref,
@@ -104,8 +112,8 @@ export default defineComponent({
         },
         options: Array as PropType<OptionsData[]>,
         props: {
-            type: Object,
-            default: () => ({
+            type: Object as PropType<Props>,
+            default: (): Props => ({
                 label: 'label',
                 value: 'value',
                 children: 'children',
@@ -197,18 +205,18 @@ export default defineComponent({
             if (!isRenderPanel.value) return
             const [y] = props.placement.split('-')
             // 增加一点距离是因为要留出三角箭头的位置
-            const height = cascaderDom.offsetHeight + 6
+            const height = cascaderDom.offsetHeight + 10
             let yValue = y === 'top' ? -15 : 15
             cascaderPanelDom.classList.add('f-cascader-panel__' + y)
             cascaderDom.style.setProperty('--translateY', `${yValue}px`)
             cascaderDom.style.setProperty('--height', `${height}px`)
         }
 
-        watch(() => isShowPanel.value, (newV: boolean) => {
-            setTimeout(() => {
-                if (!newV) treeData.value = props.options ? [props.options] : []
-            }, 150)
-        })
+        // watch(() => isShowPanel.value, (newV: boolean) => {
+        //     setTimeout(() => {
+        //         if (!newV) treeData.value = props.options ? [props.options] : []
+        //     }, 150)
+        // })
 
         watch(() => props.options, () => {
             initIsRenderPanel()
@@ -255,7 +263,7 @@ export default defineComponent({
     border-radius: 5px;
     box-sizing: border-box;
     display: inline-flex;
-    transition: border-color .2s ease-in-out;
+    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
     font-size: 14px!important;
     &:not(.f-cascader__disabled):hover{
         border-color: var(--primary);
@@ -272,6 +280,10 @@ export default defineComponent({
     i.icon-rotate{
         transform: translateY(-50%) rotate(180deg);
     }
+}
+.f-cascader__focus{
+    border-color: var(--primary);
+    box-shadow: 0 0 0 .2em rgba(var(--primary-rgba),.15);
 }
 .f-cascader__disabled{
     opacity: .65;
@@ -361,7 +373,7 @@ export default defineComponent({
     &::before, &::after{
         content: '';
         position: absolute;
-        left: calc(.8em);
+        left: calc(.85em);
         top: -12px;
         display: block;
         width: 0;

@@ -40,15 +40,55 @@ export default defineComponent({
                         {
                             label: '厦门市',
                             value: 'xiamen',
-                            disabled: true
+                            children: [
+                                {
+                                    label: '集美区',
+                                    value: 'jimei'
+                                },
+                                {
+                                    label: '思明区',
+                                    value: 'siming'
+                                },
+                                {
+                                    label: '翔安区',
+                                    value: 'xiangan'
+                                },
+                                {
+                                    label: '湖里区',
+                                    value: 'huli'
+                                },
+                                {
+                                    label: '海沧区',
+                                    value: 'haicang'
+                                }
+                            ]
                         },
                         {
                             label: '福州市',
-                            value: 'fuzhou'
+                            value: 'fuzhou',
+                            children: [
+                                {
+                                    label: '闽侯县',
+                                    value: 'minhou'
+                                },
+                                {
+                                    label: '鼓楼区',
+                                    value: 'gulou'
+                                },
+                                {
+                                    label: '台江区',
+                                    value: 'taijiang'
+                                },
+                                {
+                                    label: '晋安区',
+                                    value: 'jinan'
+                                }
+                            ]
                         },
                         {
                             label: '泉州',
-                            value: 'quanzhou'
+                            value: 'quanzhou',
+                            disabled: true
                         },
                         {
                             label: '漳州',
@@ -62,19 +102,107 @@ export default defineComponent({
                     children: [
                         {
                             label: '玉林市',
-                            value: 'yulin'
+                            value: 'yulin',
+                            children: [
+                                {
+                                    label: '玉州区',
+                                    value: 'yuzhouqu'
+                                },
+                                {
+                                    label: '北流市',
+                                    value: 'beiliushi'
+                                },
+                                {
+                                    label: '博白县',
+                                    value: 'bobaixian'
+                                },
+                                {
+                                    label: '容县',
+                                    value: 'rongxian'
+                                },
+                                {
+                                    label: '福绵区',
+                                    value: 'fumian'
+                                },
+                                {
+                                    label: '玉东新区',
+                                    value: 'yudong'
+                                }
+                            ]
                         },
                         {
                             label: '南宁市',
-                            value: 'nanning'
+                            value: 'nanning',
+                            children: [
+                                {
+                                    label: '青秀区',
+                                    value: 'qingxiu'
+                                },
+                                {
+                                    label: '西乡塘区',
+                                    value: 'xixiangtang'
+                                },
+                                {
+                                    label: '朗东新区',
+                                    value: 'langdong'
+                                },
+                                {
+                                    label: '五象新区',
+                                    value: 'wuxiang'
+                                }
+                            ]
                         },
                         {
                             label: '柳州市',
-                            value: 'liuzhou'
+                            value: 'liuzhou',
+                            children: [
+                                {
+                                    label: '城中区',
+                                    value: 'chengzhong'
+                                },
+                                {
+                                    label: '鱼峰区',
+                                    value: 'yufeng'
+                                },
+                                {
+                                    label: '柳南区',
+                                    value: 'liunan'
+                                },
+                                {
+                                    label: '柳北区',
+                                    value: 'liubei'
+                                }
+                            ]
                         },
                         {
                             label: '桂林市',
-                            value: 'guilin'
+                            value: 'guilin',
+                            children: [
+                                {
+                                    label: '秀峰区',
+                                    value: 'xiufeng'
+                                },
+                                {
+                                    label: '叠彩区',
+                                    value: 'diecai'
+                                },
+                                {
+                                    label: '七星区',
+                                    value: 'qixing'
+                                },
+                                {
+                                    label: '雁山区',
+                                    value: 'yanshan'
+                                },
+                                {
+                                    label: '象山区',
+                                    value: 'xiangshan'
+                                },
+                                {
+                                    label: '临桂区',
+                                    value: 'lingui'
+                                }
+                            ]
                         }
                     ]
                 },
