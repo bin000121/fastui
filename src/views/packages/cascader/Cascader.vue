@@ -20,6 +20,11 @@
             :placeholder="placeholder || '请选择内容'"
         >
         <i class="f-icon-arrow-down-bold icon" :class="{'icon-rotate': isShowPanel}"></i>
+        <i
+            v-if="clearable"
+            class="f-icon-close-bold iconClose"
+            @click.stop="handleClear"
+        ></i>
 
         <template v-if="isRenderPanel">
             <transition
@@ -91,7 +96,7 @@ import type { PropType } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 import { isEmpty } from '/@/utils/utils'
 export default defineComponent({
-    emits: ['update:value', 'change', 'show', 'showed', 'hide', 'hided'],
+    emits: ['update:value', 'change', 'clear', 'show', 'showed', 'hide', 'hided'],
     props: {
         value: {
             type: Array as PropType<string[] | number[]>,
@@ -132,7 +137,10 @@ export default defineComponent({
             default: '/'
         },
         filterable: Boolean,
+        clearable: Boolean,
         foldTag: Boolean,
+        stopOnSelect: Boolean,
+        alwaysSelectLast: Boolean
     },
     setup (props, { emit }) {
         const id = getRandomId('f-cascader')
@@ -172,12 +180,21 @@ export default defineComponent({
             isShowPanel.value = false
         }
 
+        // 清空Input
+        const handleClear = () => {
+            emit('clear')
+            console.log('清空事件！')
+        }
+
         const handleClick = (data: OptionsData, level: number) => {
             if (data.disabled) return
+            console.log(treeData.value.length)
             currentLabel.value[level] = data[labelKey]
             currentValue.value[level] = data[valueKey]
+            // 在没有下级children的情况下关闭级联面板
             if (data?.[childKey]?.length) treeData.value[level + 1] = data[childKey]
             else {
+                // 如果存在format，那就将结果通过format包装后返回
                 cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
                 console.log(currentLabel.value)
                 handleHidePanel()
@@ -212,11 +229,11 @@ export default defineComponent({
             cascaderDom.style.setProperty('--height', `${height}px`)
         }
 
-        // watch(() => isShowPanel.value, (newV: boolean) => {
-        //     setTimeout(() => {
-        //         if (!newV) treeData.value = props.options ? [props.options] : []
-        //     }, 150)
-        // })
+        watch(() => isShowPanel.value, (newV: boolean) => {
+            setTimeout(() => {
+                if (!newV) treeData.value = props.options ? [props.options] : []
+            }, 150)
+        })
 
         watch(() => props.options, () => {
             initIsRenderPanel()
@@ -248,6 +265,7 @@ export default defineComponent({
             togglePanel,
             handleHidePanel,
             handleClick,
+            handleClear,
         }
     }
 })
@@ -267,8 +285,11 @@ export default defineComponent({
     font-size: 14px!important;
     &:not(.f-cascader__disabled):hover{
         border-color: var(--primary);
+        i.iconClose{
+            display: inline-block;
+        }
     }
-    i.icon{
+    i.icon, i.iconClose{
         color: #bbb;
         font-size: 14px;
         position: absolute;
@@ -279,6 +300,18 @@ export default defineComponent({
     }
     i.icon-rotate{
         transform: translateY(-50%) rotate(180deg);
+    }
+    i.iconClose{
+        box-sizing: border-box;
+        display: none;
+        background-color: #aaa;
+        border-radius: 50%;
+        color: #fff;
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        font-size: 12px;
+        cursor: pointer;
     }
 }
 .f-cascader__focus{
@@ -317,16 +350,28 @@ export default defineComponent({
 .f-cascader-panel{
     display: flex;
     box-sizing: border-box;
-    border: 1px solid #ddd;
+    box-shadow: 0 2px 7px #bbb;
     background-color: #fff;
     position: absolute;
     left: 0;
     border-radius: 5px;
     ul{
         padding: 4px 0;
-        min-height: 150px;
-        max-height: 200px;
+        height: 180px;
         margin: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        &::-webkit-scrollbar{
+            width: 6px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background-color: #ddd;
+            border-radius: 20px;
+            &:hover{
+                background-color: #ccc;
+            }
+        }
+        
         &:not(:last-child){
             border-right: 1px solid #ddd;
         }

@@ -613,7 +613,7 @@ export default defineComponent({
     left: 0;
     z-index: 100;
     background-color: #fff;
-    border: 1px solid #ccc;
+    box-shadow: 0 1px 5px #bbb;
     border-radius: 5px;
     padding: 5px 0;
 }
