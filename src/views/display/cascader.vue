@@ -7,8 +7,9 @@
             <p>基础的使用方式。</p>
 
             <div class="demo-cascader">
+                <p>当前选中：{{cascaderValue}}</p>
                 <f-cascader
-                    v-model:value="data"
+                    v-model:value="cascaderValue"
                     :options="options"
                 />
             </div>
@@ -21,7 +22,7 @@ import {
     defineComponent,
     reactive,
     toRefs,
-
+    watch
 } from 'vue'
 import fCascader from '/@/views/packages/cascader/Cascader.vue'
 
@@ -31,7 +32,7 @@ export default defineComponent({
     },
     setup () {
         const data = reactive({
-            data: [],
+            cascaderValue: [],
             options: [
                 {
                     label: '福建省',
@@ -48,18 +49,6 @@ export default defineComponent({
                                 {
                                     label: '思明区',
                                     value: 'siming'
-                                },
-                                {
-                                    label: '翔安区',
-                                    value: 'xiangan'
-                                },
-                                {
-                                    label: '湖里区',
-                                    value: 'huli'
-                                },
-                                {
-                                    label: '海沧区',
-                                    value: 'haicang'
                                 }
                             ]
                         },
@@ -74,26 +63,9 @@ export default defineComponent({
                                 {
                                     label: '鼓楼区',
                                     value: 'gulou'
-                                },
-                                {
-                                    label: '台江区',
-                                    value: 'taijiang'
-                                },
-                                {
-                                    label: '晋安区',
-                                    value: 'jinan'
                                 }
                             ]
                         },
-                        {
-                            label: '泉州',
-                            value: 'quanzhou',
-                            disabled: true
-                        },
-                        {
-                            label: '漳州',
-                            value: 'zhangzhou'
-                        }
                     ]
                 },
                 {
@@ -109,24 +81,8 @@ export default defineComponent({
                                     value: 'yuzhouqu'
                                 },
                                 {
-                                    label: '北流市',
-                                    value: 'beiliushi'
-                                },
-                                {
-                                    label: '博白县',
-                                    value: 'bobaixian'
-                                },
-                                {
-                                    label: '容县',
-                                    value: 'rongxian'
-                                },
-                                {
                                     label: '福绵区',
                                     value: 'fumian'
-                                },
-                                {
-                                    label: '玉东新区',
-                                    value: 'yudong'
                                 }
                             ]
                         },
@@ -139,71 +95,12 @@ export default defineComponent({
                                     value: 'qingxiu'
                                 },
                                 {
-                                    label: '西乡塘区',
-                                    value: 'xixiangtang'
-                                },
-                                {
-                                    label: '朗东新区',
-                                    value: 'langdong'
-                                },
-                                {
-                                    label: '五象新区',
-                                    value: 'wuxiang'
+                                    label: '良庆区',
+                                    value: 'liangqing'
                                 }
+
                             ]
                         },
-                        {
-                            label: '柳州市',
-                            value: 'liuzhou',
-                            children: [
-                                {
-                                    label: '城中区',
-                                    value: 'chengzhong'
-                                },
-                                {
-                                    label: '鱼峰区',
-                                    value: 'yufeng'
-                                },
-                                {
-                                    label: '柳南区',
-                                    value: 'liunan'
-                                },
-                                {
-                                    label: '柳北区',
-                                    value: 'liubei'
-                                }
-                            ]
-                        },
-                        {
-                            label: '桂林市',
-                            value: 'guilin',
-                            children: [
-                                {
-                                    label: '秀峰区',
-                                    value: 'xiufeng'
-                                },
-                                {
-                                    label: '叠彩区',
-                                    value: 'diecai'
-                                },
-                                {
-                                    label: '七星区',
-                                    value: 'qixing'
-                                },
-                                {
-                                    label: '雁山区',
-                                    value: 'yanshan'
-                                },
-                                {
-                                    label: '象山区',
-                                    value: 'xiangshan'
-                                },
-                                {
-                                    label: '临桂区',
-                                    value: 'lingui'
-                                }
-                            ]
-                        }
                     ]
                 },
             ]

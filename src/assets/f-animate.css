@@ -44,7 +44,7 @@
 /*f-select*/
 .f-select-fade-enter-from,
 .f-select-fade-leave-to{
-    transform: translateY(var(--translateY)) scale(.98);
+    transform: translateY(var(--translateY)) scale(.96);
     opacity: 0;
 }
 .f-select-fade-enter-active,

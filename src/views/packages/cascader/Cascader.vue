@@ -96,7 +96,7 @@ import type { PropType } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 import { isEmpty } from '/@/utils/utils'
 export default defineComponent({
-    emits: ['update:value', 'change', 'clear', 'show', 'showed', 'hide', 'hided'],
+    emits: ['change', 'update:value', 'clear', 'show', 'showed', 'hide', 'hided'],
     props: {
         value: {
             type: Array as PropType<string[] | number[]>,
@@ -153,21 +153,23 @@ export default defineComponent({
         const isFocus = ref(false)
         const isShowPanel = ref(false)
         const isRenderPanel = ref(true)
-        const currentValue: any = ref([])
-        const currentLabel: any = ref([])
-        const treeData: any = ref(props.options ? [props.options] : [])
+        // const currentValue: any = ref([])
+        // const currentLabel: any = ref([])
+        let currentValue: Array<string | number> = []
+        let currentLabel: string[] = []
+        const treeData: any = ref([])
 
         const {
             label: labelKey,
             value: valueKey,
-            children: childKey,
+            children: childrenKey,
             disabled: disabledKey
         } = props.props
 
         let level = 0
 
         const isActive = computed(() => {
-            return (val: number | string) => currentValue.value.includes(val)
+            return (val: number | string) => currentValue.includes(val)
         })
 
         const togglePanel = () => {
@@ -188,28 +190,38 @@ export default defineComponent({
 
         const handleClick = (data: OptionsData, level: number) => {
             if (data.disabled) return
-            console.log(treeData.value.length)
-            currentLabel.value[level] = data[labelKey]
-            currentValue.value[level] = data[valueKey]
+            currentLabel[level] = data[labelKey]
+            currentValue[level] = data[valueKey]
             // 在没有下级children的情况下关闭级联面板
-            if (data?.[childKey]?.length) treeData.value[level + 1] = data[childKey]
+            if (data?.[childrenKey]?.length) treeData.value[level + 1] = data[childrenKey]
             else {
                 // 如果存在format，那就将结果通过format包装后返回
-                cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
-                console.log(currentLabel.value)
+                cascaderIptDom.value = props?.format?.(currentLabel) || currentLabel.join(` ${props.separator} `)
                 handleHidePanel()
-                emit('update:value', currentValue.value)
+                emit('update:value', currentValue)
             }
         }
 
-        const getOptions = (data: OptionsData[]) => {
-            // level++
-            // let options =  data.reduce((pre, cur) => {
-            //     const { children, ...options} = cur
-            //     pre.push(options)
-            //     return pre
-            // }, [] as OptionsData[])
-            // treeData.value.push(options)
+        // 拼凑出选项面板的数据
+        const getOptions = () => {
+            // 私有函数，用作递归
+            const _getOptions = (data: OptionsData[]) => {
+                let val = props.value[idx]
+                if (!val) return
+                for (const item of data) {
+                    if (item[valueKey] !== val) continue
+                    idx ++
+                    if (!item?.[childrenKey]?.length) return
+                    treeData.push(item[childrenKey])
+                    _getOptions(item[childrenKey])
+                }
+            }
+            if (!isRenderPanel.value) return []
+            let treeData = [props.options]
+            if (!props?.value?.length) return treeData
+            let idx = 0
+            _getOptions(props.options!)
+            return treeData
         }
 
         // 初始化是否展示级联面板
@@ -230,9 +242,11 @@ export default defineComponent({
         }
 
         watch(() => isShowPanel.value, (newV: boolean) => {
-            setTimeout(() => {
-                if (!newV) treeData.value = props.options ? [props.options] : []
-            }, 150)
+            if (newV) {
+                treeData.value = getOptions()
+                level = treeData.value.length
+                currentValue = props.value ? [...props.value!] : []
+            }
         })
 
         watch(() => props.options, () => {
@@ -247,7 +261,6 @@ export default defineComponent({
             cascaderDom = cascader.value!
             cascaderIptDom = cascaderIpt.value!
             cascaderPanelDom = cascaderPanel.value!
-            if (props.options) getOptions(props.options)
             initIsRenderPanel()
             initCascaderPanelPosition()
         })
@@ -261,6 +274,7 @@ export default defineComponent({
             isRenderPanel,
             treeData,
             currentValue,
+            currentLabel,
             isActive,
             togglePanel,
             handleHidePanel,
@@ -371,13 +385,13 @@ export default defineComponent({
                 background-color: #ccc;
             }
         }
-        
         &:not(:last-child){
             border-right: 1px solid #ddd;
         }
         li{
             min-width: 100px;
             max-width: 150px;
+            line-height: 20px;
             user-select: none;
             overflow: hidden;
             text-overflow: ellipsis;
