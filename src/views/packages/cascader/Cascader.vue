@@ -99,7 +99,7 @@ export default defineComponent({
     emits: ['change', 'update:value', 'clear', 'show', 'showed', 'hide', 'hided'],
     props: {
         value: {
-            type: Array as PropType<string[] | number[]>,
+            type: Array as PropType<(string | number)[]>,
             required: true
         },
         placeholder: String,
@@ -155,7 +155,7 @@ export default defineComponent({
         const isRenderPanel = ref(true)
         // const currentValue: any = ref([])
         // const currentLabel: any = ref([])
-        let currentValue: Array<string | number> = []
+        let currentValue: (string | number)[] = []
         let currentLabel: string[] = []
         const treeData: any = ref([])
 
