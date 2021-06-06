@@ -3,13 +3,17 @@ export function getScrollbarWidth(): number {
     return window.innerWidth - document.body.offsetWidth
 }
 
-interface resObjType {
+interface IsEmptyResObjType {
     [key: string] : boolean
 }
+
+// 获取传入数据类型
+const _getType = (value: any): string => Object.prototype.toString.call(value)
+
+
 // 监测是否空类型
 export function isEmpty(data: any) {
-    const _getType = (value: any): string => Object.prototype.toString.call(value)
-    let resObj: resObjType = {
+    let resObj: IsEmptyResObjType = {
         '[object Boolean]': true,
         '[object Number]': true,
         '[object RegExp]': true,
@@ -29,6 +33,56 @@ export function isEmpty(data: any) {
 
     return !!Object.values(data).length
 }
+
+interface IsEqualResObjType {
+    [key: string] : boolean
+}
+
+// 检测是否相等
+// export function isEqual (value: any, value2: any) {
+//     const _isEmptyArray = (data: any[], data2: any[]) => {
+//         if (data.length !== data2.length) return false
+//         let length = data.length
+//         for (const item of data) {
+//             return
+//         }
+//         return false
+//     }
+//
+//     const _isEmptyObject = (data: object, data2: object) => {
+//         let length = Object.keys(data).length
+//         let length2 = Object.keys(data2).length
+//         if (length !== length2) return false
+//         for (let key in data) {
+//             if (!data2?[key]) return false
+//             let value = data[key]
+//             let value2 = data[key]
+//             isEqual(value, value2)
+//         }
+//     }
+//
+//     let simpleObj: IsEqualResObjType = {
+//
+//     }
+//
+//     let resObj: IsEqualResObjType = {
+//         '[object Boolean]': value === value2,
+//         '[object Number]': value === value2,
+//         '[object RegExp]': false,
+//         '[object Error]': false,
+//         '[object Function]': false,
+//         '[object Null]': value === value2,
+//         '[object Undefined]': value === value2,
+//         '[object Array]': _isEmptyArray(value, value2),
+//         '[object Object]': _isEmptyObject(value, value2)
+//     }
+//
+//     // 如果类型都不对，那就当然不相等
+//     if (_getType(value) !== _getType(value2)) return false
+//     return resObj[_getType(value)]
+// }
+
+
 
 // 函数节流
 export function throttle (fn: Function, delay: number) {

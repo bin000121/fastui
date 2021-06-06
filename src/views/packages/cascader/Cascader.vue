@@ -21,12 +21,13 @@
         >
         <i class="f-icon-arrow-down-bold icon" :class="{'icon-rotate': isShowPanel}"></i>
         <i
-            v-if="clearable"
+            v-if="clearable && currentValue.length"
             class="f-icon-close-bold iconClose"
             @click.stop="handleClear"
+            title="清空所选"
         ></i>
 
-        <template v-if="isRenderPanel">
+        <template v-if="!disabled">
             <transition
                 name="f-select-fade"
                 @before-enter="$emit('show')"
@@ -35,34 +36,45 @@
                 @after-leave="$emit('hided')"
             >
                 <div
-                    class="f-cascader-panel"
+                    :class="{
+                        'f-cascader-panel': true,
+                        ['f-cascader-panel__' + placement.split('-')[0]]: true,
+                        'f-cascader__empty': isEmptyOptions
+                    }"
                     v-show="isShowPanel"
                     ref="cascaderPanel"
                     @click.stop
                 >
-                    <ul
-                        v-for="(item, level) in treeData"
-                        :key="level"
-                    >
-                        <template v-if="item !== 'none'">
-                            <li
-                                v-for="subItem in item"
-                                :key="subItem[props.value]"
-                                @click="handleClick(subItem, level)"
-                                :class="{
-                                    'is-active': isActive(subItem[props.value]),
+                    <template v-if="isEmptyOptions">
+                        <slot name="empty" v-if="$slots.empty"></slot>
+                        <span v-else>暂无数据</span>
+                    </template>
+                    <template v-else>
+                        <ul
+                            v-for="(item, level) in treeData"
+                            :key="level"
+                        >
+                            <template v-if="item !== 'none'">
+                                <li
+                                    v-for="subItem in item"
+                                    :key="subItem[props.value]"
+                                    @click="handleClick(subItem, level)"
+                                    @mouseenter="handleHover(subItem, level)"
+                                    :class="{
+                                    'is-active': level <= level && isActive(subItem[props.value]),
                                     'options__disabled': subItem[props.disabled],
                                 }"
-                                :title="subItem[props.label]"
-                            >
-                                {{subItem[props.label]}}
-                                <i
-                                    class="f-icon-arrow-right-bold right-icon"
-                                    v-if="subItem[props.children]"
-                                ></i>
-                            </li>
-                        </template>
-                    </ul>
+                                    :title="subItem[props.label]"
+                                >
+                                    {{subItem[props.label]}}
+                                    <i
+                                        class="f-icon-arrow-right-bold right-icon"
+                                        v-if="subItem[props.children]"
+                                    ></i>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
                 </div>
             </transition>
         </template>
@@ -90,6 +102,7 @@ import {
     ref,
     watch,
     computed,
+    nextTick,
     onMounted,
 } from 'vue'
 import type { PropType } from 'vue'
@@ -152,11 +165,9 @@ export default defineComponent({
         let cascaderPanelDom: HTMLElement
         const isFocus = ref(false)
         const isShowPanel = ref(false)
-        const isRenderPanel = ref(true)
-        // const currentValue: any = ref([])
-        // const currentLabel: any = ref([])
-        let currentValue: (string | number)[] = []
-        let currentLabel: string[] = []
+        const isEmptyOptions = ref(isEmpty(props.options))
+        const currentValue = ref([] as (string | number)[])
+        const currentLabel: any = ref([] as string[])
         const treeData: any = ref([])
 
         const {
@@ -166,10 +177,10 @@ export default defineComponent({
             disabled: disabledKey
         } = props.props
 
-        let level = 0
+        const level = ref(0)
 
         const isActive = computed(() => {
-            return (val: number | string) => currentValue.includes(val)
+            return (val: number | string) => currentValue.value.includes(val)
         })
 
         const togglePanel = () => {
@@ -184,26 +195,56 @@ export default defineComponent({
 
         // 清空Input
         const handleClear = () => {
+            cascaderIptDom.value = ''
+            currentLabel.value = []
+            currentValue.value = []
             emit('clear')
-            console.log('清空事件！')
+            emit('update:value', [])
+            handleHidePanel()
         }
 
-        const handleClick = (data: OptionsData, level: number) => {
+        const handleHover = (data: OptionsData, levelNum: number) => {
+            if (props.trigger === 'hover' &&
+                !isEmpty(data.children)
+            ) handleChoseOption(data, levelNum)
+        }
+
+        const handleClick = (data: OptionsData, levelNum: number) => {
+            if (props.trigger === 'click' ||
+                isEmpty(data.children)
+            ) handleChoseOption(data, levelNum)
+        }
+
+        // 处理函数
+        const handleChoseOption = (data: OptionsData, levelNum: number) => {
             if (data.disabled) return
-            currentLabel[level] = data[labelKey]
-            currentValue[level] = data[valueKey]
+            const {
+                [labelKey]: label,
+                [valueKey]: value,
+                [childrenKey]: children = []
+            } = data
+            currentLabel .value = currentLabel.value.slice(0, levelNum)
+            currentValue.value = currentValue.value.slice(0, levelNum)
+            currentLabel.value[levelNum] = label
+            currentValue.value[levelNum] = value
             // 在没有下级children的情况下关闭级联面板
-            if (data?.[childrenKey]?.length) treeData.value[level + 1] = data[childrenKey]
+            if (children?.length) {
+                level.value = levelNum + 1
+                treeData.value = treeData.value.slice(0, levelNum + 1)
+                treeData.value[levelNum + 1] = children
+            }
             else {
                 // 如果存在format，那就将结果通过format包装后返回
-                cascaderIptDom.value = props?.format?.(currentLabel) || currentLabel.join(` ${props.separator} `)
+                cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
                 handleHidePanel()
-                emit('update:value', currentValue)
+                emit('update:value', currentValue.value)
             }
         }
 
         // 拼凑出选项面板的数据
         const getOptions = () => {
+            if (props.disabled) return []
+            currentLabel.value = []
             // 私有函数，用作递归
             const _getOptions = (data: OptionsData[]) => {
                 let val = props.value[idx]
@@ -211,49 +252,49 @@ export default defineComponent({
                 for (const item of data) {
                     if (item[valueKey] !== val) continue
                     idx ++
+                    currentLabel.value.push(item[labelKey])
                     if (!item?.[childrenKey]?.length) return
                     treeData.push(item[childrenKey])
                     _getOptions(item[childrenKey])
                 }
             }
-            if (!isRenderPanel.value) return []
             let treeData = [props.options]
             if (!props?.value?.length) return treeData
+            // 往下走说明props.value有值
             let idx = 0
             _getOptions(props.options!)
+            cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
             return treeData
-        }
-
-        // 初始化是否展示级联面板
-        const initIsRenderPanel = () => {
-            isRenderPanel.value = !props.disabled && !isEmpty(props.options)
         }
 
         // 初始化级联面板的y轴定位
         const initCascaderPanelPosition = () => {
-            if (!isRenderPanel.value) return
+            if (props.disabled) return
             const [y] = props.placement.split('-')
             // 增加一点距离是因为要留出三角箭头的位置
             const height = cascaderDom.offsetHeight + 10
             let yValue = y === 'top' ? -15 : 15
-            cascaderPanelDom.classList.add('f-cascader-panel__' + y)
             cascaderDom.style.setProperty('--translateY', `${yValue}px`)
             cascaderDom.style.setProperty('--height', `${height}px`)
         }
 
+        watch(() => props.disabled, (newV: boolean) => {
+            if (!newV) initCascaderPanelPosition()
+        })
+
         watch(() => isShowPanel.value, (newV: boolean) => {
             if (newV) {
                 treeData.value = getOptions()
-                level = treeData.value.length
-                currentValue = props.value ? [...props.value!] : []
+                level.value = treeData.value?.length - 1 || 0
+                currentValue.value = props.value ? [...props.value!] : []
             }
         })
 
-        watch(() => props.options, () => {
-            initIsRenderPanel()
+        watch(() => props.options, (newV: OptionsData[] | undefined) => {
+            isEmptyOptions.value = isEmpty(newV)
         }, { immediate: true, deep: true })
 
-        watch(() => props.placement, () => {
+        watch(() => [props.placement, props.size], () => {
             initCascaderPanelPosition()
         })
 
@@ -261,8 +302,8 @@ export default defineComponent({
             cascaderDom = cascader.value!
             cascaderIptDom = cascaderIpt.value!
             cascaderPanelDom = cascaderPanel.value!
-            initIsRenderPanel()
             initCascaderPanelPosition()
+            if (!isEmpty(props.value)) getOptions()
         })
         return{
             id,
@@ -271,14 +312,16 @@ export default defineComponent({
             cascaderPanel,
             isFocus,
             isShowPanel,
-            isRenderPanel,
+            isEmptyOptions,
             treeData,
             currentValue,
             currentLabel,
             isActive,
+            level,
             togglePanel,
             handleHidePanel,
             handleClick,
+            handleHover,
             handleClear,
         }
     }
@@ -290,7 +333,6 @@ export default defineComponent({
     --translateY: 15px;
     --height: 20px;
     position: relative;
-    height: 40px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
@@ -318,7 +360,7 @@ export default defineComponent({
     i.iconClose{
         box-sizing: border-box;
         display: none;
-        background-color: #aaa;
+        background-color: #ccc;
         border-radius: 50%;
         color: #fff;
         width: 14px;
@@ -326,7 +368,23 @@ export default defineComponent({
         text-align: center;
         font-size: 12px;
         cursor: pointer;
+        transition: background-color .2s ease-in-out;
+        &:hover{
+            background-color: #aaa;
+        }
     }
+}
+.f-cascader__large .f-cascader-input{
+    height: 38px!important;
+    line-height: 38px!important;
+    padding: 6px 24px 6px 12px;
+    font-size: 16px;
+}
+.f-cascader__small .f-cascader-input{
+    height: 22px!important;
+    line-height: 22px!important;
+    font-size: 12px!important;
+    padding: 2px 24px 2px 12px;
 }
 .f-cascader__focus{
     border-color: var(--primary);
@@ -339,27 +397,18 @@ export default defineComponent({
         cursor: not-allowed;
     }
 }
-.f-cascader__small{
-    .f-cascader-input{
-        font-size: 12px!important;
-    }
-    height: 36px;
-}
-.f-cascader__large{
-    .f-cascader-input{
-        font-size: 16px!important;
-    }
-    height: 44px;
-}
 .f-cascader-input{
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
+    height: 30px;
+    line-height: 30px;
     outline: none;
     border-radius: 5px;
     overflow: hidden;
     border: 0;
-    padding: 6px 24px 6px 12px;
+    padding: 4px 24px 4px 12px;
+    font-size: 14px;
 }
 .f-cascader-panel{
     display: flex;
@@ -369,6 +418,7 @@ export default defineComponent({
     position: absolute;
     left: 0;
     border-radius: 5px;
+    z-index: 999;
     ul{
         padding: 4px 0;
         height: 180px;
@@ -389,7 +439,7 @@ export default defineComponent({
             border-right: 1px solid #ddd;
         }
         li{
-            min-width: 100px;
+            min-width: 120px;
             max-width: 150px;
             line-height: 20px;
             user-select: none;
@@ -398,11 +448,10 @@ export default defineComponent({
             white-space: nowrap;
             box-sizing: border-box;
             font-size: 14px;
-            padding: 6px 26px 6px 10px;
+            padding: 6px 26px 6px 15px;
             position: relative;
             cursor: pointer;
             color: #333;
-            transition: all .15s ease-in-out;
             &:not(.options__disabled):hover{
                 background-color: #f2f2f2;
             }
@@ -424,6 +473,15 @@ export default defineComponent({
             right: calc(.4em);
         }
     }
+}
+
+.f-cascader__empty{
+    min-width: 100px;
+    padding: 10px 12px;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 14px;
 }
 .f-cascader-panel__top{
     bottom: var(--height)

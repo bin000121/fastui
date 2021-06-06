@@ -171,6 +171,10 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/cascader.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '自定义显示': 'zi_ding_yi_xian_shi',
+                    '尺寸': 'chi_cun',
+                    '可清空': 'ke_qing_kong',
+                    '触发方式': 'chu_fa_fang_shi',
                 }
             },
             {
