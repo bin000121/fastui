@@ -104,6 +104,7 @@ import {
     watch,
     computed,
     onMounted,
+    onUnmounted
 } from 'vue'
 import type { PropType } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
@@ -193,6 +194,12 @@ export default defineComponent({
         const handleHidePanel = () => {
             if (props.disabled) return
             isShowPanel.value = false
+        }
+
+        // 按下esc关闭级联面板
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!isShowPanel.value || props.disabled) return
+            if (e.key === 'Escape' && e.keyCode === 27) handleHidePanel()
         }
 
         // 清空Input
@@ -332,6 +339,10 @@ export default defineComponent({
             cascaderPanelDom = cascaderPanel.value!
             initCascaderPanelPosition()
             if (!isEmpty(props.value)) getOptions()
+            document.addEventListener('keydown', handleKeyDown)
+        })
+        onUnmounted(() => {
+            document.removeEventListener('keydown', handleKeyDown)
         })
         return{
             id,
@@ -352,6 +363,7 @@ export default defineComponent({
             handleHover,
             handleHoverLeave,
             handleClear,
+            handleKeyDown,
         }
     }
 })
