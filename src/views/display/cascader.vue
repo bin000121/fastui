@@ -269,19 +269,23 @@
             <p>清空你的级联选择器选择结果，同时向外触发监听的clear事件。</p>
 
             <div class="demo-cascader">
+                <p>清空次数： {{ num }}</p>
                 <f-cascader
                     v-model:value="cascaderValue8"
                     :options="options"
+                    @clear="handleClear"
                     clearable
                 />
             </div>
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-cascader
+    {{`<p>清空次数： \{\{ num \}\}</p>
+    <f-cascader
         v-model:value="cascaderValue"
         :options="options"
         clearable
+        @clear="handleClear"
     />
 
 
@@ -295,9 +299,16 @@
     export default defineComponent({
         setup () {
             const data = reactive({
+                num: 0,
                 cascaderValue: []
             })
-            return{ ...toRefs(data) }
+            const handleClear = () => {
+                data.num++
+            }
+            return{
+                handleClear,
+                ...toRefs(data)
+            }
         }
     })
     </script>`}}
@@ -367,6 +378,197 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="jin_yong">禁用
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
+            <p>为级联选择器或其选项添加禁用样式，您不可以与之交互。</p>
+
+            <div class="demo-cascader">
+                <p>1.禁用整体</p>
+                <f-cascader
+                    v-model:value="cascaderValue11"
+                    :options="options"
+                    disabled
+                />
+            </div>
+
+            <div class="demo-cascader">
+                <p>2.禁用选项</p>
+                <f-cascader
+                    v-model:value="cascaderValue11"
+                    :options="options2"
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<p>1.禁用整体</p>
+    <f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        disabled
+    />
+    <p>2.禁用选项</p>
+    <f-cascader
+        v-model:value="cascaderValue"
+        :options="options2"
+    />
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                cascaderValue: [],
+                options: [
+                    {
+                        label: '福建省',
+                        value: 'fujian',
+                        children: [
+                            {
+                                label: '厦门市',
+                                value: 'xiamen',
+                                disabled: true,
+                                children: [
+                                    {
+                                        label: '集美区',
+                                        value: 'jimei'
+                                    },
+                                    {
+                                        label: '思明区',
+                                        value: 'siming'
+                                    }
+                                ]
+                            },
+                            {
+                                label: '福州市',
+                                value: 'fuzhou',
+                                children: [
+                                    {
+                                        label: '闽侯县',
+                                        value: 'minhou',
+                                        disabled: true,
+                                    },
+                                    {
+                                        label: '鼓楼区',
+                                        value: 'gulou'
+                                    }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        label: '广西',
+                        value: 'guangxi',
+                        children: [
+                            {
+                                label: '玉林市',
+                                value: 'yulin',
+                                disabled: true,
+                                children: [
+                                    {
+                                        label: '玉州区',
+                                        value: 'yuzhouqu'
+                                    },
+                                    {
+                                        label: '福绵区',
+                                        value: 'fumian'
+                                    }
+                                ]
+                            },
+                            {
+                                label: '南宁市',
+                                value: 'nanning',
+                                children: [
+                                    {
+                                        label: '青秀区',
+                                        value: 'qingxiu',
+                                        disabled: true,
+                                    },
+                                    {
+                                        label: '良庆区',
+                                        value: 'liangqing'
+                                    }
+
+                                ]
+                            },
+                        ]
+                    },
+                ]
+            })
+            return{ ...toRefs(data) }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="zui_hou_yi_ji">只显示最后一级
+                <a href="#zui_hou_yi_ji" class="f-icon-anchor"></a>
+            </h3>
+            <p>级联选择器只显示您选择的最后一级。</p>
+
+            <div class="desc">
+                设置属性 <b>only-show-last</b> 即可生效。
+            </div>
+
+            <div>
+                <f-cascader
+                    v-model:value="cascaderValue12"
+                    :options="options"
+                    only-show-last
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        only-show-last
+    />`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="xuan_ze_ji_jie_guo">选择即停下
+                <a href="#xuan_ze_ji_jie_guo" class="f-icon-anchor"></a>
+            </h3>
+            <p>不必选择到最后一级，您可以在任意一级的选择停下，这可能需要你通过点击外部来关闭选择面板。</p>
+
+            <div class="desc">
+                设置属性 <b>stop-on-select</b> 即可生效，在此模式下，触发方式将锁定为<b>click</b>。
+            </div>
+
+            <div>
+                <f-cascader
+                    v-model:value="cascaderValue13"
+                    :options="options"
+                    stop-on-select
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        stop-on-select
+    />`}}
+                </code></pre>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -384,6 +586,7 @@ export default defineComponent({
     },
     setup () {
         const data = reactive({
+            num: 0,
             cascaderValue: [],
             cascaderValue2: [],
             cascaderValue3: [],
@@ -394,6 +597,9 @@ export default defineComponent({
             cascaderValue8: [],
             cascaderValue9: [],
             cascaderValue10: [],
+            cascaderValue11: [],
+            cascaderValue12: [],
+            cascaderValue13: [],
             options: [
                 {
                     label: '福建省',
@@ -464,9 +670,90 @@ export default defineComponent({
                         },
                     ]
                 },
-            ]
+            ],
+            options2: [
+                {
+                    label: '福建省',
+                    value: 'fujian',
+                    children: [
+                        {
+                            label: '厦门市',
+                            value: 'xiamen',
+                            disabled: true,
+                            children: [
+                                {
+                                    label: '集美区',
+                                    value: 'jimei'
+                                },
+                                {
+                                    label: '思明区',
+                                    value: 'siming'
+                                }
+                            ]
+                        },
+                        {
+                            label: '福州市',
+                            value: 'fuzhou',
+                            children: [
+                                {
+                                    label: '闽侯县',
+                                    value: 'minhou',
+                                    disabled: true,
+                                },
+                                {
+                                    label: '鼓楼区',
+                                    value: 'gulou'
+                                }
+                            ]
+                        },
+                    ]
+                },
+                {
+                    label: '广西',
+                    value: 'guangxi',
+                    children: [
+                        {
+                            label: '玉林市',
+                            value: 'yulin',
+                            disabled: true,
+                            children: [
+                                {
+                                    label: '玉州区',
+                                    value: 'yuzhouqu'
+                                },
+                                {
+                                    label: '福绵区',
+                                    value: 'fumian'
+                                }
+                            ]
+                        },
+                        {
+                            label: '南宁市',
+                            value: 'nanning',
+                            children: [
+                                {
+                                    label: '青秀区',
+                                    value: 'qingxiu',
+                                    disabled: true,
+                                },
+                                {
+                                    label: '良庆区',
+                                    value: 'liangqing'
+                                }
+
+                            ]
+                        },
+                    ]
+                },
+            ],
         })
+
+        const handleClear = () => {
+            data.num++
+        }
+
         return{
+            handleClear,
             ...toRefs(data),
         }
     }

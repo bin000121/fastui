@@ -60,6 +60,7 @@
                                     :key="subItem[props.value]"
                                     @click="handleClick(subItem, level)"
                                     @mouseenter="handleHover(subItem, level)"
+                                    @mouseleave="handleHoverLeave(subItem)"
                                     :class="{
                                     'is-active': level <= level && isActive(subItem[props.value]),
                                     'options__disabled': subItem[props.disabled],
@@ -102,7 +103,6 @@ import {
     ref,
     watch,
     computed,
-    nextTick,
     onMounted,
 } from 'vue'
 import type { PropType } from 'vue'
@@ -117,7 +117,7 @@ export default defineComponent({
         },
         placeholder: String,
         disabled: Boolean,
-        closeable: Boolean,
+        clearable: Boolean,
         placement: {
             type: String,
             default: 'bottom-left',
@@ -138,11 +138,15 @@ export default defineComponent({
                 disabled: 'disabled'
             })
         },
-        stopLevel: Number,
+        onlyShowLast: Boolean,
         trigger: {
             type: String,
             default: 'click',
             validator: (val: string) => ['click', 'hover'].includes(val)
+        },
+        hoverShowTime: {
+            type: Number,
+            default: 250
         },
         format: Function as PropType<(labelList: string[]) => string>,
         separator: {
@@ -150,10 +154,8 @@ export default defineComponent({
             default: '/'
         },
         filterable: Boolean,
-        clearable: Boolean,
         foldTag: Boolean,
         stopOnSelect: Boolean,
-        alwaysSelectLast: Boolean
     },
     setup (props, { emit }) {
         const id = getRandomId('f-cascader')
@@ -203,15 +205,29 @@ export default defineComponent({
             handleHidePanel()
         }
 
+        let timer: NodeJS.Timer
         const handleHover = (data: OptionsData, levelNum: number) => {
+            if (data?.disabled) return
             if (props.trigger === 'hover' &&
-                !isEmpty(data.children)
-            ) handleChoseOption(data, levelNum)
+                !isEmpty(data.children) &&
+                !props.stopOnSelect
+            ) timer = setTimeout(() => handleChoseOption(data, levelNum), props.hoverShowTime)
+        }
+
+        const handleHoverLeave = (data: OptionsData) => {
+            if (data?.disabled) return
+            if (props.trigger === 'hover' &&
+                !isEmpty(data.children) &&
+                !props.stopOnSelect &&
+                timer
+            ) clearTimeout(timer)
         }
 
         const handleClick = (data: OptionsData, levelNum: number) => {
+            if (data?.disabled) return
             if (props.trigger === 'click' ||
-                isEmpty(data.children)
+                isEmpty(data.children) ||
+                props.stopOnSelect
             ) handleChoseOption(data, levelNum)
         }
 
@@ -227,18 +243,30 @@ export default defineComponent({
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
-            // 在没有下级children的情况下关闭级联面板
+            // 最后一级没必要在向外触发一遍
+            if (props.stopOnSelect && children?.length) {
+                handleResLabel()
+                emit('update:value', currentValue.value)
+            }
+            // 判断是否走到了最后一级
             if (children?.length) {
                 level.value = levelNum + 1
                 treeData.value = treeData.value.slice(0, levelNum + 1)
                 treeData.value[levelNum + 1] = children
             }
-            else {
-                // 如果存在format，那就将结果通过format包装后返回
-                cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
+            else { // 在没有下级children的情况下关闭级联面板
+                handleResLabel()
                 handleHidePanel()
                 emit('update:value', currentValue.value)
             }
+        }
+
+        // 处理返回的label样式
+        const handleResLabel = () => {
+            // 判断是否只显示最后一级
+            if (props.onlyShowLast) currentLabel.value = currentLabel.value.slice(-1)
+            // 如果存在format，那就将结果通过format包装后返回
+            cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
         }
 
         // 拼凑出选项面板的数据
@@ -263,7 +291,7 @@ export default defineComponent({
             // 往下走说明props.value有值
             let idx = 0
             _getOptions(props.options!)
-            cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
+            handleResLabel()
             return treeData
         }
 
@@ -322,6 +350,7 @@ export default defineComponent({
             handleHidePanel,
             handleClick,
             handleHover,
+            handleHoverLeave,
             handleClear,
         }
     }
@@ -452,6 +481,7 @@ export default defineComponent({
             position: relative;
             cursor: pointer;
             color: #333;
+            transition: background-color .15s ease-in-out;
             &:not(.options__disabled):hover{
                 background-color: #f2f2f2;
             }

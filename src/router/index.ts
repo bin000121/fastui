@@ -175,6 +175,9 @@ const routes: RouteRecordRaw[] = [
                     '尺寸': 'chi_cun',
                     '可清空': 'ke_qing_kong',
                     '触发方式': 'chu_fa_fang_shi',
+                    '禁用': 'jin_yong',
+                    '只显示最后一级': 'zui_hou_yi_ji',
+                    '选择即停下': 'xuan_ze_ji_jie_guo',
                 }
             },
             {
