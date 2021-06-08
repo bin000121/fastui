@@ -302,6 +302,36 @@ export default defineComponent({
             return treeData
         }
 
+        //获取所有路径
+        const flatOptions = () => {
+            let labelList: any = []
+            let valueList: any = []
+            const _flatOptions = (options: OptionsData[], labelArr = [], valueArr = []) => {
+                let _labelList: any = [...labelArr]
+                let _valueList: any = [...valueArr]
+                for (const item of options) {
+                    const {
+                        [labelKey]: label,
+                        [valueKey]: value,
+                        [childrenKey]: children
+                    } = item
+                    _labelList.push(label)
+                    _valueList.push(value)
+                    if (children?.length){
+                        _flatOptions(children, _labelList, _valueList)
+                    } else {
+                        labelList.push(_labelList)
+                        valueList.push(_valueList)
+                    }
+                }
+            }
+            _flatOptions(props.options!)
+            return {
+                labelList,
+                valueList
+            }
+        }
+
         // 初始化级联面板的y轴定位
         const initCascaderPanelPosition = () => {
             if (props.disabled) return
@@ -339,6 +369,7 @@ export default defineComponent({
             cascaderPanelDom = cascaderPanel.value!
             initCascaderPanelPosition()
             if (!isEmpty(props.value)) getOptions()
+            console.log(flatOptions())
             document.addEventListener('keydown', handleKeyDown)
         })
         onUnmounted(() => {
