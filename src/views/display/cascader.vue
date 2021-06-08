@@ -569,6 +569,25 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="ke_sou_suo">可搜索
+                <a href="#ke_sou_suo" class="f-icon-anchor"></a>
+            </h3>
+            <p>输入关键字进行搜索并返回符合条件的选项。</p>
+
+            <div class="desc">
+                为其设置属性 <b>filterable</b> 即可开启搜索模式。
+            </div>
+            <div>
+                <f-cascader
+                    v-model:value="cascaderValue14"
+                    :options="options"
+                    filterable
+                />
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -600,6 +619,7 @@ export default defineComponent({
             cascaderValue11: [],
             cascaderValue12: [],
             cascaderValue13: [],
+            cascaderValue14: [],
             options: [
                 {
                     label: '福建省',

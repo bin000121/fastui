@@ -14,10 +14,13 @@
         <input
             type="text"
             class="f-cascader-input"
-            readonly
+            :readonly="!filterable"
             ref="cascaderIpt"
             autocomplete="off"
             :placeholder="placeholder || '请选择内容'"
+            @input="handleInput"
+            @compositionstart="compositionStart"
+            @compositionend="compositionEnd"
         >
         <i class="f-icon-arrow-down-bold icon" :class="{'icon-rotate': isShowPanel}"></i>
         <i
@@ -88,14 +91,20 @@ interface OptionsData {
     label?: string;
     children?: OptionsData[];
     disabled?: boolean;
+
     [key: string]: any;
 }
 
-interface Props{
+interface Props {
     label: string;
     value: string;
     disabled: string;
     children: string;
+}
+
+interface FilterObj {
+    labelList: Array<string[]>;
+    valueList: Array<string[]>;
 }
 
 import {
@@ -106,9 +115,10 @@ import {
     onMounted,
     onUnmounted
 } from 'vue'
-import type { PropType } from 'vue'
-import { getRandomId } from '/@/utils/getRandomId'
-import { isEmpty } from '/@/utils/utils'
+import type {PropType} from 'vue'
+import {getRandomId} from '/@/utils/getRandomId'
+import {isEmpty, debounce} from '/@/utils/utils'
+
 export default defineComponent({
     emits: ['change', 'update:value', 'clear', 'show', 'showed', 'hide', 'hided'],
     props: {
@@ -155,10 +165,16 @@ export default defineComponent({
             default: '/'
         },
         filterable: Boolean,
+        filterFunction: Function,
+        debounce: {
+            type: Number,
+            default: 300,
+            validator: (val: number) => val >= 0
+        },
         foldTag: Boolean,
         stopOnSelect: Boolean,
     },
-    setup (props, { emit }) {
+    setup(props, {emit}) {
         const id = getRandomId('f-cascader')
         const cascader = ref(null)
         const cascaderIpt = ref(null)
@@ -172,6 +188,8 @@ export default defineComponent({
         const currentValue = ref([] as (string | number)[])
         const currentLabel: any = ref([] as string[])
         const treeData: any = ref([])
+        let onComposition = ''
+        let filterObj: FilterObj
 
         const {
             label: labelKey,
@@ -238,7 +256,7 @@ export default defineComponent({
             ) handleChoseOption(data, levelNum)
         }
 
-        // 处理函数
+        // 选择处理函数
         const handleChoseOption = (data: OptionsData, levelNum: number) => {
             if (data.disabled) return
             const {
@@ -246,7 +264,7 @@ export default defineComponent({
                 [valueKey]: value,
                 [childrenKey]: children = []
             } = data
-            currentLabel .value = currentLabel.value.slice(0, levelNum)
+            currentLabel.value = currentLabel.value.slice(0, levelNum)
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
@@ -260,8 +278,7 @@ export default defineComponent({
                 level.value = levelNum + 1
                 treeData.value = treeData.value.slice(0, levelNum + 1)
                 treeData.value[levelNum + 1] = children
-            }
-            else { // 在没有下级children的情况下关闭级联面板
+            } else { // 在没有下级children的情况下关闭级联面板
                 handleResLabel()
                 handleHidePanel()
                 emit('update:value', currentValue.value)
@@ -286,7 +303,7 @@ export default defineComponent({
                 if (!val) return
                 for (const item of data) {
                     if (item[valueKey] !== val) continue
-                    idx ++
+                    idx++
                     currentLabel.value.push(item[labelKey])
                     if (!item?.[childrenKey]?.length) return
                     treeData.push(item[childrenKey])
@@ -302,31 +319,57 @@ export default defineComponent({
             return treeData
         }
 
+        const compositionStart = () => {
+            onComposition = 'compositionStart'
+        }
+
+        const compositionEnd = (e: InputEvent | any) => {
+            handleFilter(e.target.value)
+            setTimeout(() => {
+                onComposition = 'compositionEnd'
+            }, props.debounce)
+        }
+
+        const handleInput = debounce((e: InputEvent | any) => {
+            if (props.disabled ||
+                onComposition === 'compositionStart'
+            ) return
+            handleFilter(e.target.value)
+        }, props.debounce)
+
+        // 过滤、搜索函数
+        const handleFilter = (iptVal: string) => {
+            console.log(iptVal)
+        }
+
         //获取所有路径
         const flatOptions = () => {
-            let labelList: any = []
-            let valueList: any = []
-            const _flatOptions = (options: OptionsData[], labelArr = [], valueArr = []) => {
-                let _labelList: any = [...labelArr]
-                let _valueList: any = [...valueArr]
+            if (props.disabled) return
+            let labelList: Array<string[]> = []
+            let valueList: Array<string[]> = []
+            const _flatOptions = (options: OptionsData[], labelArr: string[] = [], valueArr: string[] = []) => {
                 for (const item of options) {
+
                     const {
                         [labelKey]: label,
                         [valueKey]: value,
-                        [childrenKey]: children
+                        [childrenKey]: children,
+                        [disabledKey]: disabled
                     } = item
+                    if (disabled) continue
+                    let _labelList: string[] = [...labelArr]
+                    let _valueList: string[] = [...valueArr]
                     _labelList.push(label)
                     _valueList.push(value)
-                    if (children?.length){
-                        _flatOptions(children, _labelList, _valueList)
-                    } else {
+                    if (children?.length) _flatOptions(children, _labelList, _valueList)
+                    else {
                         labelList.push(_labelList)
                         valueList.push(_valueList)
                     }
                 }
             }
             _flatOptions(props.options!)
-            return {
+            filterObj = {
                 labelList,
                 valueList
             }
@@ -357,11 +400,15 @@ export default defineComponent({
 
         watch(() => props.options, (newV: OptionsData[] | undefined) => {
             isEmptyOptions.value = isEmpty(newV)
-        }, { immediate: true, deep: true })
+        }, {immediate: true, deep: true})
 
         watch(() => [props.placement, props.size], () => {
             initCascaderPanelPosition()
         })
+
+        watch(() => props.filterable, (newV: boolean) => {
+            if (newV) flatOptions()
+        }, {immediate: true})
 
         onMounted(() => {
             cascaderDom = cascader.value!
@@ -369,13 +416,12 @@ export default defineComponent({
             cascaderPanelDom = cascaderPanel.value!
             initCascaderPanelPosition()
             if (!isEmpty(props.value)) getOptions()
-            console.log(flatOptions())
             document.addEventListener('keydown', handleKeyDown)
         })
         onUnmounted(() => {
             document.removeEventListener('keydown', handleKeyDown)
         })
-        return{
+        return {
             id,
             cascader,
             cascaderIpt,
@@ -395,13 +441,16 @@ export default defineComponent({
             handleHoverLeave,
             handleClear,
             handleKeyDown,
+            handleInput,
+            compositionStart,
+            compositionEnd,
         }
     }
 })
 </script>
 
 <style scoped lang="scss">
-.f-cascader{
+.f-cascader {
     --translateY: 15px;
     --height: 20px;
     position: relative;
@@ -410,14 +459,17 @@ export default defineComponent({
     box-sizing: border-box;
     display: inline-flex;
     transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
-    font-size: 14px!important;
-    &:not(.f-cascader__disabled):hover{
+    font-size: 14px !important;
+
+    &:not(.f-cascader__disabled):hover {
         border-color: var(--primary);
-        i.iconClose{
+
+        i.iconClose {
             display: inline-block;
         }
     }
-    i.icon, i.iconClose{
+
+    i.icon, i.iconClose {
         color: #bbb;
         font-size: 14px;
         position: absolute;
@@ -426,10 +478,12 @@ export default defineComponent({
         transition: transform .2s ease-in-out;
         transform: translateY(-50%);
     }
-    i.icon-rotate{
+
+    i.icon-rotate {
         transform: translateY(-50%) rotate(180deg);
     }
-    i.iconClose{
+
+    i.iconClose {
         box-sizing: border-box;
         display: none;
         background-color: #ccc;
@@ -441,35 +495,42 @@ export default defineComponent({
         font-size: 12px;
         cursor: pointer;
         transition: background-color .2s ease-in-out;
-        &:hover{
+
+        &:hover {
             background-color: #aaa;
         }
     }
 }
-.f-cascader__large .f-cascader-input{
-    height: 38px!important;
-    line-height: 38px!important;
+
+.f-cascader__large .f-cascader-input {
+    height: 38px !important;
+    line-height: 38px !important;
     padding: 6px 24px 6px 12px;
     font-size: 16px;
 }
-.f-cascader__small .f-cascader-input{
-    height: 22px!important;
-    line-height: 22px!important;
-    font-size: 12px!important;
+
+.f-cascader__small .f-cascader-input {
+    height: 22px !important;
+    line-height: 22px !important;
+    font-size: 12px !important;
     padding: 2px 24px 2px 12px;
 }
-.f-cascader__focus{
+
+.f-cascader__focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 .2em rgba(var(--primary-rgba),.15);
+    box-shadow: 0 0 0 .2em rgba(var(--primary-rgba), .15);
 }
-.f-cascader__disabled{
+
+.f-cascader__disabled {
     opacity: .65;
-    .f-cascader-input{
+
+    .f-cascader-input {
         background-color: #f2f2f2;
         cursor: not-allowed;
     }
 }
-.f-cascader-input{
+
+.f-cascader-input {
     display: inline-block;
     box-sizing: border-box;
     width: 100%;
@@ -482,7 +543,8 @@ export default defineComponent({
     padding: 4px 24px 4px 12px;
     font-size: 14px;
 }
-.f-cascader-panel{
+
+.f-cascader-panel {
     display: flex;
     box-sizing: border-box;
     box-shadow: 0 2px 7px #bbb;
@@ -491,26 +553,32 @@ export default defineComponent({
     left: 0;
     border-radius: 5px;
     z-index: 999;
-    ul{
+
+    ul {
         padding: 4px 0;
         height: 180px;
         margin: 0;
         overflow-x: hidden;
         overflow-y: auto;
-        &::-webkit-scrollbar{
+
+        &::-webkit-scrollbar {
             width: 6px;
         }
-        &::-webkit-scrollbar-thumb{
+
+        &::-webkit-scrollbar-thumb {
             background-color: #ddd;
             border-radius: 20px;
-            &:hover{
+
+            &:hover {
                 background-color: #ccc;
             }
         }
-        &:not(:last-child){
+
+        &:not(:last-child) {
             border-right: 1px solid #ddd;
         }
-        li{
+
+        li {
             min-width: 120px;
             max-width: 150px;
             line-height: 20px;
@@ -525,20 +593,24 @@ export default defineComponent({
             cursor: pointer;
             color: #333;
             transition: background-color .15s ease-in-out;
-            &:not(.options__disabled):hover{
+
+            &:not(.options__disabled):hover {
                 background-color: #f2f2f2;
             }
         }
-        li.options__disabled{
+
+        li.options__disabled {
             opacity: .35;
             cursor: not-allowed;
         }
-        li.is-active{
+
+        li.is-active {
             color: var(--primary);
             background-color: #f2f2f2;
             font-weight: bold;
         }
-        i.right-icon{
+
+        i.right-icon {
             font-size: 12px;
             position: absolute;
             top: 50%;
@@ -548,7 +620,7 @@ export default defineComponent({
     }
 }
 
-.f-cascader__empty{
+.f-cascader__empty {
     min-width: 100px;
     padding: 10px 12px;
     align-items: center;
@@ -556,11 +628,13 @@ export default defineComponent({
     color: #999;
     font-size: 14px;
 }
-.f-cascader-panel__top{
+
+.f-cascader-panel__top {
     bottom: var(--height)
 }
-.f-cascader-panel__bottom{
-    &::before, &::after{
+
+.f-cascader-panel__bottom {
+    &::before, &::after {
         content: '';
         position: absolute;
         left: calc(.85em);
@@ -572,11 +646,13 @@ export default defineComponent({
         border-bottom-color: #fff;
         z-index: 2;
     }
-    &::after{
+
+    &::after {
         top: -13px;
         border-bottom-color: #ddd;
         z-index: 1;
     }
+
     top: var(--height)
 }
 </style>
