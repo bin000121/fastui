@@ -73,7 +73,7 @@
                                 >
                                     <span
                                         v-if="filterable && filterHighlight"
-                                        v-html="subItem[props.label]"
+                                        v-html="subItem.filterableLabel ?? subItem[props.label]"
                                     ></span>
                                     <template v-else>
                                         {{subItem[props.label]}}
@@ -360,11 +360,12 @@ export default defineComponent({
             let filterRes = labelList.reduce((pre: any[], cur: string[], idx: number) => {
                 let valStr =  props?.format?.(cur) ?? cur.join(` ${props.separator} `)
                 if (props.filterFunction(valStr, iptVal)) {
-                    valStr = props.filterHighlight ?
+                    let filterableLabel = props.filterHighlight ?
                         valStr.replace(new RegExp(iptVal, 'g'), (word: string) => `<b style="color: var(--primary)">${word}</b>`)
                         :
                         valStr
                     pre.push({
+                        filterableLabel,
                         label: valStr,
                         value: valueList[idx]
                     })
@@ -376,19 +377,19 @@ export default defineComponent({
 
         // 搜索模式下打开、关闭级联面板的处理函数
         const handleShowOrHideWhenFilterable = (flag: boolean) => {
-            console.log(flag)
+            console.log(props.value)
             // 被打开
             if (flag) {
-                if (currentValue.value.length) {
-                    cascaderIptDom.placeholder = cascaderIptDom.value
+                if (props.value.length) {
+                    console.log(cascaderIptDom.value)
+                    console.log(currentLabel.value)
+                    cascaderIptDom.placeholder = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
                     cascaderIptDom.value = ''
                 }
             } else {
-                if (currentValue.value.length) {
-                    cascaderIptDom.value = cascaderIptDom.placeholder
+                if (props.value.length) {
+                    cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
                     cascaderIptDom.placeholder = props.placeholder ?? ''
-                } else {
-                    cascaderIptDom.value = ''
                 }
             }
         }
