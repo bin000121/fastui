@@ -14,7 +14,7 @@
         <input
             type="text"
             class="f-cascader-input"
-            :readonly="!filterable"
+            :readonly="!filterable && isShowPanel"
             ref="cascaderIpt"
             autocomplete="off"
             :placeholder="placeholder || '请选择内容'"
@@ -42,13 +42,14 @@
                     :class="{
                         'f-cascader-panel': true,
                         ['f-cascader-panel__' + placement.split('-')[0]]: true,
-                        'f-cascader__empty': isEmptyOptions
+                        'f-cascader__empty': isEmptyOptions || !treeData.length,
+                        'f-cascader__filter': filterable,
                     }"
                     v-show="isShowPanel"
                     ref="cascaderPanel"
                     @click.stop
                 >
-                    <template v-if="isEmptyOptions">
+                    <template v-if="isEmptyOptions || !treeData.length">
                         <slot name="empty" v-if="$slots.empty"></slot>
                         <span v-else>暂无数据</span>
                     </template>
@@ -70,7 +71,13 @@
                                 }"
                                     :title="subItem[props.label]"
                                 >
-                                    {{subItem[props.label]}}
+                                    <span
+                                        v-if="filterable && filterHighlight"
+                                        v-html="subItem[props.label]"
+                                    ></span>
+                                    <template v-else>
+                                        {{subItem[props.label]}}
+                                    </template>
                                     <i
                                         class="f-icon-arrow-right-bold right-icon"
                                         v-if="subItem[props.children]"
@@ -165,10 +172,14 @@ export default defineComponent({
             default: '/'
         },
         filterable: Boolean,
-        filterFunction: Function,
+        filterHighlight: Boolean,
+        filterFunction: {
+            type: Function as PropType<(labelFormat: string, keyword: string) => boolean>,
+            default: (labelFormat: string, keyword: string) => labelFormat.search(new RegExp(keyword)) !== -1
+        },
         debounce: {
             type: Number,
-            default: 300,
+            default: 250,
             validator: (val: number) => val >= 0
         },
         foldTag: Boolean,
@@ -206,6 +217,8 @@ export default defineComponent({
 
         const togglePanel = () => {
             if (props.disabled) return
+            // 搜索模式下不允许关闭
+            if (isShowPanel.value && props.filterable) return
             isShowPanel.value = !isShowPanel.value
         }
 
@@ -290,7 +303,7 @@ export default defineComponent({
             // 判断是否只显示最后一级
             if (props.onlyShowLast) currentLabel.value = currentLabel.value.slice(-1)
             // 如果存在format，那就将结果通过format包装后返回
-            cascaderIptDom.value = props?.format?.(currentLabel.value) || currentLabel.value.join(` ${props.separator} `)
+            cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
         }
 
         // 拼凑出选项面板的数据
@@ -339,7 +352,45 @@ export default defineComponent({
 
         // 过滤、搜索函数
         const handleFilter = (iptVal: string) => {
-            console.log(iptVal)
+            if (!iptVal) {
+                treeData.value = [props.options]
+                return
+            }
+            const { labelList, valueList } = filterObj
+            let filterRes = labelList.reduce((pre: any[], cur: string[], idx: number) => {
+                let valStr =  props?.format?.(cur) ?? cur.join(` ${props.separator} `)
+                if (props.filterFunction(valStr, iptVal)) {
+                    valStr = props.filterHighlight ?
+                        valStr.replace(new RegExp(iptVal, 'g'), (word: string) => `<b style="color: var(--primary)">${word}</b>`)
+                        :
+                        valStr
+                    pre.push({
+                        label: valStr,
+                        value: valueList[idx]
+                    })
+                }
+                return pre
+            }, [])
+            treeData.value = isEmpty(filterRes) ? [] : [filterRes]
+        }
+
+        // 搜索模式下打开、关闭级联面板的处理函数
+        const handleShowOrHideWhenFilterable = (flag: boolean) => {
+            console.log(flag)
+            // 被打开
+            if (flag) {
+                if (currentValue.value.length) {
+                    cascaderIptDom.placeholder = cascaderIptDom.value
+                    cascaderIptDom.value = ''
+                }
+            } else {
+                if (currentValue.value.length) {
+                    cascaderIptDom.value = cascaderIptDom.placeholder
+                    cascaderIptDom.placeholder = props.placeholder ?? ''
+                } else {
+                    cascaderIptDom.value = ''
+                }
+            }
         }
 
         //获取所有路径
@@ -349,7 +400,6 @@ export default defineComponent({
             let valueList: Array<string[]> = []
             const _flatOptions = (options: OptionsData[], labelArr: string[] = [], valueArr: string[] = []) => {
                 for (const item of options) {
-
                     const {
                         [labelKey]: label,
                         [valueKey]: value,
@@ -396,6 +446,7 @@ export default defineComponent({
                 level.value = treeData.value?.length - 1 || 0
                 currentValue.value = props.value ? [...props.value!] : []
             }
+            handleShowOrHideWhenFilterable(newV)
         })
 
         watch(() => props.options, (newV: OptionsData[] | undefined) => {
@@ -619,7 +670,11 @@ export default defineComponent({
         }
     }
 }
-
+.f-cascader__filter ul {
+    li{
+        max-width: 100%!important;
+    }
+}
 .f-cascader__empty {
     min-width: 100px;
     padding: 10px 12px;

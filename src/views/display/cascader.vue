@@ -577,14 +577,73 @@
             <p>输入关键字进行搜索并返回符合条件的选项。</p>
 
             <div class="desc">
-                为其设置属性 <b>filterable</b> 即可开启搜索模式。
+                为其设置属性 <b>filterable</b> 即可开启搜索模式，同时再设置属性 <b>filter-highlight</b> 可以使得关键字高亮。
             </div>
-            <div>
+            <div class="demo-cascader">
                 <f-cascader
                     v-model:value="cascaderValue14"
                     :options="options"
                     filterable
+                    filter-highlight
                 />
+            </div>
+
+            <div class="desc">
+                在搜索模式下，可以配合自定义过滤函数 <b>filter-function</b> 进行搜索，
+                该函数有两个参数，第一个参数为某条从根节点到末尾节点路径上的全部label组成的数组经自定义显示格式化后的字符串，第二个参数为输入的关键字
+                ，该函数必须返回一个布尔值以表示是否匹配。
+            </div>
+
+            <div>
+                <f-cascader
+                    v-model:value="cascaderValue15"
+                    :options="options"
+                    filterable
+                    :filter-function="filterFunction"
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        filterable
+    />
+
+    <f-cascader
+        v-model:value="cascaderValue2"
+        :options="options"
+        filterable
+        :filter-function="filterFunction"
+    />
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                cascaderValue: [],
+                cascaderValue2: [],
+            })
+
+            // 必须以该关键词开头的选项
+            const filterFunction = (labelFormat: string, keyword: string) => {
+                return labelFormat.startsWith(keyword)
+            }
+            return{
+                filterFunction,
+                ...toRefs(data)
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
             </div>
         </div>
 
@@ -620,6 +679,7 @@ export default defineComponent({
             cascaderValue12: [],
             cascaderValue13: [],
             cascaderValue14: [],
+            cascaderValue15: [],
             options: [
                 {
                     label: '福建省',
@@ -772,8 +832,14 @@ export default defineComponent({
             data.num++
         }
 
+        // 必须以该关键词开头的选项
+        const filterFunction = (labelFormat: string, keyword: string) => {
+            return labelFormat.startsWith(keyword)
+        }
+
         return{
             handleClear,
+            filterFunction,
             ...toRefs(data),
         }
     }

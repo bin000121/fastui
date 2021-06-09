@@ -178,6 +178,7 @@ const routes: RouteRecordRaw[] = [
                     '禁用': 'jin_yong',
                     '只显示最后一级': 'zui_hou_yi_ji',
                     '选择即停下': 'xuan_ze_ji_jie_guo',
+                    '可搜索': 'ke_sou_suo',
                 }
             },
             {
