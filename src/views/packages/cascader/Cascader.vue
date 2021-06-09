@@ -380,14 +380,15 @@ export default defineComponent({
             console.log(props.value)
             // 被打开
             if (flag) {
-                if (props.value.length) {
-                    console.log(cascaderIptDom.value)
-                    console.log(currentLabel.value)
-                    cascaderIptDom.placeholder = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
+                console.log(currentLabel.value)
+                console.log(cascaderIptDom.value)
+                if (cascaderIptDom.value) {
+                    // cascaderIptDom.placeholder = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
+                    cascaderIptDom.placeholder = cascaderIptDom.value
                     cascaderIptDom.value = ''
                 }
             } else {
-                if (props.value.length) {
+                if (currentValue.value.length) {
                     cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
                     cascaderIptDom.placeholder = props.placeholder ?? ''
                 }
