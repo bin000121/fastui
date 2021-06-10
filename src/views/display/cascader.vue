@@ -580,6 +580,7 @@
                 为其设置属性 <b>filterable</b> 即可开启搜索模式，同时再设置属性 <b>filter-highlight</b> 可以使得关键字高亮。
             </div>
             <div class="demo-cascader">
+                <p>当前选中：{{ cascaderValue14 }}</p>
                 <f-cascader
                     v-model:value="cascaderValue14"
                     :options="options"
@@ -595,6 +596,7 @@
             </div>
 
             <div>
+                <p>当前选中：{{ cascaderValue15 }}</p>
                 <f-cascader
                     v-model:value="cascaderValue15"
                     :options="options"

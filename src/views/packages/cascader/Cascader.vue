@@ -5,7 +5,8 @@
             'f-cascader': true,
             'f-cascader__focus': isShowPanel,
             'f-cascader__disabled': disabled,
-            ['f-cascader__' + size]: size !== 'default'
+            ['f-cascader__' + size]: size !== 'default',
+            'f-cascader__filter': filterable,
         }"
         ref="cascader"
         @click="togglePanel"
@@ -14,7 +15,7 @@
         <input
             type="text"
             class="f-cascader-input"
-            :readonly="!filterable && isShowPanel"
+            :readonly="!filterable"
             ref="cascaderIpt"
             autocomplete="off"
             :placeholder="placeholder || '请选择内容'"
@@ -42,8 +43,7 @@
                     :class="{
                         'f-cascader-panel': true,
                         ['f-cascader-panel__' + placement.split('-')[0]]: true,
-                        'f-cascader__empty': isEmptyOptions || !treeData.length,
-                        'f-cascader__filter': filterable,
+                        'f-cascader__empty': isEmptyOptions || !treeData.length
                     }"
                     v-show="isShowPanel"
                     ref="cascaderPanel"
@@ -201,6 +201,7 @@ export default defineComponent({
         const treeData: any = ref([])
         let onComposition = ''
         let filterObj: FilterObj
+        let isLast = false
 
         const {
             label: labelKey,
@@ -214,6 +215,8 @@ export default defineComponent({
         const isActive = computed(() => {
             return (val: number | string) => currentValue.value.includes(val)
         })
+
+        const getFormatLabel = (label: string[]) => props?.format?.(label) ?? label.join(` ${props.separator} `)
 
         const togglePanel = () => {
             if (props.disabled) return
@@ -281,15 +284,17 @@ export default defineComponent({
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
+            // 搜索模式下的currentValue.value为二维数组，需要降维
             if (props.filterable) {
-                currentValue.value = ([...currentValue.value] as any).flat(1)
-                console.log(currentValue.value)
+                currentValue.value = (currentValue.value as any).flat(1)
             }
             // 最后一级没必要在向外触发一遍
             if (props.stopOnSelect && children?.length) {
                 handleResLabel()
                 emit('update:value', currentValue.value)
             }
+            // 如果是选择即停下，那不论如何都标记为最后一级
+            isLast = !children?.length || props.stopOnSelect
             // 判断是否走到了最后一级
             if (children?.length) {
                 level.value = levelNum + 1
@@ -298,7 +303,6 @@ export default defineComponent({
             } else { // 在没有下级children的情况下关闭级联面板
                 handleResLabel()
                 handleHidePanel()
-                console.log(1111)
                 emit('update:value', currentValue.value)
             }
         }
@@ -308,7 +312,7 @@ export default defineComponent({
             // 判断是否只显示最后一级
             if (props.onlyShowLast) currentLabel.value = currentLabel.value.slice(-1)
             // 如果存在format，那就将结果通过format包装后返回
-            cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
+            cascaderIptDom.value = getFormatLabel(currentLabel.value)
         }
 
         // 拼凑出选项面板的数据
@@ -363,7 +367,7 @@ export default defineComponent({
             }
             const { labelList, valueList } = filterObj
             let filterRes = labelList.reduce((pre: any[], cur: string[], idx: number) => {
-                let valStr =  props?.format?.(cur) ?? cur.join(` ${props.separator} `)
+                let valStr =  getFormatLabel(cur)
                 if (props.filterFunction(valStr, iptVal)) {
                     let filterableLabel = props.filterHighlight ?
                         valStr.replace(new RegExp(iptVal, 'g'), (word: string) => `<b style="color: var(--primary)">${word}</b>`)
@@ -382,22 +386,18 @@ export default defineComponent({
 
         // 搜索模式下打开、关闭级联面板的处理函数
         const handleShowOrHideWhenFilterable = (flag: boolean) => {
-            if (props.disabled || !props.filterable) return
-            console.log(props.value)
+            if (props.disabled || !props.filterable || !props?.value?.length) return
             // 被打开
             if (flag) {
-                console.log(currentLabel.value)
-                console.log(cascaderIptDom.value)
-                if (props.value.length && cascaderIptDom.value) {
-                    // cascaderIptDom.placeholder = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
-                    cascaderIptDom.placeholder = cascaderIptDom.value
-                    cascaderIptDom.value = ''
-                }
+                cascaderIptDom.placeholder = getFormatLabel(currentLabel.value)
+                cascaderIptDom.value = ''
             } else {
-                if (props.value.length) {
-                    cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
-                    cascaderIptDom.placeholder = props.placeholder ?? ''
+                if (isLast) {
+                    cascaderIptDom.value = getFormatLabel(currentLabel.value)
+                } else {
+                    cascaderIptDom.value = cascaderIptDom.placeholder
                 }
+                cascaderIptDom.placeholder = props.placeholder ?? ''
             }
         }
 
@@ -592,6 +592,7 @@ export default defineComponent({
 .f-cascader-input {
     display: inline-block;
     box-sizing: border-box;
+    cursor: pointer;
     width: 100%;
     height: 30px;
     line-height: 30px;
@@ -678,9 +679,15 @@ export default defineComponent({
         }
     }
 }
-.f-cascader__filter ul {
-    li{
-        max-width: 100%!important;
+.f-cascader__filter {
+    .f-cascader-input{
+        cursor: text;
+    }
+    .f-cascader-panel{
+        ul li {
+            max-width: 100%!important;
+
+        }
     }
 }
 .f-cascader__empty {
