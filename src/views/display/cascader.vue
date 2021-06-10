@@ -632,7 +632,7 @@
                 cascaderValue2: [],
             })
 
-            // 必须以该关键词开头的选项
+            // 是以该关键词开头的选项
             const filterFunction = (labelFormat: string, keyword: string) => {
                 return labelFormat.startsWith(keyword)
             }

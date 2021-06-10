@@ -281,6 +281,10 @@ export default defineComponent({
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
+            if (props.filterable) {
+                currentValue.value = ([...currentValue.value] as any).flat(1)
+                console.log(currentValue.value)
+            }
             // 最后一级没必要在向外触发一遍
             if (props.stopOnSelect && children?.length) {
                 handleResLabel()
@@ -294,6 +298,7 @@ export default defineComponent({
             } else { // 在没有下级children的情况下关闭级联面板
                 handleResLabel()
                 handleHidePanel()
+                console.log(1111)
                 emit('update:value', currentValue.value)
             }
         }
@@ -377,25 +382,26 @@ export default defineComponent({
 
         // 搜索模式下打开、关闭级联面板的处理函数
         const handleShowOrHideWhenFilterable = (flag: boolean) => {
+            if (props.disabled || !props.filterable) return
             console.log(props.value)
             // 被打开
             if (flag) {
                 console.log(currentLabel.value)
                 console.log(cascaderIptDom.value)
-                if (cascaderIptDom.value) {
+                if (props.value.length && cascaderIptDom.value) {
                     // cascaderIptDom.placeholder = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
                     cascaderIptDom.placeholder = cascaderIptDom.value
                     cascaderIptDom.value = ''
                 }
             } else {
-                if (currentValue.value.length) {
+                if (props.value.length) {
                     cascaderIptDom.value = props?.format?.(currentLabel.value) ?? currentLabel.value.join(` ${props.separator} `)
                     cascaderIptDom.placeholder = props.placeholder ?? ''
                 }
             }
         }
 
-        //获取所有路径
+        // 获取所有路径
         const flatOptions = () => {
             if (props.disabled) return
             let labelList: Array<string[]> = []
