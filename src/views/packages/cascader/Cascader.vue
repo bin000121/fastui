@@ -18,7 +18,7 @@
             :readonly="!filterable"
             ref="cascaderIpt"
             autocomplete="off"
-            :placeholder="placeholder || '请选择内容'"
+            :placeholder="placeholder"
             @input="handleInput"
             @compositionstart="compositionStart"
             @compositionend="compositionEnd"
@@ -133,7 +133,10 @@ export default defineComponent({
             type: Array as PropType<(string | number)[]>,
             required: true
         },
-        placeholder: String,
+        placeholder: {
+            type: String,
+            default: '请选择内容'
+        },
         disabled: Boolean,
         clearable: Boolean,
         placement: {
@@ -241,6 +244,7 @@ export default defineComponent({
             cascaderIptDom.value = ''
             currentLabel.value = []
             currentValue.value = []
+            cascaderIptDom.placeholder = props.placeholder
             emit('clear')
             emit('update:value', [])
             handleHidePanel()
@@ -387,17 +391,14 @@ export default defineComponent({
         // 搜索模式下打开、关闭级联面板的处理函数
         const handleShowOrHideWhenFilterable = (flag: boolean) => {
             if (props.disabled || !props.filterable || !props?.value?.length) return
+            const formatLabel = getFormatLabel(currentLabel.value)
             // 被打开
             if (flag) {
-                cascaderIptDom.placeholder = getFormatLabel(currentLabel.value)
+                cascaderIptDom.placeholder = formatLabel
                 cascaderIptDom.value = ''
             } else {
-                if (isLast) {
-                    cascaderIptDom.value = getFormatLabel(currentLabel.value)
-                } else {
-                    cascaderIptDom.value = cascaderIptDom.placeholder
-                }
-                cascaderIptDom.placeholder = props.placeholder ?? ''
+                cascaderIptDom.value = isLast ? formatLabel : cascaderIptDom.placeholder
+                cascaderIptDom.placeholder = props.placeholder
             }
         }
 

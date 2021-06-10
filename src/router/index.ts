@@ -179,6 +179,7 @@ const routes: RouteRecordRaw[] = [
                     '只显示最后一级': 'zui_hou_yi_ji',
                     '选择即停下': 'xuan_ze_ji_jie_guo',
                     '可搜索': 'ke_sou_suo',
+                    '动态加载数据源': 'dong_tai_jia_zai',
                 }
             },
             {

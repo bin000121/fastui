@@ -585,6 +585,7 @@
                     v-model:value="cascaderValue14"
                     :options="options"
                     filterable
+                    clearable
                     filter-highlight
                 />
             </div>
@@ -607,12 +608,14 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-cascader
+    {{`<p>当前选中：\{\{ cascaderValue \}\}</p>
+    <f-cascader
         v-model:value="cascaderValue"
         :options="options"
         filterable
     />
 
+    <p>当前选中：\{\{ cascaderValue2 \}\}
     <f-cascader
         v-model:value="cascaderValue2"
         :options="options"
@@ -640,6 +643,49 @@
             }
             return{
                 filterFunction,
+                ...toRefs(data)
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="dong_tai_jia_zai">动态加载数据源
+                <a href="#dong_tai_jia_zai" class="f-icon-anchor"></a>
+            </h3>
+            <p>可以动态加载数据源，这可以满足您对异步请求的需求。</p>
+            <div class="demo-cascader">
+                <f-cascader
+                    v-model:value="cascaderValue16"
+                    :options="options"
+                />
+            </div>
+            <div v-highlight>
+                <pre><code>
+    {{`<f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        filterable
+    />
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                cascaderValue: []
+            })
+
+            return{
                 ...toRefs(data)
             }
         }
@@ -682,6 +728,7 @@ export default defineComponent({
             cascaderValue13: [],
             cascaderValue14: [],
             cascaderValue15: [],
+            cascaderValue16: [],
             options: [
                 {
                     label: '福建省',
