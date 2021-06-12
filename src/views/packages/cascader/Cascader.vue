@@ -15,7 +15,7 @@
         <input
             type="text"
             class="f-cascader-input"
-            :readonly="!filterable"
+            :readonly="!filterable || !!asyncLoad"
             ref="cascaderIpt"
             autocomplete="off"
             :placeholder="placeholder"
@@ -55,35 +55,33 @@
                     </template>
                     <template v-else>
                         <ul
-                            v-for="(item, level) in treeData"
-                            :key="level"
+                            v-for="(item, idx) in treeData"
+                            :key="idx"
                         >
-                            <template v-if="item !== 'none'">
-                                <li
-                                    v-for="subItem in item"
-                                    :key="subItem[props.value]"
-                                    @click="handleClick(subItem, level)"
-                                    @mouseenter="handleHover(subItem, level)"
-                                    @mouseleave="handleHoverLeave(subItem)"
-                                    :class="{
-                                    'is-active': level <= level && isActive(subItem[props.value]),
+                            <li
+                                v-for="subItem in item"
+                                :key="subItem[props.value]"
+                                @click="handleClick(subItem, idx)"
+                                @mouseenter="handleHover(subItem, idx)"
+                                @mouseleave="handleHoverLeave(subItem)"
+                                :class="{
+                                    'is-active': idx <= level && isActive(subItem[props.value]),
                                     'options__disabled': subItem[props.disabled],
                                 }"
-                                    :title="subItem[props.label]"
-                                >
-                                    <span
-                                        v-if="filterable && filterHighlight"
-                                        v-html="subItem.filterableLabel ?? subItem[props.label]"
-                                    ></span>
-                                    <template v-else>
-                                        {{subItem[props.label]}}
-                                    </template>
-                                    <i
-                                        class="f-icon-arrow-right-bold right-icon"
-                                        v-if="subItem[props.children]"
-                                    ></i>
-                                </li>
-                            </template>
+                                :title="subItem[props.label]"
+                            >
+                                <span
+                                    v-if="filterable && filterHighlight"
+                                    v-html="subItem.filterableLabel ?? subItem[props.label]"
+                                ></span>
+                                <template v-else>
+                                    {{subItem[props.label]}}
+                                </template>
+                                <i
+                                    class="f-icon-arrow-right-bold right-icon"
+                                    v-if="subItem[props.children]"
+                                ></i>
+                            </li>
                         </ul>
                     </template>
                 </div>
@@ -187,8 +185,9 @@ export default defineComponent({
         },
         foldTag: Boolean,
         stopOnSelect: Boolean,
+        asyncLoad: Function as PropType<(currentOption: OptionsData[], callback: () => void) => void>
     },
-    setup(props, {emit}) {
+    setup(props, { emit }) {
         const id = getRandomId('f-cascader')
         const cascader = ref(null)
         const cascaderIpt = ref(null)
@@ -202,7 +201,7 @@ export default defineComponent({
         const currentValue = ref([] as (string | number)[])
         const currentLabel: any = ref([] as string[])
         const treeData: any = ref([])
-        let onComposition = ''
+        let onComposition = 'compositionStart'
         let filterObj: FilterObj
         let isLast = false
 
@@ -224,7 +223,7 @@ export default defineComponent({
         const togglePanel = () => {
             if (props.disabled) return
             // 搜索模式下不允许关闭
-            if (isShowPanel.value && props.filterable) return
+            if (isShowPanel.value && props.filterable && !props.asyncLoad) return
             isShowPanel.value = !isShowPanel.value
         }
 
@@ -247,6 +246,7 @@ export default defineComponent({
             cascaderIptDom.placeholder = props.placeholder
             emit('clear')
             emit('update:value', [])
+            emit('change', [])
             handleHidePanel()
         }
 
@@ -289,13 +289,14 @@ export default defineComponent({
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
             // 搜索模式下的currentValue.value为二维数组，需要降维
-            if (props.filterable) {
+            if (props.filterable && !props.asyncLoad) {
                 currentValue.value = (currentValue.value as any).flat(1)
             }
             // 最后一级没必要在向外触发一遍
             if (props.stopOnSelect && children?.length) {
                 handleResLabel()
                 emit('update:value', currentValue.value)
+                emit('change', currentValue.value)
             }
             // 如果是选择即停下，那不论如何都标记为最后一级
             isLast = !children?.length || props.stopOnSelect
@@ -308,6 +309,7 @@ export default defineComponent({
                 handleResLabel()
                 handleHidePanel()
                 emit('update:value', currentValue.value)
+                emit('change', currentValue.value)
             }
         }
 
@@ -390,16 +392,14 @@ export default defineComponent({
 
         // 搜索模式下打开、关闭级联面板的处理函数
         const handleShowOrHideWhenFilterable = (flag: boolean) => {
-            if (props.disabled || !props.filterable || !props?.value?.length) return
+            if (props.disabled ||
+                !props.filterable ||
+                !props?.value?.length ||
+                props.asyncLoad
+            ) return
             const formatLabel = getFormatLabel(currentLabel.value)
-            // 被打开
-            if (flag) {
-                cascaderIptDom.placeholder = formatLabel
-                cascaderIptDom.value = ''
-            } else {
-                cascaderIptDom.value = isLast ? formatLabel : cascaderIptDom.placeholder
-                cascaderIptDom.placeholder = props.placeholder
-            }
+            cascaderIptDom.value = flag ? '' : isLast ? formatLabel : cascaderIptDom.placeholder
+            cascaderIptDom.placeholder = flag ? formatLabel : props.placeholder
         }
 
         // 获取所有路径
@@ -460,15 +460,15 @@ export default defineComponent({
 
         watch(() => props.options, (newV: OptionsData[] | undefined) => {
             isEmptyOptions.value = isEmpty(newV)
-        }, {immediate: true, deep: true})
+        }, { immediate: true, deep: true })
 
         watch(() => [props.placement, props.size], () => {
             initCascaderPanelPosition()
         })
 
         watch(() => props.filterable, (newV: boolean) => {
-            if (newV) flatOptions()
-        }, {immediate: true})
+            if (newV && !props.asyncLoad) flatOptions()
+        }, { immediate: true })
 
         onMounted(() => {
             cascaderDom = cascader.value!

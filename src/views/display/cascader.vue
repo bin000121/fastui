@@ -656,7 +656,10 @@
             <h3 id="dong_tai_jia_zai">动态加载数据源
                 <a href="#dong_tai_jia_zai" class="f-icon-anchor"></a>
             </h3>
-            <p>可以动态加载数据源，这可以满足您对异步请求的需求。</p>
+            <p>级联选择器可以动态加载数据源，这可以满足您对异步请求的需求。</p>
+            <div class="desc">
+                注意，动态加载下 <b>filterable</b> 模式将不起作用。
+            </div>
             <div class="demo-cascader">
                 <f-cascader
                     v-model:value="cascaderValue16"
@@ -682,8 +685,85 @@
     export default defineComponent({
         setup () {
             const data = reactive({
-                cascaderValue: []
+                cascaderValue: [],
+                options: [
+                    {
+                        label: '福建省',
+                        value: 'fujian',
+                    },
+                    {
+                        label: '广西',
+                        value: 'guangxi',
+                    }
+                ],
             })
+
+            const guangxi = [
+                {
+                    label: '玉林市',
+                    value: 'yulin'
+                },
+                {
+                    label: '南宁市',
+                    value: 'nanning',
+                }
+            ]
+
+            const yulin = [
+                {
+                    label: '玉州区',
+                    value: 'yuzhouqu'
+                },
+                {
+                    label: '福绵区',
+                    value: 'fumian'
+                }
+            ]
+
+            const nanning = [
+                {
+                    label: '青秀区',
+                    value: 'qingxiu'
+                },
+                {
+                    label: '良庆区',
+                    value: 'liangqing'
+                }
+
+            ]
+
+            const fujian = [
+                {
+                    label: '厦门市',
+                    value: 'xiamen'
+                },
+                {
+                    label: '福州市',
+                    value: 'fuzhou'
+                }
+            ]
+
+            const xiamen = [
+                {
+                    label: '集美区',
+                    value: 'jimei'
+                },
+                {
+                    label: '思明区',
+                    value: 'siming'
+                }
+            ]
+
+            const fuzhou = [
+                {
+                    label: '闽侯县',
+                    value: 'minhou'
+                },
+                {
+                    label: '鼓楼区',
+                    value: 'gulou'
+                }
+            ]
 
             return{
                 ...toRefs(data)
@@ -885,6 +965,69 @@ export default defineComponent({
         const filterFunction = (labelFormat: string, keyword: string) => {
             return labelFormat.startsWith(keyword)
         }
+
+        const guangxi = [
+            {
+                label: '玉林市',
+                value: 'yulin'
+            },
+            {
+                label: '南宁市',
+                value: 'nanning',
+            },
+        ]
+        const yulin = [
+            {
+                label: '玉州区',
+                value: 'yuzhouqu'
+            },
+            {
+                label: '福绵区',
+                value: 'fumian'
+            }
+        ]
+        const nanning = [
+            {
+                label: '青秀区',
+                value: 'qingxiu'
+            },
+            {
+                label: '良庆区',
+                value: 'liangqing'
+            }
+
+        ]
+
+        const fujian = [
+            {
+                label: '厦门市',
+                value: 'xiamen'
+            },
+            {
+                label: '福州市',
+                value: 'fuzhou'
+            },
+        ]
+        const xiamen = [
+            {
+                label: '集美区',
+                value: 'jimei'
+            },
+            {
+                label: '思明区',
+                value: 'siming'
+            }
+        ]
+        const fuzhou = [
+            {
+                label: '闽侯县',
+                value: 'minhou'
+            },
+            {
+                label: '鼓楼区',
+                value: 'gulou'
+            }
+        ]
 
         return{
             handleClear,
