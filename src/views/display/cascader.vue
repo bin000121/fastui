@@ -77,7 +77,7 @@
                         ]
                     },
                     {
-                        label: '广西壮族自治区',
+                        label: '广西',
                         value: 'guangxi',
                         children: [
                             {
@@ -592,7 +592,8 @@
 
             <div class="desc">
                 在搜索模式下，可以配合自定义过滤函数 <b>filter-function</b> 进行搜索，
-                该函数有两个参数，第一个参数为某条从根节点到末尾节点路径上的全部label组成的数组经自定义显示格式化后的字符串，第二个参数为输入的关键字
+                该函数有两个参数，第一个参数为某条从根节点到末尾节点路径上的全部label组成的数组经自定义显示格式化后的字符串
+                （以该数据源、默认分隔符为例，那么其中一条路径为：“福建省 / 厦门市 / 集美区”），第二个参数为输入的关键字
                 ，该函数必须返回一个布尔值以表示是否匹配。
             </div>
 
@@ -664,6 +665,7 @@
                 <f-cascader
                     v-model:value="cascaderValue16"
                     :options="options"
+                    :async-load="asyncLoad"
                 />
             </div>
             <div v-highlight>
@@ -671,7 +673,7 @@
     {{`<f-cascader
         v-model:value="cascaderValue"
         :options="options"
-        filterable
+        :async-load="asyncLoad"
     />
 
 
@@ -775,6 +777,132 @@
             </div>
         </div>
 
+        <div>
+            <h3 id="zi_ding_yi_zi_duan_ming">自定义字段名
+                <a href="#zi_ding_yi_zi_duan_ming" class="f-icon-anchor"></a>
+            </h3>
+            <p>级联选择器可以自定义字段名，这可以应对后端返回的各种数据结构。</p>
+
+            <div>
+                <f-cascader
+                    v-model:value="cascaderValue17"
+                    :options="options3"
+                    :props="props"
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-cascader
+        v-model:value="cascaderValue"
+        :options="options"
+        :props="props"
+    />
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                cascaderValue: [],
+                options: [
+                    {
+                        name: '福建省',
+                        key: 'fujian',
+                        items: [
+                            {
+                                name: '厦门市',
+                                key: 'xiamen',
+                                items: [
+                                    {
+                                        name: '集美区',
+                                        key: 'jimei',
+                                        unusable: true
+                                    },
+                                    {
+                                        name: '思明区',
+                                        key: 'siming'
+                                    }
+                                ]
+                            },
+                            {
+                                name: '福州市',
+                                key: 'fuzhou',
+                                items: [
+                                    {
+                                        name: '闽侯县',
+                                        key: 'minhou',
+                                        unusable: true
+                                    },
+                                    {
+                                        name: '鼓楼区',
+                                        key: 'gulou'
+                                    }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        name: '广西',
+                        key: 'guangxi',
+                        items: [
+                            {
+                                name: '玉林市',
+                                key: 'yulin',
+                                items: [
+                                    {
+                                        name: '玉州区',
+                                        key: 'yuzhouqu'
+                                    },
+                                    {
+                                        name: '福绵区',
+                                        key: 'fumian'
+                                    }
+                                ]
+                            },
+                            {
+                                name: '南宁市',
+                                key: 'nanning',
+                                unusable: true,
+                                items: [
+                                    {
+                                        name: '青秀区',
+                                        key: 'qingxiu'
+                                    },
+                                    {
+                                        name: '良庆区',
+                                        key: 'liangqing'
+                                    }
+
+                                ]
+                            },
+                        ]
+                    },
+                ]
+            })
+            const props = {
+                label: 'name',
+                value: 'key',
+                children: 'items',
+                disabled: 'unusable'
+            }
+            return{
+                props,
+                ...toRefs(data)
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -809,6 +937,7 @@ export default defineComponent({
             cascaderValue14: [],
             cascaderValue15: [],
             cascaderValue16: [],
+            cascaderValue17: [],
             options: [
                 {
                     label: '福建省',
@@ -955,6 +1084,80 @@ export default defineComponent({
                     ]
                 },
             ],
+            options3: [
+                {
+                    name: '福建省',
+                    key: 'fujian',
+                    items: [
+                        {
+                            name: '厦门市',
+                            key: 'xiamen',
+                            items: [
+                                {
+                                    name: '集美区',
+                                    key: 'jimei',
+                                    unusable: true
+                                },
+                                {
+                                    name: '思明区',
+                                    key: 'siming'
+                                }
+                            ]
+                        },
+                        {
+                            name: '福州市',
+                            key: 'fuzhou',
+                            items: [
+                                {
+                                    name: '闽侯县',
+                                    key: 'minhou',
+                                    unusable: true
+                                },
+                                {
+                                    name: '鼓楼区',
+                                    key: 'gulou'
+                                }
+                            ]
+                        },
+                    ]
+                },
+                {
+                    name: '广西',
+                    key: 'guangxi',
+                    items: [
+                        {
+                            name: '玉林市',
+                            key: 'yulin',
+                            items: [
+                                {
+                                    name: '玉州区',
+                                    key: 'yuzhouqu'
+                                },
+                                {
+                                    name: '福绵区',
+                                    key: 'fumian'
+                                }
+                            ]
+                        },
+                        {
+                            name: '南宁市',
+                            key: 'nanning',
+                            unusable: true,
+                            items: [
+                                {
+                                    name: '青秀区',
+                                    key: 'qingxiu'
+                                },
+                                {
+                                    name: '良庆区',
+                                    key: 'liangqing'
+                                }
+
+                            ]
+                        },
+                    ]
+                },
+            ]
         })
 
         const handleClear = () => {
@@ -997,7 +1200,6 @@ export default defineComponent({
             }
 
         ]
-
         const fujian = [
             {
                 label: '厦门市',
@@ -1029,8 +1231,50 @@ export default defineComponent({
             }
         ]
 
+        const resObj: any = {
+            fujian,
+            xiamen,
+            fuzhou,
+            guangxi,
+            yulin,
+            nanning
+        }
+
+        const props = {
+            label: 'name',
+            value: 'key',
+            children: 'items',
+            disabled: 'unusable'
+        }
+
+        interface OptionsData {
+            value: string | number;
+            label?: string;
+            children?: OptionsData[];
+            disabled?: boolean;
+            level: number;
+
+            [key: string]: any;
+        }
+
+        interface Callback {
+            (data: OptionsData, isHasChildren: boolean): void
+        }
+
+        const asyncLoad = (currentItem: OptionsData, callback: Callback) => {
+            // 这里可以发起异步请求向后端拿数据，现在假设这个res就是向后端拿到的。
+            const { value, level } = currentItem
+            let res = resObj[value] ?? []
+            console.log(level)
+            setTimeout(() => {
+                callback(res, level < 2)
+            }, 1500)
+        }
+
         return{
+            props,
             handleClear,
+            asyncLoad,
             filterFunction,
             ...toRefs(data),
         }

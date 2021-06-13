@@ -180,6 +180,7 @@ const routes: RouteRecordRaw[] = [
                     '选择即停下': 'xuan_ze_ji_jie_guo',
                     '可搜索': 'ke_sou_suo',
                     '动态加载': 'dong_tai_jia_zai',
+                    '自定义字段名': 'zi_ding_yi_zi_duan_ming',
                 }
             },
             {

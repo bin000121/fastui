@@ -42,6 +42,7 @@
                 <div
                     :class="{
                         'f-cascader-panel': true,
+                        [panelClassName]: panelClassName,
                         ['f-cascader-panel__' + placement.split('-')[0]]: true,
                         'f-cascader__empty': isEmptyOptions || !treeData.length
                     }"
@@ -59,10 +60,10 @@
                             :key="idx"
                         >
                             <li
-                                v-for="subItem in item"
+                                v-for="(subItem, subIdx) in item"
                                 :key="subItem[props.value]"
-                                @click="handleClick(subItem, idx)"
-                                @mouseenter="handleHover(subItem, idx)"
+                                @click="handleClick(subItem, idx, subIdx)"
+                                @mouseenter="handleHover(subItem, idx, subIdx)"
                                 @mouseleave="handleHoverLeave(subItem)"
                                 :class="{
                                     'is-active': idx <= level && isActive(subItem[props.value]),
@@ -79,8 +80,12 @@
                                 </template>
                                 <i
                                     class="f-icon-arrow-right-bold right-icon"
-                                    v-if="subItem[props.children]"
+                                    v-if="isShowPanelLiNextIcon(subItem[props.children])"
                                 ></i>
+                                <span
+                                    v-show="loading"
+                                    class="f-cascader__loading"
+                                ></span>
                             </li>
                         </ul>
                     </template>
@@ -120,9 +125,9 @@ import {
     onMounted,
     onUnmounted
 } from 'vue'
-import type {PropType} from 'vue'
-import {getRandomId} from '/@/utils/getRandomId'
-import {isEmpty, debounce} from '/@/utils/utils'
+import type { PropType } from 'vue'
+import { getRandomId } from '/@/utils/getRandomId'
+import { isEmpty, debounce } from '/@/utils/utils'
 
 export default defineComponent({
     emits: ['change', 'update:value', 'clear', 'show', 'showed', 'hide', 'hided'],
@@ -157,6 +162,7 @@ export default defineComponent({
                 disabled: 'disabled'
             })
         },
+        panelClassName: String,
         onlyShowLast: Boolean,
         trigger: {
             type: String,
@@ -185,7 +191,7 @@ export default defineComponent({
         },
         foldTag: Boolean,
         stopOnSelect: Boolean,
-        asyncLoad: Function as PropType<(currentOption: OptionsData[], callback: () => void) => void>
+        asyncLoad: Function as PropType<(data: OptionsData, callback: (data: OptionsData[], isHasChildren: boolean) => void) => void>
     },
     setup(props, { emit }) {
         const id = getRandomId('f-cascader')
@@ -204,6 +210,9 @@ export default defineComponent({
         let onComposition = 'compositionStart'
         let filterObj: FilterObj
         let isLast = false
+        const loading = ref(false)
+        const loadingIdx = ref(-1)
+        const isExistNextChildren = ref(true)
 
         const {
             label: labelKey,
@@ -216,6 +225,15 @@ export default defineComponent({
 
         const isActive = computed(() => {
             return (val: number | string) => currentValue.value.includes(val)
+        })
+
+        const isShowPanelLiNextIcon = computed(() => {
+            return (data: OptionsData) => {
+                if (props.asyncLoad) {
+                    return isExistNextChildren.value
+                }
+                return !isEmpty(data)
+            }
         })
 
         const getFormatLabel = (label: string[]) => props?.format?.(label) ?? label.join(` ${props.separator} `)
@@ -251,8 +269,10 @@ export default defineComponent({
         }
 
         let timer: NodeJS.Timer
-        const handleHover = (data: OptionsData, levelNum: number) => {
+        // 移入展开、消失
+        const handleHover = (data: OptionsData, levelNum: number, subIdx: number) => {
             if (data?.disabled) return
+            loadingIdx.value = subIdx
             if (props.trigger === 'hover' &&
                 !isEmpty(data.children) &&
                 !props.stopOnSelect
@@ -268,22 +288,40 @@ export default defineComponent({
             ) clearTimeout(timer)
         }
 
-        const handleClick = (data: OptionsData, levelNum: number) => {
+        // 点击展开
+        const handleClick = (data: OptionsData, levelNum: number, subIdx: number) => {
             if (data?.disabled) return
+            loadingIdx.value = subIdx
             if (props.trigger === 'click' ||
                 isEmpty(data.children) ||
                 props.stopOnSelect
             ) handleChoseOption(data, levelNum)
         }
 
+        // 异步加载数据源处理方式
+        const asyncGetOptions = (optionsData: OptionsData[], isHasChildren = true) => {
+            isExistNextChildren.value = isHasChildren
+            console.log(isHasChildren)
+            if (!isEmpty(optionsData)) {
+                level.value = currentIndex + 1
+                treeData.value = treeData.value.slice(0, currentIndex + 1)
+                treeData.value[currentIndex + 1] = optionsData
+                console.log(optionsData)
+            } else isExistNextChildren.value = false
+            loading.value = false
+        }
+
+        let currentIndex = -1
+        let children: OptionsData[] = []
         // 选择处理函数
         const handleChoseOption = (data: OptionsData, levelNum: number) => {
-            if (data.disabled) return
             const {
                 [labelKey]: label,
                 [valueKey]: value,
-                [childrenKey]: children = []
+                [disabledKey]: disabled
             } = data
+            children = data[childrenKey] ?? []
+            if (disabled) return
             currentLabel.value = currentLabel.value.slice(0, levelNum)
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
@@ -300,11 +338,19 @@ export default defineComponent({
             }
             // 如果是选择即停下，那不论如何都标记为最后一级
             isLast = !children?.length || props.stopOnSelect
+            currentIndex = levelNum
             // 判断是否走到了最后一级
-            if (children?.length) {
+            if (children?.length && !props.asyncLoad) {
                 level.value = levelNum + 1
                 treeData.value = treeData.value.slice(0, levelNum + 1)
                 treeData.value[levelNum + 1] = children
+            } else if (props.asyncLoad && isExistNextChildren.value) {
+                loading.value = true
+                treeData.value[currentIndex + 1] = []
+                props.asyncLoad({
+                    ...data,
+                    level: currentIndex + 1
+                } as OptionsData, asyncGetOptions)
             } else { // 在没有下级children的情况下关闭级联面板
                 handleResLabel()
                 handleHidePanel()
@@ -317,7 +363,6 @@ export default defineComponent({
         const handleResLabel = () => {
             // 判断是否只显示最后一级
             if (props.onlyShowLast) currentLabel.value = currentLabel.value.slice(-1)
-            // 如果存在format，那就将结果通过format包装后返回
             cascaderIptDom.value = getFormatLabel(currentLabel.value)
         }
 
@@ -360,13 +405,15 @@ export default defineComponent({
 
         const handleInput = debounce((e: InputEvent | any) => {
             if (props.disabled ||
-                onComposition === 'compositionStart'
+                onComposition === 'compositionStart' ||
+                props.asyncLoad
             ) return
             handleFilter(e.target.value)
         }, props.debounce)
 
         // 过滤、搜索函数
         const handleFilter = (iptVal: string) => {
+            if (props.asyncLoad) return
             if (!iptVal) {
                 treeData.value = [props.options]
                 return
@@ -494,6 +541,9 @@ export default defineComponent({
             currentLabel,
             isActive,
             level,
+            loading,
+            loadingIdx,
+            isShowPanelLiNextIcon,
             togglePanel,
             handleHidePanel,
             handleClick,
@@ -520,7 +570,6 @@ export default defineComponent({
     display: inline-flex;
     transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
     font-size: 14px !important;
-
     &:not(.f-cascader__disabled):hover {
         border-color: var(--primary);
 
@@ -537,6 +586,7 @@ export default defineComponent({
         right: calc(.45em);
         transition: transform .2s ease-in-out;
         transform: translateY(-50%);
+        cursor: pointer;
     }
 
     i.icon-rotate {
@@ -553,7 +603,6 @@ export default defineComponent({
         height: 14px;
         text-align: center;
         font-size: 12px;
-        cursor: pointer;
         transition: background-color .2s ease-in-out;
 
         &:hover {
@@ -591,7 +640,6 @@ export default defineComponent({
 }
 
 .f-cascader-input {
-    display: inline-block;
     box-sizing: border-box;
     cursor: pointer;
     width: 100%;
@@ -603,6 +651,8 @@ export default defineComponent({
     border: 0;
     padding: 4px 24px 4px 12px;
     font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .f-cascader-panel {
@@ -671,12 +721,24 @@ export default defineComponent({
             font-weight: bold;
         }
 
-        i.right-icon {
+        i.right-icon, span.f-cascader__loading {
             font-size: 12px;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             right: calc(.4em);
+            z-index: 1;
+        }
+        span.f-cascader__loading{
+            width: 12px;
+            height: 12px;
+            right: -2px;
+            border: 2px solid #ddd;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            background-color: #fff;
+            animation: f-switch__loading-rotate 1s infinite linear;
+            z-index: 2;
         }
     }
 }
