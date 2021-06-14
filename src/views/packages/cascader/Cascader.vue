@@ -191,7 +191,7 @@ export default defineComponent({
         },
         foldTag: Boolean,
         stopOnSelect: Boolean,
-        asyncLoad: Function as PropType<(data: OptionsData, callback: (data: OptionsData[], isHasChildren: boolean) => void) => void>
+        asyncLoad: Function as PropType<(data: OptionsData, callback: (nextData: OptionsData[], isHasChildren: boolean, levelNum: number) => void) => void>
     },
     setup(props, { emit }) {
         const id = getRandomId('f-cascader')
@@ -276,7 +276,9 @@ export default defineComponent({
             if (props.trigger === 'hover' &&
                 !isEmpty(data.children) &&
                 !props.stopOnSelect
-            ) timer = setTimeout(() => handleChoseOption(data, levelNum), props.hoverShowTime)
+            ) timer = setTimeout(() => {
+                props.asyncLoad ? handleOptionWhenAsyncLoad(data, levelNum) : handleChoseOption(data, levelNum)
+            }, props.hoverShowTime)
         }
 
         const handleHoverLeave = (data: OptionsData) => {
@@ -295,13 +297,13 @@ export default defineComponent({
             if (props.trigger === 'click' ||
                 isEmpty(data.children) ||
                 props.stopOnSelect
-            ) handleChoseOption(data, levelNum)
+            ) props.asyncLoad ? handleOptionWhenAsyncLoad(data, levelNum) : handleChoseOption(data, levelNum)
         }
 
         // 异步加载数据源处理方式
-        const asyncGetOptions = (optionsData: OptionsData[], isHasChildren = true) => {
+        const asyncGetOptions = (optionsData: OptionsData[], isHasChildren = true, currentIndex: number) => {
+            // 传入为false，那么就标记为最后一级的数据
             isExistNextChildren.value = isHasChildren
-            console.log(isHasChildren)
             if (!isEmpty(optionsData)) {
                 level.value = currentIndex + 1
                 treeData.value = treeData.value.slice(0, currentIndex + 1)
@@ -311,23 +313,43 @@ export default defineComponent({
             loading.value = false
         }
 
-        let currentIndex = -1
-        let children: OptionsData[] = []
-        // 选择处理函数
-        const handleChoseOption = (data: OptionsData, levelNum: number) => {
+
+        // 异步加载时的处理函数
+        const handleOptionWhenAsyncLoad = (data: OptionsData, levelNum: number) => {
             const {
                 [labelKey]: label,
                 [valueKey]: value,
                 [disabledKey]: disabled
             } = data
-            children = data[childrenKey] ?? []
+            if (disabled) return
+            currentLabel.value = currentLabel.value.slice(0, levelNum)
+            currentValue.value = currentValue.value.slice(0, levelNum)
+            currentLabel.value[levelNum] = label
+            currentValue.value[levelNum] = value
+            if (props.stopOnSelect) {
+                handleResLabel()
+                emit('update:value', currentValue.value)
+                emit('change', currentValue.value)
+            }
+            data.level = levelNum + 1
+            props.asyncLoad!(data, (nextData, isHasChildren) => asyncGetOptions(nextData, isHasChildren, levelNum))
+        }
+
+        // 选择处理函数
+        const handleChoseOption = (data: OptionsData, levelNum: number) => {
+            const {
+                [labelKey]: label,
+                [valueKey]: value,
+                [childrenKey]: children = [],
+                [disabledKey]: disabled
+            } = data
             if (disabled) return
             currentLabel.value = currentLabel.value.slice(0, levelNum)
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
             // 搜索模式下的currentValue.value为二维数组，需要降维
-            if (props.filterable && !props.asyncLoad) {
+            if (props.filterable) {
                 currentValue.value = (currentValue.value as any).flat(1)
             }
             // 最后一级没必要在向外触发一遍
@@ -338,25 +360,24 @@ export default defineComponent({
             }
             // 如果是选择即停下，那不论如何都标记为最后一级
             isLast = !children?.length || props.stopOnSelect
-            currentIndex = levelNum
             // 判断是否走到了最后一级
-            if (children?.length && !props.asyncLoad) {
+            if (children?.length) {
                 level.value = levelNum + 1
                 treeData.value = treeData.value.slice(0, levelNum + 1)
                 treeData.value[levelNum + 1] = children
-            } else if (props.asyncLoad && isExistNextChildren.value) {
-                loading.value = true
-                treeData.value[currentIndex + 1] = []
-                props.asyncLoad({
-                    ...data,
-                    level: currentIndex + 1
-                } as OptionsData, asyncGetOptions)
             } else { // 在没有下级children的情况下关闭级联面板
                 handleResLabel()
                 handleHidePanel()
                 emit('update:value', currentValue.value)
                 emit('change', currentValue.value)
             }
+        // } else if (props.asyncLoad && isExistNextChildren.value) {
+        //     loading.value = true
+        //     treeData.value[currentIndex + 1] = []
+        //     props.asyncLoad({
+        //         ...data,
+        //         level: currentIndex + 1
+        //     } as OptionsData, asyncGetOptions)
         }
 
         // 处理返回的label样式

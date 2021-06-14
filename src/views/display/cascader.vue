@@ -654,7 +654,7 @@
         </div>
 
         <div>
-            <h3 id="dong_tai_jia_zai">动态加载数据源
+            <h3 id="dong_tai_jia_zai">动态加载
                 <a href="#dong_tai_jia_zai" class="f-icon-anchor"></a>
             </h3>
             <p>级联选择器可以动态加载数据源，这可以满足您对异步请求的需求。</p>
