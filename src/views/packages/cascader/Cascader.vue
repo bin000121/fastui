@@ -310,6 +310,7 @@ export default defineComponent({
             const {
                 [labelKey]: label,
                 [valueKey]: value,
+                [childrenKey]: children,
                 [disabledKey]: disabled
             } = data
             if (disabled) return
@@ -327,6 +328,10 @@ export default defineComponent({
                 handleHidePanel()
                 emit('update:value', currentValue.value)
                 emit('change', currentValue.value)
+            } else if (children?.length) {
+                level.value = levelNum + 1
+                treeData.value = treeData.value.slice(0, levelNum + 1)
+                treeData.value[levelNum + 1] = children
             } else {
                 treeData.value = treeData.value.slice(0, levelNum + 1)
                 data.level = levelNum + 1
