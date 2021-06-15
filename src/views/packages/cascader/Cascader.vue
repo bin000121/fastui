@@ -6,7 +6,7 @@
             'f-cascader__focus': isShowPanel,
             'f-cascader__disabled': disabled,
             ['f-cascader__' + size]: size !== 'default',
-            'f-cascader__filter': filterable,
+            'f-cascader__filter': filterable && !asyncLoad,
         }"
         ref="cascader"
         @click="togglePanel"
@@ -80,10 +80,10 @@
                                 </template>
                                 <i
                                     class="f-icon-arrow-right-bold right-icon"
-                                    v-if="isShowPanelLiNextIcon(subItem[props.children])"
+                                    v-if="isShowPanelLiNextIcon(subItem)"
                                 ></i>
                                 <span
-                                    v-show="loading"
+                                    v-show="subItem.isLoading"
                                     class="f-cascader__loading"
                                 ></span>
                             </li>
@@ -101,7 +101,6 @@ interface OptionsData {
     label?: string;
     children?: OptionsData[];
     disabled?: boolean;
-
     [key: string]: any;
 }
 
@@ -191,7 +190,7 @@ export default defineComponent({
         },
         foldTag: Boolean,
         stopOnSelect: Boolean,
-        asyncLoad: Function as PropType<(data: OptionsData, callback: (nextData: OptionsData[], isHasChildren: boolean, levelNum: number) => void) => void>
+        asyncLoad: Function as PropType<(data: OptionsData, callback: (nextOption: OptionsData[], isHasChildren: boolean) => void) => void>
     },
     setup(props, { emit }) {
         const id = getRandomId('f-cascader')
@@ -210,9 +209,6 @@ export default defineComponent({
         let onComposition = 'compositionStart'
         let filterObj: FilterObj
         let isLast = false
-        const loading = ref(false)
-        const loadingIdx = ref(-1)
-        const isExistNextChildren = ref(true)
 
         const {
             label: labelKey,
@@ -228,12 +224,7 @@ export default defineComponent({
         })
 
         const isShowPanelLiNextIcon = computed(() => {
-            return (data: OptionsData) => {
-                if (props.asyncLoad) {
-                    return isExistNextChildren.value
-                }
-                return !isEmpty(data)
-            }
+            return (data: OptionsData) => props.asyncLoad ? !data.isLast : !isEmpty(data[childrenKey])
         })
 
         const getFormatLabel = (label: string[]) => props?.format?.(label) ?? label.join(` ${props.separator} `)
@@ -261,7 +252,7 @@ export default defineComponent({
             cascaderIptDom.value = ''
             currentLabel.value = []
             currentValue.value = []
-            cascaderIptDom.placeholder = props.placeholder
+            cascaderIptDom.placeholder = props.placeholder ?? '请选择内容'
             emit('clear')
             emit('update:value', [])
             emit('change', [])
@@ -270,9 +261,9 @@ export default defineComponent({
 
         let timer: NodeJS.Timer
         // 移入展开、消失
-        const handleHover = (data: OptionsData, levelNum: number, subIdx: number) => {
+        const handleHover = (data: OptionsData, levelNum: number) => {
             if (data?.disabled) return
-            loadingIdx.value = subIdx
+            // 最后一级时Hover无效
             if (props.trigger === 'hover' &&
                 !isEmpty(data.children) &&
                 !props.stopOnSelect
@@ -291,28 +282,28 @@ export default defineComponent({
         }
 
         // 点击展开
-        const handleClick = (data: OptionsData, levelNum: number, subIdx: number) => {
+        const handleClick = (data: OptionsData, levelNum: number) => {
             if (data?.disabled) return
-            loadingIdx.value = subIdx
             if (props.trigger === 'click' ||
                 isEmpty(data.children) ||
                 props.stopOnSelect
             ) props.asyncLoad ? handleOptionWhenAsyncLoad(data, levelNum) : handleChoseOption(data, levelNum)
         }
 
+        let isExistNextChildren = true
         // 异步加载数据源处理方式
-        const asyncGetOptions = (optionsData: OptionsData[], isHasChildren = true, currentIndex: number) => {
+        const asyncGetOptions = (optionsData: OptionsData[], currentData: OptionsData, isHasChildren = true) => {
             // 传入为false，那么就标记为最后一级的数据
-            isExistNextChildren.value = isHasChildren
+            isExistNextChildren = isHasChildren
+            const { level: currentIdx } = currentData
             if (!isEmpty(optionsData)) {
-                level.value = currentIndex + 1
-                treeData.value = treeData.value.slice(0, currentIndex + 1)
-                treeData.value[currentIndex + 1] = optionsData
-                console.log(optionsData)
-            } else isExistNextChildren.value = false
-            loading.value = false
+                level.value = currentIdx
+                treeData.value[currentIdx] = optionsData
+                currentData[childrenKey] = optionsData
+            } else isExistNextChildren = false
+            if (!isExistNextChildren) optionsData.forEach(value => value.isLast = true)
+            currentData.isLoading = false
         }
-
 
         // 异步加载时的处理函数
         const handleOptionWhenAsyncLoad = (data: OptionsData, levelNum: number) => {
@@ -326,16 +317,25 @@ export default defineComponent({
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
-            if (props.stopOnSelect) {
+            if (props.stopOnSelect && !data?.isLast) {
                 handleResLabel()
                 emit('update:value', currentValue.value)
                 emit('change', currentValue.value)
             }
-            data.level = levelNum + 1
-            props.asyncLoad!(data, (nextData, isHasChildren) => asyncGetOptions(nextData, isHasChildren, levelNum))
+            if (data.isLast) {
+                handleResLabel()
+                handleHidePanel()
+                emit('update:value', currentValue.value)
+                emit('change', currentValue.value)
+            } else {
+                treeData.value = treeData.value.slice(0, levelNum + 1)
+                data.level = levelNum + 1
+                data.isLoading = true
+                props.asyncLoad!(data, (nextOption, isHasChildren) => asyncGetOptions(nextOption, data, isHasChildren))
+            }
         }
 
-        // 选择处理函数
+        // 处理函数
         const handleChoseOption = (data: OptionsData, levelNum: number) => {
             const {
                 [labelKey]: label,
@@ -371,18 +371,10 @@ export default defineComponent({
                 emit('update:value', currentValue.value)
                 emit('change', currentValue.value)
             }
-        // } else if (props.asyncLoad && isExistNextChildren.value) {
-        //     loading.value = true
-        //     treeData.value[currentIndex + 1] = []
-        //     props.asyncLoad({
-        //         ...data,
-        //         level: currentIndex + 1
-        //     } as OptionsData, asyncGetOptions)
         }
 
         // 处理返回的label样式
         const handleResLabel = () => {
-            // 判断是否只显示最后一级
             if (props.onlyShowLast) currentLabel.value = currentLabel.value.slice(-1)
             cascaderIptDom.value = getFormatLabel(currentLabel.value)
         }
@@ -562,8 +554,6 @@ export default defineComponent({
             currentLabel,
             isActive,
             level,
-            loading,
-            loadingIdx,
             isShowPanelLiNextIcon,
             togglePanel,
             handleHidePanel,

@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <Header/>
+        <Header style="position: absolute;"/>
         <div class="container">
             <h1>猛男 UI</h1>
             <h2>一款基于Vue3、Typescript的UI框架，让开发更简单。</h2>
@@ -35,6 +35,7 @@ export default defineComponent( {
     height: 100%;
 }
 .container{
+    padding-top: 60px;
     height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;

@@ -31,20 +31,23 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     height: 60px;
+    z-index: 999;
     /*background-color: #58a397;*/
     box-sizing: border-box;
     background-color: #fff;
     display: flex;
     align-items: center;
     padding: 0 5vw;
+    box-shadow: 0 1px 5px #ddd;
     .title{
         cursor: pointer;
         user-select: none;
     }
-}
-.header-bottom {
-    border-bottom: 1px solid #eee;
 }
 .title{
     color: #3cd0be;

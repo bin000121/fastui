@@ -132,7 +132,7 @@
             </div>
 
             <div class="demo-cascader">
-                <p>1.separator例子：</p>
+                <p>1.separator：</p>
                 <f-cascader
                     v-model:value="cascaderValue2"
                     :options="options"
@@ -140,7 +140,7 @@
                 />
             </div>
             <div class="demo-cascader">
-                <p>2.format例子：</p>
+                <p>2.format：</p>
                 <f-cascader
                     v-model:value="cascaderValue3"
                     :options="options"
@@ -659,7 +659,7 @@
             </h3>
             <p>级联选择器可以动态加载数据源，这可以满足您对异步请求的需求。</p>
             <div class="desc">
-                注意，动态加载下 <b>filterable</b> 模式将不起作用。
+                注意：动态加载下 <b>filterable</b> 模式将不起作用，此外请给 <b>options</b> 传递一个初始数据源。
             </div>
             <div class="demo-cascader">
                 <f-cascader
@@ -767,7 +767,35 @@
                 }
             ]
 
+            interface OptionsData {
+                value: string | number;
+                label?: string;
+                children?: OptionsData[];
+                disabled?: boolean;
+                level: number;
+
+                [key: string]: any;
+            }
+
+            interface Callback {
+                (nextOption: OptionsData[], isHasChildren: boolean): void
+            }
+
+            interface AsyncLoad {
+                (currentItem: OptionsData, callback: Callback): void
+            }
+
+            const asyncLoad: AsyncLoad = (currentItem, callback) => {
+                // 这里可以发起异步请求向后端拿数据，现在假设这个res就是向后端拿到的。
+                const { value, level } = currentItem
+                let res = resObj[value] ?? []
+                setTimeout(() => {
+                    callback(res, level < 2)
+                }, 1500)
+            }
+
             return{
+                asyncLoad,
                 ...toRefs(data)
             }
         }
@@ -1258,14 +1286,17 @@ export default defineComponent({
         }
 
         interface Callback {
-            (data: OptionsData, isHasChildren: boolean): void
+            (nextOption: OptionsData[], isHasChildren: boolean): void
         }
 
-        const asyncLoad = (currentItem: OptionsData, callback: Callback) => {
+        interface AsyncLoad {
+            (currentItem: OptionsData, callback: Callback): void
+        }
+
+        const asyncLoad: AsyncLoad = (currentItem, callback) => {
             // 这里可以发起异步请求向后端拿数据，现在假设这个res就是向后端拿到的。
             const { value, level } = currentItem
             let res = resObj[value] ?? []
-            console.log(level)
             setTimeout(() => {
                 callback(res, level < 2)
             }, 1500)

@@ -133,7 +133,7 @@ export default defineComponent( {
             isShowAnchor,
             tipList,
             isActive,
-            route,
+            route
         }
     }
 })
@@ -144,13 +144,12 @@ export default defineComponent( {
     height: calc(100% - 60px);
     display: flex;
     justify-content: center;
-    padding: 0 2vw;
+    padding: 60px 2vw 0;
     min-width: 996px;
 }
 
 .content{
-    flex-basis: 768px;
-    max-width: 992px;
+    flex-basis: 850px;
     padding: 20px 25px 200px;
     box-sizing: border-box;
     & :deep(h3):hover{
@@ -167,7 +166,7 @@ export default defineComponent( {
     border-left: 2px solid #eee;
     position: fixed;
     right: 5px;
-    top: 60px;
+    top: 62px;
     transition: right .15s ease-out;
     backdrop-filter: blur(5px);
     &:hover a.is-anchorHide{

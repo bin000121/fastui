@@ -83,7 +83,8 @@ export default defineComponent( {
 <style scoped lang="scss">
 .aside{
     min-height: calc(100vh - 60px);
-    width: 248px;
+    max-width: 250px;
+    width: 15vw;
     min-width: 200px;
     box-sizing: border-box;
     border-right: 1px solid #eee;
