@@ -318,7 +318,6 @@ export default defineComponent({
             currentValue.value = currentValue.value.slice(0, levelNum)
             currentLabel.value[levelNum] = label
             currentValue.value[levelNum] = value
-            console.log(treeData.value)
             if (props.stopOnSelect && !data?.isLast) {
                 handleResLabel()
                 emit('update:value', currentValue.value)
@@ -387,7 +386,6 @@ export default defineComponent({
 
         // 拼凑出选项面板的数据
         const getOptions = () => {
-            if (props.asyncLoad) return [props.options]
             if (props.disabled) return []
             currentLabel.value = []
             // 私有函数，用作递归

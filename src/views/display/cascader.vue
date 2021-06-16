@@ -664,7 +664,7 @@
             <div class="demo-cascader">
                 <f-cascader
                     v-model:value="cascaderValue16"
-                    :options="options"
+                    :options="options4"
                     :async-load="asyncLoad"
                 />
             </div>
@@ -1185,7 +1185,17 @@ export default defineComponent({
                         },
                     ]
                 },
-            ]
+            ],
+            options4: [
+                {
+                    label: '福建省',
+                    value: 'fujian',
+                },
+                {
+                    label: '广西',
+                    value: 'guangxi',
+                }
+            ],
         })
 
         const handleClear = () => {
