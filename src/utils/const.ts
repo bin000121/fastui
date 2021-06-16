@@ -26,6 +26,7 @@ export default {
     Row: 'fRow',
     Select: 'fSelect',
     Cascader: 'fCascader',
+    Carousel: 'fCarousel',
     SelectGroup: 'fSelectGroup',
     SelectOption: 'fSelectOption',
     Slider: 'fSlider',

@@ -184,6 +184,14 @@ const routes: RouteRecordRaw[] = [
                 }
             },
             {
+                path: '/doc/carousel',
+                name: 'carousel',
+                component: () => import('/@/views/display/carousel.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
+            },
+            {
                 path: '/doc/tabs',
                 name: 'tabs',
                 component: () => import('/@/views/display/tabs.vue'),

@@ -35,6 +35,7 @@ export default defineComponent( {
             '/doc/input_number': 'InputNumber 步进器',
             '/doc/select': 'Select 下拉框',
             '/doc/cascader': 'Cascader 级联选择器',
+            '/doc/carousel': 'Carousel 走马灯',
             '/doc/tabs': 'Tabs 标签页',
             '/doc/pagination': 'Pagination 分页器',
             '/doc/radio': 'Radio 单选按钮',
