@@ -662,6 +662,7 @@
                 注意：动态加载下 <b>filterable</b> 模式将不起作用，此外请给 <b>options</b> 传递一个初始数据源。
             </div>
             <div class="demo-cascader">
+                <p>当前选中： {{cascaderValue16}}</p>
                 <f-cascader
                     v-model:value="cascaderValue16"
                     :options="options4"
@@ -670,7 +671,8 @@
             </div>
             <div v-highlight>
                 <pre><code>
-    {{`<f-cascader
+    {{`<p>当前选中： \{\{cascaderValue\}\}</p>
+    <f-cascader
         v-model:value="cascaderValue"
         :options="options"
         :async-load="asyncLoad"
