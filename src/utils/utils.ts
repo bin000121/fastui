@@ -117,3 +117,12 @@ export function isFirefox() {
     return window.navigator.userAgent.includes('Firefox')
 }
 
+// 是否有效单位
+export function isCorrectUnit (unit: string | number | undefined) {
+    if (!unit) return '0px'
+    if (typeof unit === 'number') return unit + 'px'
+    const reg = /px|%|vw|vh|em|rem/
+    let match = (unit! as string).match(reg)
+    return match?.length ? parseInt(unit! as string) + match[0] : '0px'
+}
+

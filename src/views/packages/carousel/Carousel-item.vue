@@ -2,7 +2,7 @@
     <div
         class="f-carousel-item"
     >
-        666
+        <slot></slot>
     </div>
 </template>
 
@@ -30,5 +30,7 @@ export default defineComponent({
 .f-carousel-item{
     width: 100%;
     height: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
 }
 </style>

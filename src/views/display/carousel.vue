@@ -11,13 +11,34 @@
 
             <div class="demo-carousel">
                 <f-carousel
-                    height="350px"
+                    height="300px"
+                    loop
                 >
-                    <f-carousel-item class="blue"/>
-                    <f-carousel-item class="red"/>
-                    <f-carousel-item class="pink"/>
-                    <f-carousel-item class="red"/>
-                    <f-carousel-item class="blue"/>
+                    <f-carousel-item>
+                        <div class="deep-1">
+                            <b>Carousel 1</b>
+                        </div>
+                    </f-carousel-item>
+                    <f-carousel-item>
+                        <div class="deep-2">
+                            <b>Carousel 2</b>
+                        </div>
+                    </f-carousel-item>
+                    <f-carousel-item>
+                        <div class="deep-3">
+                            <b>Carousel 3</b>
+                        </div>
+                    </f-carousel-item>
+                    <f-carousel-item>
+                        <div class="deep-2">
+                            <b>Carousel 4</b>
+                        </div>
+                    </f-carousel-item>
+                    <f-carousel-item>
+                        <div class="deep-1">
+                            <b>Carousel 5</b>
+                        </div>
+                    </f-carousel-item>
                 </f-carousel>
             </div>
         </div>
@@ -43,13 +64,25 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.red{
-    background-color: red;
+.demo-carousel{
+    width: 600px;
 }
-.blue{
-    background-color: blue;
+.deep-1, .deep-2, .deep-3{
+    background-color: #ccc;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 40px;
+    letter-spacing: 1px;
 }
-.pink{
-    background-color: pink;
+.deep-2{
+    background-color: #ddd;
+    height: 100%;
+}
+.deep-3{
+    background-color: #eee;
+    height: 100%;
 }
 </style>
