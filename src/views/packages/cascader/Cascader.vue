@@ -72,7 +72,7 @@
                                 :title="subItem[props.label]"
                             >
                                 <span
-                                    v-if="filterable && filterHighlight"
+                                    v-if="filterable && keywordHighlight"
                                     v-html="subItem.filterableLabel ?? subItem[props.label]"
                                 ></span>
                                 <template v-else>
@@ -179,7 +179,7 @@ export default defineComponent({
             default: '/'
         },
         filterable: Boolean,
-        filterHighlight: Boolean,
+        keywordHighlight: Boolean,
         filterFunction: {
             type: Function as PropType<(labelFormat: string, keyword: string) => boolean>,
             default: (labelFormat: string, keyword: string) => labelFormat.search(new RegExp(keyword)) !== -1
@@ -441,7 +441,7 @@ export default defineComponent({
             let filterRes = labelList.reduce((pre: any[], cur: string[], idx: number) => {
                 let valStr =  getFormatLabel(cur)
                 if (props.filterFunction(valStr, iptVal)) {
-                    let filterableLabel = props.filterHighlight ?
+                    let filterableLabel = props.keywordHighlight ?
                         valStr.replace(new RegExp(iptVal, 'g'), (word: string) => `<b style="color: var(--primary)">${word}</b>`)
                         :
                         valStr
@@ -457,15 +457,23 @@ export default defineComponent({
         }
 
         // 搜索模式下打开、关闭级联面板的处理函数
-        const handleShowOrHideWhenFilterable = (flag: boolean) => {
+        const handleShowOrHideWhenFilterable = (isOpen: boolean) => {
             if (props.disabled ||
                 !props.filterable ||
-                !props?.value?.length ||
                 props.asyncLoad
             ) return
             const formatLabel = getFormatLabel(currentLabel.value)
-            cascaderIptDom.value = flag ? '' : isLast ? formatLabel : cascaderIptDom.placeholder
-            cascaderIptDom.placeholder = flag ? formatLabel : props.placeholder
+            if (isOpen) {
+                cascaderIptDom.value = ''
+                cascaderIptDom.placeholder = props?.value?.length ? formatLabel : props.placeholder
+            } else {
+                if (isLast) cascaderIptDom.value = formatLabel
+                else if (cascaderIptDom.placeholder === props.placeholder) cascaderIptDom.value = ''
+                else cascaderIptDom.value = cascaderIptDom.placeholder
+                cascaderIptDom.placeholder = props.placeholder
+            }
+            // cascaderIptDom.value = isOpen ? '' : isLast ? formatLabel : cascaderIptDom.placeholder
+            // cascaderIptDom.placeholder = isOpen ? formatLabel : props.placeholder
         }
 
         // 获取所有路径

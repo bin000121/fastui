@@ -577,7 +577,7 @@
             <p>输入关键字进行搜索并返回符合条件的选项。</p>
 
             <div class="desc">
-                为其设置属性 <b>filterable</b> 即可开启搜索模式，同时再设置属性 <b>filter-highlight</b> 可以使得关键字高亮。
+                为其设置属性 <b>filterable</b> 即可开启搜索模式，同时再设置属性 <b>keyword-highlight</b> 可以使得关键字高亮。
             </div>
             <div class="demo-cascader">
                 <p>当前选中：{{ cascaderValue14 }}</p>
@@ -586,7 +586,7 @@
                     :options="options"
                     filterable
                     clearable
-                    filter-highlight
+                    keyword-highlight
                 />
             </div>
 
