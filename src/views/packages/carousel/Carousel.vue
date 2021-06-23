@@ -301,6 +301,7 @@ export default defineComponent({
     list-style: none;
     cursor: pointer;
     margin: 0 4px;
+    transition: width .2s ease;
 }
 .f-carousel-dots__rect{
     background-color: #fff;
