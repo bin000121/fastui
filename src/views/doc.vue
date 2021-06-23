@@ -10,25 +10,26 @@
 <!--                    </keep-alive>-->
 <!--                </transition>-->
             </router-view>
-            <div
-                :class="{
+
+        </div>
+        <div
+            :class="{
                     'anchor': true,
                     'anchor__hide': isAnchorHide,
                 }"
-                v-show="isShowAnchor"
-            >
-                <a
-                    v-for="([k, v], i) in tipList"
-                    :key="i"
-                    :href="'#' + v"
-                    :class="{
+            v-show="isShowAnchor"
+        >
+            <a
+                v-for="([k, v], i) in tipList"
+                :key="i"
+                :href="'#' + v"
+                :class="{
                         'is-active': i === isActive,
                         'is-anchorHide': isAnchorHide,
                     }"
-                    :title="k"
-                    @click="isActive = i"
-                >{{k}}</a>
-            </div>
+                :title="k"
+                @click="isActive = i"
+            >{{k}}</a>
         </div>
         <f-top :scroll-top="800" v-if="!route.path.includes('/toTop')">
             <i class="f-icon-to-top"></i>
@@ -141,17 +142,17 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .doc{
-    height: calc(100% - 60px);
-    display: flex;
-    justify-content: center;
-    padding: 60px 2vw 0;
-    min-width: 996px;
+    position: relative;
+    height: 100vh;
+    max-width: 1096px;
+    margin: 0 auto;
 }
 
 .content{
-    flex-basis: 850px;
-    padding: 20px 25px 200px;
+    flex-basis: 880px;
+    padding: 60px 25px 50px 235px;
     box-sizing: border-box;
+    min-width: 880px;
     & :deep(h3):hover{
         a{
             opacity: 1;

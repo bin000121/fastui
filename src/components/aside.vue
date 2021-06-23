@@ -11,12 +11,8 @@
 <script lang="ts">
 import {
     defineComponent,
-    reactive,
-    onMounted,
-    onUnmounted,
     ref
 } from 'vue'
-import { throttle } from '/@/utils/throttle'
 
 export default defineComponent( {
     setup () {
@@ -58,21 +54,7 @@ export default defineComponent( {
         }
 
         const Aside = ref(null)
-        let asideDom: HTMLElement | any
 
-        // const onScroll = throttle(() => {
-        //     let scrollTop = document.documentElement.scrollTop
-        //     scrollTop > 60 ? asideDom.classList.add('aside__sticky') : asideDom.classList.remove('aside__sticky')
-        // }, 25)
-
-        // onMounted(() => {
-        //     asideDom = Aside.value as any
-        //     window.addEventListener('scroll', onScroll)
-        // })
-        //
-        // onUnmounted(() => {
-        //     window.removeEventListener('scroll', onScroll)
-        // })
         return {
             Aside,
             element
@@ -83,17 +65,24 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .aside{
-    min-height: calc(100vh - 60px);
-    max-width: 250px;
-    width: 15vw;
-    min-width: 200px;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    width: 220px;
     box-sizing: border-box;
     border-right: 1px solid #eee;
-    padding: 5px 2px 5px 5px;
-
+    background-color: #fff;
+    padding: 15px 0 45px 5px;
+    overflow: hidden;
+    z-index: 1;
+    &:hover{
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
     ul{
         padding: 0;
     }
+
     .active{
         color: #3cd0be;
         background-color: #3cd0be1a;

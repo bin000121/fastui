@@ -36,14 +36,14 @@ export default defineComponent( {
     left: 0;
     right: 0;
     height: 60px;
-    z-index: 999;
+    z-index: 1;
     /*background-color: #58a397;*/
     box-sizing: border-box;
     background-color: #fff;
     display: flex;
     align-items: center;
     padding: 0 5vw;
-    box-shadow: 0 1px 5px #ddd;
+    border-bottom: 1px solid #ddd;
     .title{
         cursor: pointer;
         user-select: none;
