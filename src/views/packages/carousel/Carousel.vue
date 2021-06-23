@@ -173,11 +173,11 @@ export default defineComponent({
 
         const handleSlide = () => {
             const containerWidth = itemListDom.offsetWidth
+            let idx = currentIndex.value % 4
             if (currentIndex.value === instanceList.length - 1) {
                 itemListDom.style.cssText = 'left: 0px;'
                 currentIndex.value = 0
             }
-            let idx = currentIndex.value % 4
             itemListDom.style.transform = `translate(${-1 * (idx + 1) * containerWidth}px)`
             currentIndex.value ++
         }
@@ -301,7 +301,8 @@ export default defineComponent({
     list-style: none;
     cursor: pointer;
     margin: 0 4px;
-    transition: width .2s ease;
+
+    transition: width .15s ease;
 }
 .f-carousel-dots__rect{
     background-color: #fff;

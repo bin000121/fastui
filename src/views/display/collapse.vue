@@ -269,6 +269,5 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .demo-collapse{
-
 }
 </style>

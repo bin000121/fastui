@@ -128,7 +128,7 @@
             <p>您可以自定义显示选择后input中的显示格式。</p>
             <div class="desc">
                 级联选择器提供了两种自定义显示方法，分隔符：<b>separator</b> 和 格式化函数：<b>format</b>，
-                其中格式化函数有一个参数，即选中的label组成的数组。
+                其中格式化函数接收一个参数，参数即为选中的label组成的数组。
             </div>
 
             <div class="demo-cascader">
@@ -552,6 +552,7 @@
             </div>
 
             <div>
+                <p>当前选中：{{cascaderValue13}}</p>
                 <f-cascader
                     v-model:value="cascaderValue13"
                     :options="options"
@@ -561,7 +562,8 @@
 
             <div v-highlight>
                 <pre><code>
-    {{`<f-cascader
+    {{`<p>当前选中：\{\{cascaderValue\}\}</p>
+    <f-cascader
         v-model:value="cascaderValue"
         :options="options"
         stop-on-select
