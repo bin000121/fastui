@@ -3,17 +3,18 @@
         :id="id"
         :style="`height: ${getHeight}`"
         class="f-carousel-container"
+        ref="carouselContainer"
     >
-        <div
-            ref="itemList"
-            class="f-carousel-item-container"
-            :class="{
-                ['f-carousel-item-container__' + effect]: effect
-            }"
-            :style="`transition-timing-function: ${easing}`"
-        >
+<!--        <div-->
+<!--            ref="carouselContainer"-->
+<!--            class="f-carousel-item-container"-->
+<!--            :class="{-->
+<!--                ['f-carousel-item-container__' + effect]: effect-->
+<!--            }"-->
+<!--            :style="`transition-timing-function: ${easing}`"-->
+<!--        >-->
             <slot></slot>
-        </div>
+<!--        </div>-->
         <ul
             v-if="showDots"
             class="f-carousel-dots-container"
@@ -26,6 +27,7 @@
                     ['f-carousel-dots__' + dotsStyle]: true,
                     'is-active': currentIndex === idx
                 }"
+                @click="handleClickDots(idx)"
             ></li>
         </ul>
         <template v-if="showArrow">
@@ -64,6 +66,7 @@ import { isCorrectUnit, debounce } from '/@/utils/utils'
 
 export default defineComponent({
     props: {
+        value: Number,
         height: String,
         trigger: {
             type: String,
@@ -115,27 +118,42 @@ export default defineComponent({
         const orderList: number[] = []
         const dotsNum = ref(0)
         const currentIndex = ref(0)
-        const itemList = ref(null)
-        let itemListDom: HTMLElement
+        const carouselContainer = ref(null)
+        let carouselContainerDom: HTMLElement
         const root = getCurrentInstance()
         const getHeight = computed(() => {
             return isCorrectUnit(props.height)
         })
 
+        let containerWidth: number
+
         const collectInstance = (instance: ComponentInternalInstance) => {
             instanceList.push(instance)
             dotsNum.value = instanceList.length
             orderList[dotsNum.value - 1] = dotsNum.value - 1
-            if (slots.default!().length === dotsNum.value && props.loop) nextTick(initSetInterval)
         }
-        console.log(instanceList)
+
+        const handleCurrentIdx = (num = 1) => {
+            let sum = currentIndex.value + num
+            if (sum > instanceList.length - 1) return 0
+            else if (sum < 0) return instanceList.length - 1
+            else return sum
+        }
 
         const prev = () => {
-            console.log('prev')
+            console.log(11)
         }
 
         const next = () => {
-            console.log('next')
+            let curIdx = currentIndex.value % (instanceList.length - 1)
+            let curInsDom = instanceList[curIdx].proxy.$el as HTMLElement
+            let nextIdx = handleCurrentIdx()
+            let nextInsDom = instanceList[nextIdx].proxy.$el as HTMLElement
+            curInsDom.style.transform = `translateX(-${containerWidth}px)`
+            nextInsDom.style.cssText = `transform: translateX(0);transition: transform .3s ${props.easing};z-index: 2`
+            currentIndex.value = nextIdx
+            console.log(curInsDom)
+            console.log(nextInsDom)
         }
 
         let timer: NodeJS.Timer
@@ -147,66 +165,82 @@ export default defineComponent({
             ) return
             timer = setInterval(() => {
                 if (props.effect === 'slide') {
-                    handleSlide()
+                    next()
                 }
             }, props.interval)
         }
 
-        const getOrderObj = (curIdx: number) => {
-            let obj: any = {}
-            let orderArr: number[] = [...orderList]
-            for (let i = 0; i < orderArr.length; i ++) {
-                let findIdx = orderArr.indexOf(curIdx)
-                if (findIdx === 1) break
-                if (findIdx === 0) {
-                    orderArr = [...orderArr.slice(-1), ...orderArr.slice(0, -1)] as number[]
-                    break
-                }
-                orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)] as number[]
-            }
-            console.log(orderArr)
-            orderArr.forEach((val, i) => {
-                obj[val] = i
-            })
-            return obj
-        }
-
         const handleSlide = () => {
-            const containerWidth = itemListDom.offsetWidth
+            containerWidth = carouselContainerDom.offsetWidth
             let idx = currentIndex.value % 4
             if (currentIndex.value === instanceList.length - 1) {
-                itemListDom.style.cssText = 'left: 0px;'
+                carouselContainerDom.style.cssText = 'left: 0px;'
                 currentIndex.value = 0
             }
-            itemListDom.style.transform = `translate(${-1 * (idx + 1) * containerWidth}px)`
+            carouselContainerDom.style.transform = `translate(${-1 * (idx + 1) * containerWidth}px)`
             currentIndex.value ++
+            setTimeout(() => initCurrentIdx(), 300)
         }
         
         const handleFade = () => {
             console.log(111)
         }
-        
-        const initItemOrder = () => {
-            let obj = getOrderObj(currentIndex.value)
-            console.log(obj)
+
+        const handleClickDots = (idx: number) => {
+            if (currentIndex.value === idx) return
+            console.log(idx)
         }
-        
+
+        // 初始化索引
+        const initCurrentIdx = () => {
+            if (!props.value || typeof props.value !== 'number') currentIndex.value = 0
+            else currentIndex.value = props.value > instanceList.length - 1 || props.value < 0 ? 0 : props.value
+        }
+
+        // 初始化容器顺序
+        const initPosition = () => {
+            let findIdx = currentIndex.value
+            let orderArr: number[] = [...orderList]
+            if (findIdx === 0) orderArr.unshift(orderArr.splice(-1, 1)[0])
+            else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
+            containerWidth = carouselContainerDom.offsetWidth
+            orderArr.forEach((val: number, idx: number) => {
+                let $el = instanceList[val].proxy.$el as HTMLElement
+                if (idx === 0) $el.style.cssText = `transform: translateX(-${containerWidth}px);transition: transform .3s ${props.easing}`
+                else if (idx === 1) $el.style.cssText = 'transform: translateX(0);transition: transform .3s ${props.easing};z-index: 2'
+                else if (idx === 2) {
+                    $el.style.cssText = `transform: translateX(${containerWidth}px);transition: transform .3s ${props.easing};z-index: 1`
+                } else {
+                    $el.style.cssText = `transform: translateX(${containerWidth}px);z-index: 1`
+                }
+            })
+            console.log(orderArr)
+        }
+
+        watch(() => currentIndex.value, () => {
+            initPosition()
+        })
+
         provide('parent', {
             root,
             collectInstance,
         })
         onMounted(() => {
-            itemListDom = itemList.value!
-            initItemOrder()
+            carouselContainerDom = carouselContainer.value!
+            console.log(instanceList)
+            initCurrentIdx()
+            if (props.loop) nextTick(initSetInterval)
+            initPosition()
         })
         return {
             id,
             dotsNum,
             getHeight,
-            itemList,
+            carouselContainer,
             currentIndex,
             prev,
-            next
+            next,
+            handleClickDots,
         }
     }
 })
@@ -247,6 +281,7 @@ export default defineComponent({
         background-color: rgba(0, 0, 0, .12);
         box-sizing: border-box;
         transition: background-color .2s, opacity .3s ease;
+        z-index: 5;
     }
     i.arrow-left{
         left: 0;
@@ -282,6 +317,7 @@ export default defineComponent({
     margin: 0;
     padding: 0;
     list-style: none;
+    z-index: 5;
     li.f-carousel-dots__circle.is-active{
         height: 7px;
         width: 20px;
@@ -301,7 +337,6 @@ export default defineComponent({
     list-style: none;
     cursor: pointer;
     margin: 0 4px;
-
     transition: width .15s ease;
 }
 .f-carousel-dots__rect{

@@ -12,7 +12,6 @@
             <div class="demo-carousel">
                 <f-carousel
                     height="300px"
-                    loop
                 >
                     <f-carousel-item>
                         <div class="deep-1">
@@ -68,7 +67,7 @@ export default defineComponent({
     width: 600px;
 }
 .deep-1, .deep-2, .deep-3{
-    background-color: #ccc;
+    background-color: rgba(var(--primary-rgba), .7);
     height: 100%;
     display: flex;
     justify-content: center;
@@ -78,11 +77,11 @@ export default defineComponent({
     letter-spacing: 1px;
 }
 .deep-2{
-    background-color: #ddd;
+    background-color: var(--primary);
     height: 100%;
 }
 .deep-3{
-    background-color: #eee;
+    background-color: rgba(var(--primary-rgba), .4);
     height: 100%;
 }
 </style>
