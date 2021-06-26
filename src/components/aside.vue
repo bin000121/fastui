@@ -1,8 +1,15 @@
 <template>
     <div class="aside" ref="Aside">
         <ul>
-            <li v-for="([k, v]) in Object.entries(element)" :key="k">
-                <router-link :to="k" active-class="active">{{v}}</router-link>
+            <li
+                v-for="([k, v], idx) in Object.entries(element)"
+                :key="k"
+                :class="{
+                    'active': idx === activeIdx
+                }"
+                @click="activeIdx = idx"
+            >
+                <router-link :to="k">{{v}}</router-link>
             </li>
         </ul>
     </div>
@@ -54,8 +61,10 @@ export default defineComponent( {
         }
 
         const Aside = ref(null)
+        const activeIdx = ref(-1)
 
         return {
+            activeIdx,
             Aside,
             element
         }
@@ -82,12 +91,6 @@ export default defineComponent( {
     ul{
         padding: 0;
     }
-
-    .active{
-        color: #3cd0be;
-        background-color: #3cd0be1a;
-        border-right: 3px solid #3cd0be;
-    }
 }
 .aside__sticky{
     position: absolute!important;
@@ -99,6 +102,13 @@ ul{
     li{
         height: 45px;
         line-height: 45px;
+    }
+    li.active{
+        a{
+            color: #3cd0be;
+        }
+        background-color: #3cd0be1a;
+        border-right: 3px solid #3cd0be;
     }
     a{
         color: #999;

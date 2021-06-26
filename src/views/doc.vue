@@ -143,16 +143,15 @@ export default defineComponent( {
 <style scoped lang="scss">
 .doc{
     position: relative;
-    height: 100vh;
-    max-width: 1096px;
+    height: calc(100%);
+    max-width: 992px;
     margin: 0 auto;
 }
 
 .content{
-    flex-basis: 880px;
+    flex-basis: 850px;
     padding: 60px 25px 50px 235px;
     box-sizing: border-box;
-    min-width: 880px;
     & :deep(h3):hover{
         a{
             opacity: 1;
