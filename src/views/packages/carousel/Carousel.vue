@@ -5,16 +5,7 @@
         class="f-carousel-container"
         ref="carouselContainer"
     >
-<!--        <div-->
-<!--            ref="carouselContainer"-->
-<!--            class="f-carousel-item-container"-->
-<!--            :class="{-->
-<!--                ['f-carousel-item-container__' + effect]: effect-->
-<!--            }"-->
-<!--            :style="`transition-timing-function: ${easing}`"-->
-<!--        >-->
-            <slot></slot>
-<!--        </div>-->
+        <slot></slot>
         <ul
             v-if="showDots"
             class="f-carousel-dots-container"
@@ -62,7 +53,7 @@ import {
 } from 'vue'
 import type { ComponentInternalInstance } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
-import { isCorrectUnit, debounce } from '/@/utils/utils'
+import { isCorrectUnit, throttle } from '/@/utils/utils'
 
 export default defineComponent({
     props: {
@@ -140,21 +131,21 @@ export default defineComponent({
             else return sum
         }
 
+        let lock = false
         const prev = () => {
             console.log(11)
         }
 
-        const next = () => {
+        const next = throttle(() => {
             let curIdx = currentIndex.value % (instanceList.length - 1)
-            let curInsDom = instanceList[curIdx].proxy.$el as HTMLElement
             let nextIdx = handleCurrentIdx()
+            let curInsDom = instanceList[curIdx].proxy.$el as HTMLElement
             let nextInsDom = instanceList[nextIdx].proxy.$el as HTMLElement
+            curInsDom.style.transition = `transform .3s ${props.easing}`
             curInsDom.style.transform = `translateX(-${containerWidth}px)`
             nextInsDom.style.cssText = `transform: translateX(0);transition: transform .3s ${props.easing};z-index: 2`
             currentIndex.value = nextIdx
-            console.log(curInsDom)
-            console.log(nextInsDom)
-        }
+        }, 300)
 
         let timer: NodeJS.Timer
         const initSetInterval = () => {
@@ -199,22 +190,23 @@ export default defineComponent({
 
         // 初始化容器顺序
         const initPosition = () => {
+            if (instanceList.length === 1) return
             let findIdx = currentIndex.value
             let orderArr: number[] = [...orderList]
             if (findIdx === 0) orderArr.unshift(orderArr.splice(-1, 1)[0])
             else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
             containerWidth = carouselContainerDom.offsetWidth
-            orderArr.forEach((val: number, idx: number) => {
+            let [prev, cur, ...rest] = orderArr
+            instanceList[cur].proxy.$el.style.cssText = `transform: translateX(0);transition: transform .3s ${props.easing};z-index: 3`
+            instanceList[prev].proxy.$el.style.cssText = `transform: translateX(-${containerWidth}px);transition: transform .3s ${props.easing};`
+            rest.forEach((val: number, idx: number) => {
                 let $el = instanceList[val].proxy.$el as HTMLElement
-                if (idx === 0) $el.style.cssText = `transform: translateX(-${containerWidth}px);transition: transform .3s ${props.easing}`
-                else if (idx === 1) $el.style.cssText = 'transform: translateX(0);transition: transform .3s ${props.easing};z-index: 2'
-                else if (idx === 2) {
+                if (idx === 0) {
                     $el.style.cssText = `transform: translateX(${containerWidth}px);transition: transform .3s ${props.easing};z-index: 1`
                 } else {
                     $el.style.cssText = `transform: translateX(${containerWidth}px);z-index: 1`
                 }
             })
-            console.log(orderArr)
         }
 
         watch(() => currentIndex.value, () => {

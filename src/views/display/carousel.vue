@@ -29,12 +29,12 @@
                         </div>
                     </f-carousel-item>
                     <f-carousel-item>
-                        <div class="deep-2">
+                        <div class="deep-1">
                             <b>Carousel 4</b>
                         </div>
                     </f-carousel-item>
                     <f-carousel-item>
-                        <div class="deep-1">
+                        <div class="deep-2">
                             <b>Carousel 5</b>
                         </div>
                     </f-carousel-item>
@@ -78,10 +78,8 @@ export default defineComponent({
 }
 .deep-2{
     background-color: var(--primary);
-    height: 100%;
 }
 .deep-3{
     background-color: rgba(var(--primary-rgba), .4);
-    height: 100%;
 }
 </style>
