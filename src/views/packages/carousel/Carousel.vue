@@ -95,7 +95,7 @@ export default defineComponent({
         },
         showArrowType: {
             type: String,
-            default: 'always',
+            default: 'hover',
             validator: (val: string) => ['hover', 'always', 'none'].includes(val)
         },
         easing: {
