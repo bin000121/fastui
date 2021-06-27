@@ -4,6 +4,8 @@
         :style="`height: ${getHeight}`"
         class="f-carousel-container"
         ref="carouselContainer"
+        @mouseenter="handleMouseenter"
+        @mouseleave="handleMouseleave"
     >
         <slot></slot>
         <ul
@@ -15,7 +17,7 @@
                 v-for="(item, idx) in dotsNum"
                 :key="item"
                 :class="{
-                    ['f-carousel-dots__' + dotsStyle]: true,
+                    ['f-carousel-dots__' + dotsType]: true,
                     'is-active': currentIndex === idx
                 }"
                 @click="handleClickDots(idx)"
@@ -25,14 +27,14 @@
             <i
                 class="f-icon-arrow-left-bold arrow-left"
                 :class="{
-                    ['arrow-left__' + showArrowType]: showArrowType !== 'always'
+                    ['arrow-left__' + showArrowType]: true
                 }"
                 @click="prev"
             ></i>
             <i
                 class="f-icon-arrow-right-bold arrow-right"
                 :class="{
-                    ['arrow-right__' + showArrowType]: showArrowType !== 'always'
+                    ['arrow-right__' + showArrowType]: true
                 }"
                 @click="next"
             ></i>
@@ -78,7 +80,7 @@ export default defineComponent({
             type: String,
             default: ''
         },
-        dotsStyle: {
+        dotsType: {
             type: String,
             default: 'circle',
             validator: (val: string) => ['circle', 'rect'].includes(val)
@@ -131,34 +133,25 @@ export default defineComponent({
             else return sum
         }
 
-        let lock = false
-        const prev = () => {
-            console.log(11)
-        }
+        let isNext = true
+        const prev = throttle(() => {
+            currentIndex.value = handleCurrentIdx(-1)
+            isNext = false
+        }, 300)
 
         const next = throttle(() => {
-            let curIdx = currentIndex.value % (instanceList.length - 1)
-            let nextIdx = handleCurrentIdx()
-            let curInsDom = instanceList[curIdx].proxy.$el as HTMLElement
-            let nextInsDom = instanceList[nextIdx].proxy.$el as HTMLElement
-            curInsDom.style.transition = `transform .3s ${props.easing}`
-            curInsDom.style.transform = `translateX(-${containerWidth}px)`
-            nextInsDom.style.cssText = `transform: translateX(0);transition: transform .3s ${props.easing};z-index: 2`
-            currentIndex.value = nextIdx
+            currentIndex.value = handleCurrentIdx()
+            isNext = true
         }, 300)
 
         let timer: NodeJS.Timer
         const initSetInterval = () => {
-            if (instanceList?.length === 1
-                || !instanceList?.length ||
-                props.interval <= 0 ||
-                props.interval < 500
-            ) return
+            if (instanceList?.length <= 1) return
             timer = setInterval(() => {
                 if (props.effect === 'slide') {
                     next()
                 }
-            }, props.interval)
+            }, props.interval >= 500 ? props.interval : 500)
         }
 
         const handleSlide = () => {
@@ -177,9 +170,27 @@ export default defineComponent({
             console.log(111)
         }
 
+        const handleMouseenter = () => {
+            if (!props.loop) return
+            clearInterval(timer)
+            console.log('handleMouseEnter')
+        }
+
+        const handleMouseleave = () => {
+            if (!props.loop) return
+            initSetInterval()
+            console.log('handleMouseleave')
+        }
+
         const handleClickDots = (idx: number) => {
             if (currentIndex.value === idx) return
-            console.log(idx)
+            isNext = idx > currentIndex.value
+            currentIndex.value = idx
+            console.log(currentIndex.value)
+        }
+
+        const initTimingFunction = () => {
+            carouselContainerDom.style.setProperty('--transition-timing-function', props.easing)
         }
 
         // 初始化索引
@@ -189,7 +200,7 @@ export default defineComponent({
         }
 
         // 初始化容器顺序
-        const initPosition = () => {
+        const initPosition = (isInit = false) => {
             if (instanceList.length === 1) return
             let findIdx = currentIndex.value
             let orderArr: number[] = [...orderList]
@@ -197,16 +208,28 @@ export default defineComponent({
             else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
             containerWidth = carouselContainerDom.offsetWidth
             let [prev, cur, ...rest] = orderArr
-            instanceList[cur].proxy.$el.style.cssText = `transform: translateX(0);transition: transform .3s ${props.easing};z-index: 3`
-            instanceList[prev].proxy.$el.style.cssText = `transform: translateX(-${containerWidth}px);transition: transform .3s ${props.easing};`
+            console.log(orderArr)
+            let transition = `transition: transform .3s ${props.easing}`
+            let curDom = instanceList[cur].proxy.$el as HTMLElement
+            let prevDom = instanceList[prev].proxy.$el as HTMLElement
+            curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
+            prevDom.style.cssText = `transform: translateX(-${containerWidth}px);${transition}`
             rest.forEach((val: number, idx: number) => {
                 let $el = instanceList[val].proxy.$el as HTMLElement
                 if (idx === 0) {
-                    $el.style.cssText = `transform: translateX(${containerWidth}px);transition: transform .3s ${props.easing};z-index: 1`
+                    $el.style.cssText = `transform: translateX(${containerWidth}px);${transition}`
                 } else {
-                    $el.style.cssText = `transform: translateX(${containerWidth}px);z-index: 1`
+                    $el.style.cssText = `transform: translateX(${containerWidth}px)`
                 }
             })
+            if (isInit) {
+                instanceList[cur].proxy.$el.style.transition = 'none'
+                instanceList[prev].proxy.$el.style.transition = 'none'
+                instanceList[rest[0]].proxy.$el.style.transition = 'none'
+            }
+            if (!isNext) {
+                instanceList[prev].proxy.$el.style.transition = 'none'
+            }
         }
 
         watch(() => currentIndex.value, () => {
@@ -215,14 +238,14 @@ export default defineComponent({
 
         provide('parent', {
             root,
-            collectInstance,
+            collectInstance
         })
         onMounted(() => {
             carouselContainerDom = carouselContainer.value!
-            console.log(instanceList)
             initCurrentIdx()
+            initTimingFunction()
             if (props.loop) nextTick(initSetInterval)
-            initPosition()
+            initPosition(true)
         })
         return {
             id,
@@ -233,6 +256,8 @@ export default defineComponent({
             prev,
             next,
             handleClickDots,
+            handleMouseenter,
+            handleMouseleave,
         }
     }
 })
@@ -240,6 +265,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-carousel-container{
+    --transition-timing-function: ease;
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -272,23 +298,32 @@ export default defineComponent({
         font-size: 24px;
         background-color: rgba(0, 0, 0, .12);
         box-sizing: border-box;
-        transition: background-color .2s, opacity .3s ease;
+        transition: background-color .2s, opacity .3s ease, left .25s ease, right .25s ease;
         z-index: 5;
     }
     i.arrow-left{
-        left: 0;
         padding-right: 1px;
     }
     i.arrow-right{
-        right: 0;
+
         padding-left: 1px;
     }
     i.arrow-left:hover, i.arrow-right:hover {
         background-color: rgba(0, 0, 0, .3);
     }
-
-    i.arrow-left__hover, i.arrow-right__hover {
+    i.arrow-left__hover {
+        left: 15px;
         opacity: 0;
+    }
+    i.arrow-right__hover {
+        right: 15px;
+        opacity: 0;
+    }
+    i.arrow-left__always {
+        left: 0;
+    }
+    i.arrow-right__always {
+        right: 0;
     }
     i.arrow-left__none, i.arrow-right__none {
         display: none;
@@ -297,8 +332,13 @@ export default defineComponent({
         i.arrow-left__hover, i.arrow-right__hover {
             opacity: 1;
         }
+        i.arrow-left{
+            left: 0;
+        }
+        i.arrow-right{
+            right: 0;
+        }
     }
-
 }
 .f-carousel-dots-container{
     position: absolute;
@@ -306,6 +346,7 @@ export default defineComponent({
     left: 50%;
     transform: translateX(-50%);
     display: flex;
+    align-items: center;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -318,7 +359,8 @@ export default defineComponent({
     }
     li.f-carousel-dots__rect.is-active{
         opacity: 1;
-        box-shadow: 0 0 3px #ccc;
+        width: 28px;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, .3);
     }
 }
 .f-carousel-dots__circle{
@@ -333,12 +375,13 @@ export default defineComponent({
 }
 .f-carousel-dots__rect{
     background-color: #fff;
-    height: 7px;
+    height: 4px;
     width: 20px;
     opacity: .32;
     list-style: none;
     cursor: pointer;
     margin: 0 4px;
-    border-radius: 4px;
+    border-radius: 1px;
+    transition: all .25s ease;
 }
 </style>

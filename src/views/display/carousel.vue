@@ -12,6 +12,7 @@
             <div class="demo-carousel">
                 <f-carousel
                     height="300px"
+                    dots-type="rect"
                 >
                     <f-carousel-item>
                         <div class="deep-1">
@@ -41,6 +42,17 @@
                 </f-carousel>
             </div>
         </div>
+
+        <div>
+            <h3 id="zi_dong_qie_huan">自动切换
+                <a href="#zi_dong_qie_huan" class="f-icon-anchor"></a>
+            </h3>
+            <p>走马灯会定时的切换下一张，且进行循环播放。</p>
+
+            <div class="demo-carousel">
+
+            </div>
+        </div>
     </div>
 </template>
 
@@ -65,9 +77,10 @@ export default defineComponent({
 <style scoped lang="scss">
 .demo-carousel{
     width: 600px;
+    position: relative;
 }
 .deep-1, .deep-2, .deep-3{
-    background-color: rgba(var(--primary-rgba), .7);
+    background-color: var(--primary);
     height: 100%;
     display: flex;
     justify-content: center;
@@ -77,7 +90,7 @@ export default defineComponent({
     letter-spacing: 1px;
 }
 .deep-2{
-    background-color: var(--primary);
+    background-color: rgba(var(--primary-rgba), .7);
 }
 .deep-3{
     background-color: rgba(var(--primary-rgba), .4);
