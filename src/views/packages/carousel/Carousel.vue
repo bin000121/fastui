@@ -15,7 +15,7 @@
         >
             <li
                 v-for="(item, idx) in dotsNum"
-                :key="item"
+                :key="idx"
                 :class="{
                     ['f-carousel-dots__' + dotsType]: true,
                     'is-active': currentIndex === idx
@@ -113,13 +113,14 @@ export default defineComponent({
         const currentIndex = ref(0)
         const carouselContainer = ref(null)
         let carouselContainerDom: HTMLElement
-        const root = getCurrentInstance()
+
         const getHeight = computed(() => {
             return isCorrectUnit(props.height)
         })
 
         let containerWidth: number
 
+        // 收集实例
         const collectInstance = (instance: ComponentInternalInstance) => {
             instanceList.push(instance)
             dotsNum.value = instanceList.length
@@ -133,25 +134,37 @@ export default defineComponent({
             else return sum
         }
 
-        let isNext = true
+        // 上一张
         const prev = throttle(() => {
-            currentIndex.value = handleCurrentIdx(-1)
-            isNext = false
+            const curIdx = currentIndex.value
+            const prevIdx = handleCurrentIdx(-1)
+            const curDom = instanceList[curIdx].proxy.$el as HTMLElement
+            const prevDom = instanceList[prevIdx].proxy.$el as HTMLElement
+            prevDom.style.transitionProperty = 'transform'
+            prevDom.style.transform = 'translateX(0)'
+            curDom.style.transform = `translateX(${containerWidth}px)`
+            currentIndex.value = prevIdx
+            setTimeout(() => initPosition(), 300)
         }, 300)
 
+        // 下一张
         const next = throttle(() => {
-            currentIndex.value = handleCurrentIdx()
-            isNext = true
+            const curIdx = currentIndex.value
+            const nextIdx = handleCurrentIdx()
+            const curDom = instanceList[curIdx].proxy.$el as HTMLElement
+            const nextDom = instanceList[nextIdx].proxy.$el as HTMLElement
+            nextDom.style.transitionProperty = 'transform'
+            nextDom.style.transform = 'translateX(0)'
+            curDom.style.transform = `translateX(-${containerWidth}px)`
+            currentIndex.value = nextIdx
+            setTimeout(() => initPosition(), 300)
         }, 300)
 
         let timer: NodeJS.Timer
         const initSetInterval = () => {
-            if (instanceList?.length <= 1) return
-            timer = setInterval(() => {
-                if (props.effect === 'slide') {
-                    next()
-                }
-            }, props.interval >= 500 ? props.interval : 500)
+            if (instanceList?.length <= 1 || !props.loop) return
+            const interval = props.interval >= 500 ? props.interval : 500
+            timer = setInterval(() => next(), interval)
         }
 
         const handleSlide = () => {
@@ -184,11 +197,14 @@ export default defineComponent({
 
         const handleClickDots = (idx: number) => {
             if (currentIndex.value === idx) return
-            isNext = idx > currentIndex.value
             currentIndex.value = idx
             console.log(currentIndex.value)
         }
 
+        const handleLength2 = () => {
+            console.log('2222')
+        }
+        
         const initTimingFunction = () => {
             carouselContainerDom.style.setProperty('--transition-timing-function', props.easing)
         }
@@ -200,8 +216,12 @@ export default defineComponent({
         }
 
         // 初始化容器顺序
-        const initPosition = (isInit = false) => {
+        const initPosition = () => {
             if (instanceList.length === 1) return
+            if (instanceList.length === 2) {
+                handleLength2()
+                return
+            }
             let findIdx = currentIndex.value
             let orderArr: number[] = [...orderList]
             if (findIdx === 0) orderArr.unshift(orderArr.splice(-1, 1)[0])
@@ -210,42 +230,27 @@ export default defineComponent({
             let [prev, cur, ...rest] = orderArr
             console.log(orderArr)
             let transition = `transition: transform .3s ${props.easing}`
+            let transitionNone = `transition: none .3s ${props.easing}`
             let curDom = instanceList[cur].proxy.$el as HTMLElement
             let prevDom = instanceList[prev].proxy.$el as HTMLElement
-            curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
-            prevDom.style.cssText = `transform: translateX(-${containerWidth}px);${transition}`
+            curDom.style.cssText = `transform: translateX(0);${transition};${transition};z-index: ${rest.length}`
+            prevDom.style.cssText = `transform: translateX(-${containerWidth}px);${transitionNone};z-index: ${rest.length+1}`
             rest.forEach((val: number, idx: number) => {
                 let $el = instanceList[val].proxy.$el as HTMLElement
-                if (idx === 0) {
-                    $el.style.cssText = `transform: translateX(${containerWidth}px);${transition}`
-                } else {
-                    $el.style.cssText = `transform: translateX(${containerWidth}px)`
-                }
+                $el.style.cssText = `transform: translateX(${containerWidth}px);${transitionNone};z-index: ${rest.length - idx}`
             })
-            if (isInit) {
-                instanceList[cur].proxy.$el.style.transition = 'none'
-                instanceList[prev].proxy.$el.style.transition = 'none'
-                instanceList[rest[0]].proxy.$el.style.transition = 'none'
-            }
-            if (!isNext) {
-                instanceList[prev].proxy.$el.style.transition = 'none'
-            }
         }
 
-        watch(() => currentIndex.value, () => {
-            initPosition()
-        })
-
         provide('parent', {
-            root,
+            root: getCurrentInstance(),
             collectInstance
         })
         onMounted(() => {
             carouselContainerDom = carouselContainer.value!
             initCurrentIdx()
             initTimingFunction()
-            if (props.loop) nextTick(initSetInterval)
-            initPosition(true)
+            initSetInterval()
+            initPosition()
         })
         return {
             id,
