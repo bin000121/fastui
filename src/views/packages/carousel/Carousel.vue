@@ -134,10 +134,12 @@ export default defineComponent({
             else return sum
         }
 
+        let clickDotsIdx = -1
+
         // 上一张
         const prev = throttle(() => {
             const curIdx = currentIndex.value
-            const prevIdx = handleCurrentIdx(-1)
+            const prevIdx = clickDotsIdx !== -1 ? clickDotsIdx : handleCurrentIdx(-1)
             const curDom = instanceList[curIdx].proxy.$el as HTMLElement
             const prevDom = instanceList[prevIdx].proxy.$el as HTMLElement
             prevDom.style.transitionProperty = 'transform'
@@ -150,7 +152,7 @@ export default defineComponent({
         // 下一张
         const next = throttle(() => {
             const curIdx = currentIndex.value
-            const nextIdx = handleCurrentIdx()
+            const nextIdx = clickDotsIdx !== -1 ? clickDotsIdx : handleCurrentIdx()
             const curDom = instanceList[curIdx].proxy.$el as HTMLElement
             const nextDom = instanceList[nextIdx].proxy.$el as HTMLElement
             nextDom.style.transitionProperty = 'transform'
@@ -199,15 +201,18 @@ export default defineComponent({
             if (currentIndex.value === idx) return
             const dom = instanceList[idx].proxy.$el as HTMLElement
             let gap = idx - currentIndex.value
-            if (Math.abs(gap) === 1)  {
-                gap > 0 ? next() : prev()
+            if (currentIndex.value === 0 && idx === instanceList.length - 1) {
+                prev()
+                return
+            }
+            if (currentIndex.value === instanceList.length - 1 && idx === 0) {
+                next()
                 return
             }
             dom.style.zIndex = `${instanceList.length - 2}`
-            currentIndex.value = idx
-            if (gap > 0) {
-                next()
-            } else {
+            clickDotsIdx = idx
+            if (gap > 0) next()
+            else {
                 dom.style.transform = `translateX(-${containerWidth}px)`
                 prev()
             }
@@ -251,6 +256,7 @@ export default defineComponent({
                 let $el = instanceList[val].proxy.$el as HTMLElement
                 $el.style.cssText = `transform: translateX(${containerWidth}px);${transitionNone};z-index: ${rest.length - idx}`
             })
+            clickDotsIdx = -1
         }
 
         provide('parent', {
