@@ -233,8 +233,8 @@ export default defineComponent({
             let transitionNone = `transition: none .3s ${props.easing}`
             let curDom = instanceList[cur].proxy.$el as HTMLElement
             let prevDom = instanceList[prev].proxy.$el as HTMLElement
-            curDom.style.cssText = `transform: translateX(0);${transition};${transition};z-index: ${rest.length}`
-            prevDom.style.cssText = `transform: translateX(-${containerWidth}px);${transitionNone};z-index: ${rest.length+1}`
+            curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
+            prevDom.style.cssText = `transform: translateX(-${containerWidth}px);${transitionNone};`
             rest.forEach((val: number, idx: number) => {
                 let $el = instanceList[val].proxy.$el as HTMLElement
                 $el.style.cssText = `transform: translateX(${containerWidth}px);${transitionNone};z-index: ${rest.length - idx}`
