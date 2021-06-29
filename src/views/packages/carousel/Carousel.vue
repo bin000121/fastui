@@ -197,8 +197,20 @@ export default defineComponent({
 
         const handleClickDots = (idx: number) => {
             if (currentIndex.value === idx) return
+            const dom = instanceList[idx].proxy.$el as HTMLElement
+            let gap = idx - currentIndex.value
+            if (Math.abs(gap) === 1)  {
+                gap > 0 ? next() : prev()
+                return
+            }
+            dom.style.zIndex = `${instanceList.length - 2}`
             currentIndex.value = idx
-            console.log(currentIndex.value)
+            if (gap > 0) {
+                next()
+            } else {
+                dom.style.transform = `translateX(-${containerWidth}px)`
+                prev()
+            }
         }
 
         const handleLength2 = () => {
