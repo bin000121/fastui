@@ -12,7 +12,7 @@
             <div class="demo-carousel">
                 <f-carousel
                     height="300px"
-                    dots-type="rect"
+                    loop
                 >
                     <f-carousel-item>
                         <div class="deep-1">

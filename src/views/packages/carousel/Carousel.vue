@@ -20,7 +20,8 @@
                     ['f-carousel-dots__' + dotsType]: true,
                     'is-active': currentIndex === idx
                 }"
-                @click="handleClickDots(idx)"
+                @click="dotTriggerWhenClick(idx)"
+                @mouseenter="dotTriggerWhenHover(idx)"
             ></li>
         </ul>
         <template v-if="showArrow">
@@ -51,7 +52,8 @@ import {
     computed,
     watch,
     nextTick,
-    onMounted
+    onMounted,
+    onUnmounted
 } from 'vue'
 import type { ComponentInternalInstance } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
@@ -84,6 +86,11 @@ export default defineComponent({
             type: String,
             default: 'circle',
             validator: (val: string) => ['circle', 'rect'].includes(val)
+        },
+        dotTrigger: {
+            type: String,
+            default: 'click',
+            validator: (val: string) => ['click', 'hover'].includes(val)
         },
         showArrow: {
             type: Boolean,
@@ -197,6 +204,16 @@ export default defineComponent({
             console.log('handleMouseleave')
         }
 
+        const dotTriggerWhenHover = throttle((idx: number) => {
+            if (props.dotTrigger !== 'hover') return
+            handleClickDots(idx)
+        }, 50)
+
+        const dotTriggerWhenClick = (idx: number) => {
+            if (props.dotTrigger !== 'click') return
+            handleClickDots(idx)
+        }
+
         const handleClickDots = (idx: number) => {
             if (currentIndex.value === idx) return
             const dom = instanceList[idx].proxy.$el as HTMLElement
@@ -214,7 +231,7 @@ export default defineComponent({
             if (gap > 0) next()
             else {
                 dom.style.transform = `translateX(-${containerWidth}px)`
-                prev()
+                setTimeout(() => prev(), 100)
             }
         }
 
@@ -245,7 +262,6 @@ export default defineComponent({
             else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
             containerWidth = carouselContainerDom.offsetWidth
             let [prev, cur, ...rest] = orderArr
-            console.log(orderArr)
             let transition = `transition: transform .3s ${props.easing}`
             let transitionNone = `transition: none .3s ${props.easing}`
             let curDom = instanceList[cur].proxy.$el as HTMLElement
@@ -259,6 +275,11 @@ export default defineComponent({
             clickDotsIdx = -1
         }
 
+        watch(() => props.loop, (newV: boolean) => {
+            if (timer) clearInterval(timer)
+            if (newV) initSetInterval()
+        })
+
         provide('parent', {
             root: getCurrentInstance(),
             collectInstance
@@ -269,6 +290,9 @@ export default defineComponent({
             initTimingFunction()
             initSetInterval()
             initPosition()
+        })
+        onUnmounted(() => {
+            if (timer) clearInterval(timer)
         })
         return {
             id,
@@ -281,6 +305,8 @@ export default defineComponent({
             handleClickDots,
             handleMouseenter,
             handleMouseleave,
+            dotTriggerWhenClick,
+            dotTriggerWhenHover,
         }
     }
 })
@@ -375,9 +401,10 @@ export default defineComponent({
     list-style: none;
     z-index: 5;
     li.f-carousel-dots__circle.is-active{
-        height: 7px;
+        height: 8px;
         width: 20px;
         border-radius: 4px;
+        background-color: #fff;
         box-shadow: 0 0 0 2px rgba(255, 255, 255, .3);
     }
     li.f-carousel-dots__rect.is-active{
@@ -387,14 +414,14 @@ export default defineComponent({
     }
 }
 .f-carousel-dots__circle{
-    background-color: #fff;
-    height: 7px;
-    width: 7px;
+    height: 8px;
+    width: 8px;
     border-radius: 50%;
     list-style: none;
     cursor: pointer;
-    margin: 0 4px;
+    margin: 0 5px;
     transition: width .15s ease;
+    background-color: rgba(255, 255, 255, .65);
 }
 .f-carousel-dots__rect{
     background-color: #fff;
