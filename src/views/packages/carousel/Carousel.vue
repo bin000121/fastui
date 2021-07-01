@@ -105,11 +105,6 @@ export default defineComponent({
             type: String,
             default: 'ease',
         },
-        effect: {
-            type: String,
-            default: 'slide',
-            validator: (val: string) => ['slide', 'fade'].includes(val)
-        },
         dotsClassName: String
     },
     setup (props, { emit, slots }) {
@@ -176,32 +171,14 @@ export default defineComponent({
             timer = setInterval(() => next(), interval)
         }
 
-        const handleSlide = () => {
-            containerWidth = carouselContainerDom.offsetWidth
-            let idx = currentIndex.value % 4
-            if (currentIndex.value === instanceList.length - 1) {
-                carouselContainerDom.style.cssText = 'left: 0px;'
-                currentIndex.value = 0
-            }
-            carouselContainerDom.style.transform = `translate(${-1 * (idx + 1) * containerWidth}px)`
-            currentIndex.value ++
-            setTimeout(() => initCurrentIdx(), 300)
-        }
-        
-        const handleFade = () => {
-            console.log(111)
-        }
-
         const handleMouseenter = () => {
             if (!props.loop) return
             clearInterval(timer)
-            console.log('handleMouseEnter')
         }
 
         const handleMouseleave = () => {
             if (!props.loop) return
             initSetInterval()
-            console.log('handleMouseleave')
         }
 
         const dotTriggerWhenHover = throttle((idx: number) => {
@@ -236,9 +213,10 @@ export default defineComponent({
         }
 
         const handleLength2 = () => {
+            let curIdx = currentIndex.value
             console.log('2222')
         }
-        
+
         const initTimingFunction = () => {
             carouselContainerDom.style.setProperty('--transition-timing-function', props.easing)
         }
@@ -401,8 +379,8 @@ export default defineComponent({
     list-style: none;
     z-index: 5;
     li.f-carousel-dots__circle.is-active{
-        height: 8px;
-        width: 20px;
+        height: 7px;
+        width: 22px;
         border-radius: 4px;
         background-color: #fff;
         box-shadow: 0 0 0 2px rgba(255, 255, 255, .3);
@@ -414,8 +392,8 @@ export default defineComponent({
     }
 }
 .f-carousel-dots__circle{
-    height: 8px;
-    width: 8px;
+    height: 7px;
+    width: 7px;
     border-radius: 50%;
     list-style: none;
     cursor: pointer;

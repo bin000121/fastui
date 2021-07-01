@@ -10,10 +10,7 @@
             <p>最基本的使用方法。</p>
 
             <div class="demo-carousel">
-                <f-carousel
-                    height="300px"
-                    loop
-                >
+                <f-carousel height="300px" ref="carousel">
                     <f-carousel-item>
                         <div class="deep-1">
                             <b>Carousel 1</b>
@@ -58,7 +55,9 @@
 
 <script lang="ts">
 import {
-    defineComponent
+    defineComponent,
+    ref,
+    onMounted
 } from 'vue'
 import fCarousel from '/@/views/packages/carousel/Carousel.vue'
 import fCarouselItem from '/@/views/packages/carousel/Carousel-item.vue'
@@ -68,8 +67,14 @@ export default defineComponent({
         fCarousel,
         fCarouselItem
     },
-    setup() {
-
+    setup () {
+        const carousel = ref(null)
+        onMounted(() => {
+            console.log(carousel.value.prev())
+        })
+        return{
+            carousel
+        }
     }
 })
 </script>
