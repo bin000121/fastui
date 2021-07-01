@@ -10,30 +10,17 @@
             <p>最基本的使用方法。</p>
 
             <div class="demo-carousel">
-                <f-carousel height="300px" ref="carousel">
-                    <f-carousel-item>
-                        <div class="deep-1">
-                            <b>Carousel 1</b>
-                        </div>
-                    </f-carousel-item>
-                    <f-carousel-item>
-                        <div class="deep-2">
-                            <b>Carousel 2</b>
-                        </div>
-                    </f-carousel-item>
-                    <f-carousel-item>
-                        <div class="deep-3">
-                            <b>Carousel 3</b>
-                        </div>
-                    </f-carousel-item>
-                    <f-carousel-item>
-                        <div class="deep-1">
-                            <b>Carousel 4</b>
-                        </div>
-                    </f-carousel-item>
-                    <f-carousel-item>
-                        <div class="deep-2">
-                            <b>Carousel 5</b>
+                <f-carousel
+                    height="300px"
+                    ref="carousel"
+                >
+                    <f-carousel-item
+                        v-for="item in 6"
+                        :key="item"
+                    >
+                        <div
+                            :class="[item % 2 === 0 ? 'carousel-item-oven' : 'carousel-item-odd']">
+                            <b>{{`Carousel ${item}`}}</b>
                         </div>
                     </f-carousel-item>
                 </f-carousel>
@@ -69,9 +56,6 @@ export default defineComponent({
     },
     setup () {
         const carousel = ref(null)
-        onMounted(() => {
-            console.log(carousel.value.prev())
-        })
         return{
             carousel
         }
@@ -84,7 +68,7 @@ export default defineComponent({
     width: 600px;
     position: relative;
 }
-.deep-1, .deep-2, .deep-3{
+.carousel-item-odd, .carousel-item-oven{
     background-color: var(--primary);
     height: 100%;
     display: flex;
@@ -93,11 +77,9 @@ export default defineComponent({
     color: #fff;
     font-size: 40px;
     letter-spacing: 1px;
+    opacity: .75;
 }
-.deep-2{
-    background-color: rgba(var(--primary-rgba), .7);
-}
-.deep-3{
-    background-color: rgba(var(--primary-rgba), .4);
+.carousel-item-oven{
+    opacity: 1;
 }
 </style>
