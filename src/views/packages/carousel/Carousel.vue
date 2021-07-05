@@ -99,7 +99,7 @@ export default defineComponent({
         showArrowType: {
             type: String,
             default: 'hover',
-            validator: (val: string) => ['hover', 'always', 'none'].includes(val)
+            validator: (val: string) => ['hover', 'always'].includes(val)
         },
         easing: {
             type: String,
@@ -351,9 +351,6 @@ export default defineComponent({
     }
     i.arrow-right__always {
         right: 0;
-    }
-    i.arrow-left__none, i.arrow-right__none {
-        display: none;
     }
     &:hover {
         i.arrow-left__hover, i.arrow-right__hover {

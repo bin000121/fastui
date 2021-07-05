@@ -161,7 +161,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-switch-box{
-    display: inline-flex;
+    display: flex;
     align-items: center;
     font-size: 18px;
     --active-track-color: #1661ab99;
