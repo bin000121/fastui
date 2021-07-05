@@ -25,9 +25,18 @@
                 <div class="form">
                     <span class="label">指示器类型：</span>
                     <div class="item">
-                        <f-radio-group v-model:value="dotsType" size="small">
+                        <f-radio-group v-model:value="dotsType">
                             <f-radio label="circle">圆形</f-radio>
                             <f-radio label="rect">方形</f-radio>
+                        </f-radio-group>
+                    </div>
+                </div>
+                <div class="form">
+                    <span class="label">指示器触发切换方式：</span>
+                    <div class="item">
+                        <f-radio-group v-model:value="dotTrigger">
+                            <f-radio label="click">click</f-radio>
+                            <f-radio label="hover">hover</f-radio>
                         </f-radio-group>
                     </div>
                 </div>
@@ -40,7 +49,7 @@
                 <div class="form">
                     <span class="label">切换箭头显示时机：</span>
                     <div class="item">
-                        <f-radio-group v-model:value="showArrowType" size="small">
+                        <f-radio-group v-model:value="showArrowType">
                             <f-radio label="hover">hover</f-radio>
                             <f-radio label="always">always</f-radio>
                             <f-radio label="none">none</f-radio>
@@ -58,6 +67,7 @@
                     :showArrow="showArrow"
                     :dotsType="dotsType"
                     :showArrowType="showArrowType"
+                    :dotTrigger="dotTrigger"
                 >
                     <f-carousel-item
                         v-for="item in 6"
@@ -135,6 +145,7 @@ export default defineComponent({
             showArrow: true,
             dotsType: 'circle',
             showArrowType: 'hover',
+            dotTrigger: 'click',
         })
         return{
             ...toRefs(data),

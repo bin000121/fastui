@@ -63,12 +63,7 @@ export default defineComponent({
     props: {
         value: Number,
         height: String,
-        trigger: {
-            type: String,
-            default: 'click'
-        },
         loop: Boolean,
-        autoplay: Boolean,
         interval: {
             type: Number,
             default: 3500,
