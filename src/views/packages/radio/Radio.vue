@@ -146,7 +146,6 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .f-radio-label{
-    display: inline-flex;
     cursor: pointer;
     user-select: none;
     vertical-align: bottom;

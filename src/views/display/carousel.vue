@@ -26,8 +26,8 @@
                     <span class="label">指示器类型：</span>
                     <div class="item">
                         <f-radio-group v-model:value="dotsType">
-                            <f-radio label="circle">圆形</f-radio>
-                            <f-radio label="rect">方形</f-radio>
+                            <f-radio label="circle" border size="small">圆形</f-radio>
+                            <f-radio label="rect" border size="small">方形</f-radio>
                         </f-radio-group>
                     </div>
                 </div>
@@ -35,8 +35,8 @@
                     <span class="label">指示器触发切换方式：</span>
                     <div class="item">
                         <f-radio-group v-model:value="dotTrigger">
-                            <f-radio label="click">click</f-radio>
-                            <f-radio label="hover">hover</f-radio>
+                            <f-radio label="click" border size="small">click</f-radio>
+                            <f-radio label="hover" border size="small">hover</f-radio>
                         </f-radio-group>
                     </div>
                 </div>
@@ -50,9 +50,18 @@
                     <span class="label">切换箭头显示时机：</span>
                     <div class="item">
                         <f-radio-group v-model:value="showArrowType">
-                            <f-radio label="hover">hover</f-radio>
-                            <f-radio label="always">always</f-radio>
-                            <f-radio label="none">none</f-radio>
+                            <f-radio label="hover" border size="small">hover</f-radio>
+                            <f-radio label="always" border size="small">always</f-radio>
+                        </f-radio-group>
+                    </div>
+                </div>
+                <div class="form">
+                    <span class="label">切换间隔：</span>
+                    <div class="item">
+                        <f-radio-group v-model:value="interval">
+                            <f-radio :label="1500" border size="small">1.5s</f-radio>
+                            <f-radio :label="3500" border size="small">3.5s</f-radio>
+                            <f-radio :label="5500" border size="small">5.5s</f-radio>
                         </f-radio-group>
                     </div>
                 </div>
@@ -68,6 +77,7 @@
                     :dotsType="dotsType"
                     :showArrowType="showArrowType"
                     :dotTrigger="dotTrigger"
+                    :interval="interval"
                 >
                     <f-carousel-item
                         v-for="item in 6"
@@ -83,7 +93,16 @@
 
             <div v-highlight>
     <pre><code>
-        {{ `<f-carousel height="300px">
+        {{ `<f-carousel
+            height="300px"
+            :loop="loop"
+            :showDots="showDots"
+            :showArrow="showArrow"
+            :dotsType="dotsType"
+            :showArrowType="showArrowType"
+            :dotTrigger="dotTrigger"
+            :interval="interval"
+        >
         <f-carousel-item v-for="item in 6" :key="item">
             <div
                 :class="[item % 2 === 0 ? 'carousel-item-oven' : 'carousel-item-odd']">
@@ -91,6 +110,29 @@
             </div>
         </f-carousel-item>
     </f-carousel>
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                loop: true,
+                showDots: true,
+                showArrow: true,
+                dotsType: 'circle',
+                showArrowType: 'hover',
+                dotTrigger: 'click',
+                interval: 3500,
+            })
+            return { ...toRefs(data) }
+        }
+    })
+    </script>
 
 
     <style lang="scss">
@@ -146,6 +188,7 @@ export default defineComponent({
             dotsType: 'circle',
             showArrowType: 'hover',
             dotTrigger: 'click',
+            interval: 3500,
         })
         return{
             ...toRefs(data),

@@ -212,6 +212,13 @@ export default defineComponent({
             console.log('2222')
         }
 
+        const goto = (dotNum: number, useAnimate = true) => {
+            if (dotNum > instanceList.length - 1) dotNum = instanceList.length - 1
+            if (dotNum < 0) dotNum = 0
+            handleClickDots(dotNum)
+        }
+
+        // 初始化过渡函数
         const initTimingFunction = () => {
             carouselContainerDom.style.setProperty('--transition-timing-function', props.easing)
         }
@@ -248,9 +255,9 @@ export default defineComponent({
             clickDotsIdx = -1
         }
 
-        watch(() => props.loop, (newV: boolean) => {
+        watch(() => [props.loop, props.interval], ([loopNewV, intervalNewV]) => {
             if (timer) clearInterval(timer)
-            if (newV) initSetInterval()
+            if (loopNewV || intervalNewV) initSetInterval()
         })
 
         provide('parent', {
@@ -280,6 +287,7 @@ export default defineComponent({
             handleMouseleave,
             dotTriggerWhenClick,
             dotTriggerWhenHover,
+            goto
         }
     }
 })
