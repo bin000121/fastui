@@ -57,7 +57,7 @@ import {
 } from 'vue'
 import type { ComponentInternalInstance } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
-import { isCorrectUnit, throttle } from '/@/utils/utils'
+import {debounce, isCorrectUnit, throttle} from '/@/utils/utils'
 
 export default defineComponent({
     props: {
@@ -225,11 +225,11 @@ export default defineComponent({
             anotherDom.style.cssText = `transform: translateX(${curIdx === 0 ? '' : '-'}${containerWidth}px);${transitionNone};`
         }
 
-        const goto = (dotNum: number) => {
+        const goto = throttle((dotNum: number) => {
             if (dotNum > instanceList.length - 1) dotNum = instanceList.length - 1
             if (dotNum < 0) dotNum = 0
             handleClickDots(dotNum)
-        }
+        }, 250)
 
         // 初始化过渡函数
         const initTimingFunction = () => {
