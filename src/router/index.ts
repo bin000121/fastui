@@ -189,6 +189,7 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/carousel.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '内部方法': 'nei_bu_fang_fa',
                 }
             },
             {

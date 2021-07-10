@@ -209,7 +209,12 @@ export default defineComponent({
 
         const handleLength2 = () => {
             let curIdx = currentIndex.value
-            console.log('2222')
+            let curDom = instanceList[curIdx].proxy.$el as HTMLElement
+            curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
+            let lastIdx = curIdx === 0 ? curIdx + 1 : curIdx - 1
+            let prevDom: HTMLElement
+            prevDom = instanceList[lastIdx].proxy.$el as HTMLElement
+            prevDom.style.cssText = `transform: translateX(${(curIdx === 0 ? 1: -1) * containerWidth}px);${transitionNone};`
         }
 
         const goto = (dotNum: number, useAnimate = true) => {
@@ -229,6 +234,8 @@ export default defineComponent({
             else currentIndex.value = props.value > instanceList.length - 1 || props.value < 0 ? 0 : props.value
         }
 
+        let transition = `transition: transform .3s ${props.easing}`
+        let transitionNone = `transition: none .3s ${props.easing}`
         // 初始化容器顺序
         const initPosition = () => {
             if (instanceList.length === 1) return
@@ -242,8 +249,6 @@ export default defineComponent({
             else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
             containerWidth = carouselContainerDom.offsetWidth
             let [prev, cur, ...rest] = orderArr
-            let transition = `transition: transform .3s ${props.easing}`
-            let transitionNone = `transition: none .3s ${props.easing}`
             let curDom = instanceList[cur].proxy.$el as HTMLElement
             let prevDom = instanceList[prev].proxy.$el as HTMLElement
             curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
