@@ -136,6 +136,10 @@ export default defineComponent({
         // 上一张
         const prev = throttle(() => {
             const curIdx = currentIndex.value
+            if (curIdx === 0 && instanceList.length === 2) {
+                next()
+                return
+            }
             const prevIdx = clickDotsIdx !== -1 ? clickDotsIdx : handleCurrentIdx(-1)
             const curDom = instanceList[curIdx].proxy.$el as HTMLElement
             const prevDom = instanceList[prevIdx].proxy.$el as HTMLElement
@@ -149,6 +153,10 @@ export default defineComponent({
         // 下一张
         const next = throttle(() => {
             const curIdx = currentIndex.value
+            if (curIdx === 1 && instanceList.length === 2) {
+                prev()
+                return
+            }
             const nextIdx = clickDotsIdx !== -1 ? clickDotsIdx : handleCurrentIdx()
             const curDom = instanceList[curIdx].proxy.$el as HTMLElement
             const nextDom = instanceList[nextIdx].proxy.$el as HTMLElement
@@ -211,13 +219,13 @@ export default defineComponent({
             let curIdx = currentIndex.value
             let curDom = instanceList[curIdx].proxy.$el as HTMLElement
             curDom.style.cssText = `transform: translateX(0);${transition};${transition}`
-            let lastIdx = curIdx === 0 ? curIdx + 1 : curIdx - 1
-            let prevDom: HTMLElement
-            prevDom = instanceList[lastIdx].proxy.$el as HTMLElement
-            prevDom.style.cssText = `transform: translateX(${(curIdx === 0 ? 1: -1) * containerWidth}px);${transitionNone};`
+            let anotherIdx = curIdx === 0 ? 1 : 0
+            let anotherDom: HTMLElement
+            anotherDom = instanceList[anotherIdx].proxy.$el as HTMLElement
+            anotherDom.style.cssText = `transform: translateX(${curIdx === 0 ? '' : '-'}${containerWidth}px);${transitionNone};`
         }
 
-        const goto = (dotNum: number, useAnimate = true) => {
+        const goto = (dotNum: number) => {
             if (dotNum > instanceList.length - 1) dotNum = instanceList.length - 1
             if (dotNum < 0) dotNum = 0
             handleClickDots(dotNum)
@@ -239,6 +247,7 @@ export default defineComponent({
         // 初始化容器顺序
         const initPosition = () => {
             if (instanceList.length === 1) return
+            containerWidth = carouselContainerDom.offsetWidth
             if (instanceList.length === 2) {
                 handleLength2()
                 return
@@ -247,7 +256,6 @@ export default defineComponent({
             let orderArr: number[] = [...orderList]
             if (findIdx === 0) orderArr.unshift(orderArr.splice(-1, 1)[0])
             else if (findIdx !== 1) orderArr = [...orderArr.slice(findIdx - 1), ...orderArr.slice(0, findIdx - 1)]
-            containerWidth = carouselContainerDom.offsetWidth
             let [prev, cur, ...rest] = orderArr
             let curDom = instanceList[cur].proxy.$el as HTMLElement
             let prevDom = instanceList[prev].proxy.$el as HTMLElement
