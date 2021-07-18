@@ -62,8 +62,8 @@
                             <li
                                 v-for="(subItem, subIdx) in item"
                                 :key="subItem[props.value]"
-                                @click="handleClick(subItem, idx, subIdx)"
-                                @mouseenter="handleHover(subItem, idx, subIdx)"
+                                @click="handleClick(subItem, idx)"
+                                @mouseenter="handleHover(subItem, idx)"
                                 @mouseleave="handleHoverLeave(subItem)"
                                 :class="{
                                     'is-active': idx <= level && isActive(subItem[props.value]),

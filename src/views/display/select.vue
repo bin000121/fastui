@@ -1062,7 +1062,7 @@ export default defineComponent({
         margin-bottom: 0;
     }
     .f-select{
-        width: 250px;
+        width: 200px;
     }
 }
 .demo-select-size{

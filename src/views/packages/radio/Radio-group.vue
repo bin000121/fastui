@@ -2,7 +2,7 @@
     <div
         :class="{
             'f-radio-group': true,
-            'f-radio-group__vertical': vertical,
+            'f-radio-group__vertical': vertical
         }"
     >
         <slot></slot>
@@ -12,7 +12,9 @@
 <script lang="ts">
 import {
     defineComponent,
-    ref
+    ref,
+    provide,
+    getCurrentInstance
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
 
@@ -30,12 +32,18 @@ export default defineComponent({
         },
         vertical: Boolean,
         border: Boolean,
+        button: Boolean,
+        buttonStyle: {
+            type: String,
+            default: 'default',
+            validator: (value: string) => ['default', 'outline'].includes(value)
+        }
     },
     setup (props, { emit }) {
-
         const emitEvent = (eventName: 'update:value' | 'change', value: boolean | number) => {
             emit(eventName, value)
         }
+        provide('root', getCurrentInstance())
         return{
             emitEvent
         }
@@ -47,15 +55,9 @@ export default defineComponent({
 .f-radio-group{
     display: inline-block;
     vertical-align: bottom;
-    &:deep(.f-radio-label + .f-radio-label){
-        margin: 0 0 0 15px!important;
-    }
 }
 
 .f-radio-group__vertical{
     display: block!important;
-    &:deep(.f-radio-label + .f-radio-label){
-        margin: 15px 0 0!important;
-    }
 }
 </style>

@@ -27,11 +27,9 @@ export default defineComponent({
         border: Boolean,
     },
     setup (props, { emit }) {
-
         const emitEvent = (eventName: 'update:value' | 'change', value: boolean | number) => {
             emit(eventName, value)
         }
-
         return{
             emitEvent
         }

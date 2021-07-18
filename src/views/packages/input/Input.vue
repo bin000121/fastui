@@ -183,7 +183,6 @@ export default defineComponent({
             let count: number = 0
             if (showPass) count += 1
             if (clearable) count += 1
-            iconBoxDom.style.width = 16 + 16 * count + 'px'
             iconBoxDom.style.right = ( slots.push ? pushSlotDom.offsetWidth : 0) + 4 + 'px'
             fInputDom.style.paddingRight = parseInt(iconBoxDom.offsetWidth) + 'px'
         }
@@ -231,6 +230,11 @@ export default defineComponent({
     display: inline-flex;
     width: 100%;
     font-size: 14px;
+    &:hover {
+        .f-input{
+            border-color: var(--primary);
+        }
+    }
 }
 .f-input-box--disabled, .f-textarea-box--disabled{
     &::before{
@@ -258,16 +262,13 @@ export default defineComponent({
     padding: 0 12px;
     width: 100%;
     height: calc(2rem);
-    font-size: 1rem;
+    font-size: 14px;
     color: #333;
     line-height: 1.5;
     font-family: Helvetica;
-    vertical-align: bottom;
+    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
     &:focus{
-        caret-color: var(--primary);
-        border-color: var(--primary);
         box-shadow: 0 0 0 .16em #1661ab33;
-        transition: box-shadow .2s;
     }
 }
 .f-input--round{
@@ -321,7 +322,7 @@ export default defineComponent({
 }
 
 .f-input--clearable{
-    padding-right: 32px;
+    padding-right: 16px;
 }
 
 
@@ -334,17 +335,16 @@ export default defineComponent({
 
 .f-icon-box{
     position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
     z-index: 99;
     box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-around;
     user-select: none;
     padding: 0 2px;
-    height: 100%;
     font-size: 14px;
     color: #ddd;
-    min-width: 34px;
+    display: inline-block;
     .clearable, .showPass{
         cursor: pointer;
         &:hover{
@@ -376,19 +376,24 @@ export default defineComponent({
     display: inline-flex;
     width: 100%;
     font-size: 14px;
+    &:hover{
+        .f-textarea{
+            border-color: var(--primary);
+        }
+    }
 }
 .f-textarea{
     position: relative;
     outline: 0;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 5px;
     box-sizing: border-box;
     vertical-align: bottom;
     padding: 5px 10px;
     width: 100%;
     min-height: 32px;
+    transition: box-shadow .2s ease-in-out, border-color .2s ease-in-out;
     &:focus{
-        caret-color: var(--primary);
         border-color: var(--primary);
         box-shadow: 0 0 0 .25em #1661ab33;
         transition: box-shadow .2s;
@@ -404,7 +409,6 @@ export default defineComponent({
     border-radius: 50px;
     &:hover{
         background-color: #bbb;
-
     }
 }
 </style>

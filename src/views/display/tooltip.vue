@@ -10,9 +10,7 @@
             <p>鼠标移入即可呈现出文案提示。</p>
 
             <div class="demo-tooltip">
-                <f-tooltip
-                    tooltip="这里是提示内容"
-                >
+                <f-tooltip tooltip="这里是提示内容">
                     <h2>当你的鼠标经过这个文案时将呈现出tooltip。</h2>
                 </f-tooltip>
             </div>
@@ -20,9 +18,7 @@
             <div v-highlight>
                 <pre><code>
     {{`<div class="demo-tooltip">
-        <f-tooltip
-                tooltip="这里是提示内容"
-        >
+        <f-tooltip tooltip="这里是提示内容">
             <h2>当你的鼠标经过这个文案时将呈现出tooltip。</h2>
         </f-tooltip>
     </div>
@@ -223,6 +219,40 @@
             <div style="color: white;text-align:right;"><b>--- 唐·李白</b></div>
         </template>
         <f-button>自定义内容</f-button>
+    </f-tooltip>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <h3 id="yi_chu_jian_tou">移除箭头
+                    <a href="#yi_chu_jian_tou" class="f-icon-anchor"></a>
+                </h3>
+                <p>不显示提示组件的箭头。</p>
+
+                <div class="desc">
+                    设置属性 <b>show-arrow</b> 为 false 即可。
+                </div>
+
+            <div class="demo-tooltip-ml">
+                <f-tooltip
+                    theme="dark"
+                    tooltip="我是没有箭头的tooltip"
+                    :show-arrow="false"
+                >
+                    <f-button>移除箭头</f-button>
+                </f-tooltip>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-tooltip
+        theme="dark"
+        tooltip="移除箭头"
+        :show-arrow="false"
+    >
+        <f-button>移除箭头</f-button>
     </f-tooltip>`}}
                 </code></pre>
             </div>
