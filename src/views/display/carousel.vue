@@ -13,13 +13,13 @@
                 <div class="form">
                     <span class="label">自动切换：</span>
                     <div class="item">
-                        <f-switch  v-model:value="loop" inset></f-switch>
+                        <f-switch v-model:value="loop" inset></f-switch>
                     </div>
                 </div>
                 <div class="form">
                     <span class="label">显示指示器：</span>
                     <div class="item">
-                        <f-switch  v-model:value="showDots" inset></f-switch>
+                        <f-switch v-model:value="showDots" inset></f-switch>
                     </div>
                 </div>
                 <div class="form">
@@ -43,7 +43,7 @@
                 <div class="form">
                     <span class="label">显示切换箭头：</span>
                     <div class="item">
-                        <f-switch  v-model:value="showArrow" inset></f-switch>
+                        <f-switch v-model:value="showArrow" inset></f-switch>
                     </div>
                 </div>
                 <div class="form">
@@ -116,10 +116,11 @@
     import {
         defineComponent,
         reactive,
-        toRefs,
+        toRefs
     } from 'vue'
+
     export default defineComponent({
-        setup () {
+        setup() {
             const data = reactive({
                 loop: true,
                 showDots: true,
@@ -127,16 +128,16 @@
                 dotsType: 'circle',
                 showArrowType: 'hover',
                 dotTrigger: 'click',
-                interval: 3500,
+                interval: 3500
             })
-            return { ...toRefs(data) }
+            return {...toRefs(data)}
         }
     })
     </script>
 
 
     <style lang="scss">
-    .carousel-item-odd, .carousel-item-oven{
+    .carousel-item-odd, .carousel-item-oven {
         background-color: var(--primary);
         height: 100%;
         display: flex;
@@ -147,7 +148,8 @@
         letter-spacing: 1px;
         opacity: .75;
     }
-    .carousel-item-oven{
+
+    .carousel-item-oven {
         opacity: 1;
     }
     </style>` }}
@@ -213,8 +215,9 @@
         ref,
         onMounted
     } from 'vue'
+
     export default defineComponent({
-        setup () {
+        setup() {
             const carousel = ref(null)
             let carouselDom: any
             const prev = () => {
@@ -229,7 +232,7 @@
             onMounted(() => {
                 carouselDom = carousel.value
             })
-            return{
+            return {
                 prev,
                 next,
                 goto,
@@ -241,7 +244,7 @@
 
 
     <style lang="scss">
-    .carousel-item-odd, .carousel-item-oven{
+    .carousel-item-odd, .carousel-item-oven {
         background-color: var(--primary);
         height: 100%;
         display: flex;
@@ -252,7 +255,8 @@
         letter-spacing: 1px;
         opacity: .75;
     }
-    .carousel-item-oven{
+
+    .carousel-item-oven {
         opacity: 1;
     }
     </style>` }}
@@ -277,6 +281,7 @@ import fRadio from '/@/views/packages/radio/Radio.vue'
 import fRadioGroup from '/@/views/packages/radio/Radio-group.vue'
 import fSwitch from '/@/views/packages/switch/Switch.vue'
 import fButton from '/@/views/packages/button/Button.vue'
+
 export default defineComponent({
     components: {
         fCarousel,
@@ -284,9 +289,9 @@ export default defineComponent({
         fRadio,
         fRadioGroup,
         fSwitch,
-        fButton,
+        fButton
     },
-    setup () {
+    setup() {
         const carousel = ref(null)
         let carouselDom: any
         const data = reactive({
@@ -310,7 +315,7 @@ export default defineComponent({
         onMounted(() => {
             carouselDom = carousel.value
         })
-        return{
+        return {
             ...toRefs(data),
             prev,
             next,
@@ -322,32 +327,35 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.control{
+.control {
     background-color: #fafafa;
     padding: 12px;
     margin-bottom: 15px;
-    .form{
+
+    .form {
         display: flex;
         align-items: center;
-        height: 32px;
-        line-height: 32px;
         margin-bottom: 15px;
-        &:last-child{
+
+        &:last-child {
             margin-bottom: 0;
         }
     }
-    .label{
+
+    .label {
         text-align: right;
         width: 180px;
         margin-right: 12px;
     }
 }
-.demo-carousel{
+
+.demo-carousel {
     width: 600px;
     position: relative;
     margin-bottom: 15px;
 }
-.carousel-item-odd, .carousel-item-oven{
+
+.carousel-item-odd, .carousel-item-oven {
     background-color: var(--primary);
     height: 100%;
     display: flex;
@@ -358,7 +366,8 @@ export default defineComponent({
     letter-spacing: 1px;
     opacity: .75;
 }
-.carousel-item-oven{
+
+.carousel-item-oven {
     opacity: 1;
 }
 </style>

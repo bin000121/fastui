@@ -453,44 +453,52 @@ export default defineComponent({
     --translateY: 15px;
     position: relative;
     border: 1px solid #ccc;
-    min-height: calc(2.5em);
     box-sizing: border-box;
     border-radius: 5px;
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
     cursor: pointer;
-    width: 100%;
     transition: border-color .2s, box-shadow .2s;
     &:not(.f-select--disabled):hover{
         border-color: var(--primary);
     }
     .f-select-input{
         flex-grow: 1;
-        display: inline-block;
         outline: none;
         border: 0;
-        margin: 0;
         outline: 0;
-        height: calc(2.5em);
-        line-height: calc(2.5em);
-        font-size: inherit;
-        cursor: pointer;
+        width: 100%;
+        font-size: 14px;
         overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         user-select: none;
         border-radius: 5px;
-        padding: 0 10px;
-        vertical-align: bottom;
+        padding: 0 24px 0 12px;
         box-sizing: border-box;
+        display: inline-block;
     }
 }
 .f-select__small{
+    .f-select-input{
+        height: 24px;
+        line-height: 24px;
+    }
     font-size: 12px!important;
 }
 .f-select__default{
+    .f-select-input{
+        height: 30px;
+        line-height: 30px;
+    }
     font-size: 16px!important;
 }
 .f-select__large{
+    .f-select-input{
+        height: 38px;
+        line-height: 38px;
+    }
     font-size: 20px!important;
 }
 .f-select-prefix{
@@ -524,15 +532,13 @@ export default defineComponent({
 .f-option-tag{
     background-color: #eee;
     border-radius: 5px;
-    padding: 2px 5px;
+    padding: 2px 6px;
     font-size: 14px;
-    height: calc(1.5em);
-    line-height: calc(1.5em);
+    height: calc(1.2em);
+    line-height: calc(1.2em);
     cursor: text;
     color: #666;
-    & {
-        margin: calc(.2em) 0 calc(.2em) calc(.6em);
-    }
+    margin: calc(.2em) 0 calc(.2em) calc(.6em);
     i{
         margin-left: 8px;
         font-size: 12px;
@@ -625,7 +631,7 @@ export default defineComponent({
     /*overflow: hidden;*/
     max-height: 240px;
     width: 100%;
-    min-width: 250px;
+    min-width: 205px;
     /*&:hover{*/
         overflow: auto;
         padding: 0;
@@ -647,6 +653,6 @@ export default defineComponent({
 .f-select__isEmpty{
     text-align: center;
     color: #999;
-    min-width: 250px;
+    min-width: 205px;
 }
 </style>

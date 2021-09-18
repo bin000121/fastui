@@ -1,16 +1,18 @@
 <template>
     <label
         ref="radioLabel"
+        class="f-radio-label"
         :class="{
-            'f-radio-label': true,
             'f-radio-vertical': Vertical,
             'f-radio-label__disabled': disabled,
-            ['f-radio-label__' + getSize]: getSize !== 'default',
+            ['f-radio-label__' + Size]: Size !== 'default',
             'f-radio-label__border': Border,
             'f-radio-label__border__isChecked': Border && currentValue,
+            'f-radio__button': Button
         }"
     >
         <span
+            v-if="!Button"
             :class="{
                 'choose-box': true,
                 'choose-box__isChecked': currentValue
@@ -29,7 +31,6 @@
             :label="label"
             :disabled="disabled"
             @change="handleChange"
-            @focus="focus"
             tabindex="-1"
         >
         <span
@@ -46,18 +47,17 @@ import {
     ref,
     onMounted,
     watch,
-    computed,
-    getCurrentInstance
+    inject
 } from 'vue'
+import type { ComponentInternalInstance } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
-
 
 export default defineComponent({
     emits: ['update:value', 'change'],
     props: {
         label: [String, Number, Boolean],
         value: {
-            type: [String, Number, Boolean, Object],
+            type: [String, Number, Boolean],
             default: false
         },
         border: Boolean,
@@ -72,26 +72,25 @@ export default defineComponent({
     },
     setup (props, { emit }) {
         const {
-            value,
             label,
             disabled,
             border,
             vertical,
             size
         } = props
-        let parent: any = null
-        const _this: any = getCurrentInstance()
         const radioLabel = ref(null)
         const fRadio = ref(null)
         const currentValue = ref(false)
         const Size = ref(size)
         const Border = ref(border)
         const Vertical = ref(vertical)
-        const getSize = computed(() => {
-            if (!['default', 'small', 'large'].includes(Size.value)) return 'default'
-            return Size.value
-        })
+        const Button = ref(false)
+        // const getSize = computed(() => {
+        //     if (!['default', 'small', 'large'].includes(Size.value)) return 'default'
+        //     return Size.value
+        // })
         let fRadioDom: HTMLElement | any
+        let radioLabelDom: HTMLElement
         const id = getRandomId('radio')
 
         const handleChange = () => {
@@ -102,43 +101,39 @@ export default defineComponent({
             } else emit('update:value', label)
         }
 
-        const focus = () => {
-            console.log(label)
-        }
+        let parent: ComponentInternalInstance | null = inject('root', null)
 
         onMounted(() => {
-            const radioLabelDom: HTMLElement | any = radioLabel.value as any
-            fRadioDom = fRadio.value as any
-            // 获取 radio-group组件实例，如果被 radio-group 包裹的话，name就一定包括 radioGroup
-            if (_this.parent.props?.name && _this.parent.props?.name.includes('radioGroup')) parent = _this.parent
-
+            radioLabelDom= radioLabel.value!
+            fRadioDom = fRadio.value!
             radioLabelDom.setAttribute('for', id)
             fRadioDom.setAttribute('id', id)
-            fRadioDom.setAttribute('name', parent?.name || '')
-
             if (parent) {
+                fRadioDom.setAttribute('name', parent.props.name as string)
                 currentValue.value = parent.props.value === label
-                Size.value = parent.props.size || size
-                Border.value = parent.props.border || border
-                Vertical.value = parent.props.vertical || vertical
+                Size.value = parent.props.size as string || size
+                Border.value = parent.props.border as boolean || border
+                Vertical.value = parent.props.vertical as boolean || vertical
+                Button.value = !!parent.props.button as boolean
             }
 
-            watch(() => parent ? _this.parent.props.value : props.value, (newV: any) => {
+            watch(() => parent ? (parent.props.value as string | number | boolean) : props.value, (newV: string | number | boolean) => {
                 if (disabled) return
                 fRadioDom.checked = newV === label
-                currentValue.value = fRadioDom.checked
+                currentValue.value = newV === label
                 !parent && emit('change', label)
             }, { immediate: true })
         })
         return{
             radioLabel,
             fRadio,
-            handleChange,
             currentValue,
-            getSize,
+            // getSize,
             Border,
             Vertical,
-            focus
+            Size,
+            Button,
+            handleChange
         }
     }
 })
@@ -148,11 +143,12 @@ export default defineComponent({
 .f-radio-label{
     cursor: pointer;
     user-select: none;
-    vertical-align: bottom;
     font-size: 16px;
     position: relative;
     align-items: center;
     color: #333;
+    display: inline-block;
+    box-sizing: border-box;
 }
 .f-radio-label + .f-radio-label{
     margin-left: 15px;
@@ -167,36 +163,31 @@ export default defineComponent({
 .f-radio-label__small{
     font-size: 14px!important;
     &.f-radio-label__border{
-        padding: 5px 10px!important;
+        height: 26px;
+        line-height: 22px;
+        padding: 0 10px!important;
     }
 }
 .f-radio-label__large{
     font-size: 18px!important;
     &.f-radio-label__border{
-        padding: 10px 18px!important;
+        height: 40px;
+        line-height: 38px;
+        padding: 0 18px!important;
     }
 }
 .f-radio-label__border{
-    padding: 8px 14px;
-    border: 1px solid #999 !important;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 14px;
+    border: 1px solid #ccc !important;
     border-radius: 5px;
+    transition: border-color .2s ease-in-out, box-shadow .2s ease-in-out;
 }
 .f-radio-label__disabled{
     color: #ddd!important;
-    &::before{
-        content: '';
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 100%;
-        background-color: #fff;
-        z-index: 99;
-        opacity: .5;
-        cursor: not-allowed;
-        overflow: hidden;
-    }
+    cursor: not-allowed;
+    opacity: .5;
     .choose-box{
         border-color: #999;
         box-shadow: none;
@@ -219,8 +210,8 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: calc(1.2em);
-    height: calc(1.2em);
+    width: calc(1.1em);
+    height: calc(1.1em);
     background-color: #fff;
     border: 1px solid #999;
     border-radius: 50%;
@@ -248,5 +239,22 @@ export default defineComponent({
 }
 .f-radio{
     display: none;
+}
+.f-radio__button{
+    margin: 0!important;
+    height: 32px;
+    line-height: 32px;
+    padding: 0 14px;
+    border: 1px solid #ddd;
+    border-right: none;
+    &:first-child{
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    &:last-child{
+        border-right: 1px solid #ddd;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
 }
 </style>

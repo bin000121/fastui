@@ -328,6 +328,21 @@
             </div>
         </div>
 
+        <div>
+            <h3 id="an_niu_yang_shi">按钮样式
+                <a href="#an_niu_yang_shi" class="f-icon-anchor"></a>
+            </h3>
+            <p>只处于按钮组下时生效的属性，为单项按钮应用按钮样式。</p>
+        </div>
+
+        <div class="demo-radio">
+            <f-radio-group v-model:value="radio6" button>
+                <f-radio label="iphoneX">iphoneX</f-radio>
+                <f-radio label="iphone11">iphone11</f-radio>
+                <f-radio label="iphone12">iphone12</f-radio>
+            </f-radio-group>
+        </div>
+
     </div>
 </template>
 
@@ -350,13 +365,14 @@ export default defineComponent({
         const radio3 = ref('iphoneX')
         const radio4 = ref('iphoneX')
         const radio5 = ref('iphoneX')
-
+        const radio6 = ref('')
         return{
             radio,
             radio2,
             radio3,
             radio4,
-            radio5
+            radio5,
+            radio6
         }
     }
 })
@@ -367,9 +383,6 @@ export default defineComponent({
     margin-bottom: 30px;
     &:last-child{
         margin-bottom: 0;
-    }
-    .f-radio-label + .f-radio-label{
-        margin-left: 30px;
     }
     p{
         color: #999;

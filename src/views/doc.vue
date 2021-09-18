@@ -78,7 +78,7 @@ export default defineComponent( {
         }
 
         const onScroll = throttle(() => {
-            let scrollTop = body.scrollTop + 15
+            let scrollTop = body.scrollTop + 60
             for (let i = aOffsetTop.length - 1 ; i >= 0; i--) {
                 if (scrollTop < aOffsetTop[0]) {
                     isActive.value = 0

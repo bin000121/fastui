@@ -47,7 +47,7 @@ import {
 import { getRandomId } from '/@/utils/getRandomId'
 
 export default defineComponent({
-    emits: ['change', 'update:value'],
+    emits: ['update:value'],
     props: {
         label: [String, Number],
         value: [String, Number, Boolean, Object],
@@ -86,11 +86,7 @@ export default defineComponent({
                 let arr = [..._this.parent.props.value]
                 isChecked ? arr.push(checkValue) : arr.splice(arr.indexOf(checkValue), 1)
                 parent.emit('update:value', arr)
-                parent.emit('change', arr)
-            } else {
-                emit('update:value', isChecked)
-                emit('change', isChecked)
-            }
+            } else emit('update:value', isChecked)
         }
 
         onMounted(() => {
@@ -224,5 +220,6 @@ export default defineComponent({
     border-color: var(--primary);
     box-shadow: 0 0 0 .12em #1661ab33;
     background-color: var(--primary);
+    animation: f-radio-scale-in .15s ease-in-out;
 }
 </style>

@@ -304,6 +304,7 @@ const routes: RouteRecordRaw[] = [
                     '基本用法': 'ji_ben_yong_fa',
                     '出现位置': 'chu_xian_wei_zhi',
                     '自定义内容': 'zi_ding_yi_nei_rong',
+                    '移除箭头': 'yi_chu_jian_tou',
                     '主题': 'zhu_ti',
                     '显示、消失延迟': 'yan_chi',
                 }

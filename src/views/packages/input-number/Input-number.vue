@@ -220,7 +220,11 @@ export default defineComponent({
     position: relative;
     font-size: 14px;
     user-select: none;
-    overflow: hidden;
+    &:hover{
+        .f-input-number-input{
+            border-color: var(--primary);
+        }
+    }
 }
 .f-input-number__small{
     .f-input-number-input{
@@ -239,7 +243,7 @@ export default defineComponent({
     height: 34px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    transition: box-shadow .15s ease-in-out, border-color .12s ease-in-out;
+    transition: box-shadow .2s ease-in-out, border-color .2s ease-in-out;
 }
 .f-input-number__disabled{
     pointer-events: none;
@@ -276,11 +280,15 @@ export default defineComponent({
     }
     &:active{
         color: var(--primary);
-        background-color: rgba(var(--primary-rgba), .1);
+        background-color: rgba(var(--primary-rgba), .18);
     }
 }
 .f-input-number-add{
+    border-top-right-radius: 5px;
     border-bottom: 1px solid #ccc;
+}
+.f-input-number-minus{
+    border-bottom-right-radius: 5px;
 }
 .f-input-number-minus__disabled, .f-input-number-add__disabled {
     cursor: not-allowed!important;

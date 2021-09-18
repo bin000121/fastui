@@ -442,6 +442,6 @@ export default defineComponent({
     }
 }
 .demo-input-width{
-    width: 360px;
+    width: 240px;
 }
 </style>
