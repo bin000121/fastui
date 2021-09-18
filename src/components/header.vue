@@ -31,12 +31,7 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .header{
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
     height: 60px;
-    z-index: 1;
     /*background-color: #58a397;*/
     box-sizing: border-box;
     background-color: #fff;

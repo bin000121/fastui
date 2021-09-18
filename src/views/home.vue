@@ -1,16 +1,14 @@
 <template>
-    <div class="app">
-        <Header style="position: absolute;"/>
-        <div class="container">
-            <h1>猛男 UI</h1>
-            <h2>一款基于Vue3、Typescript的UI框架，让开发更简单。</h2>
-            <div class="link">
-                <router-link to="/doc">Getting Started</router-link>
-                <a href="https://github.com/bin000121/fastui" target="_blank">github</a>
-            </div>
+    <Header/>
+    <div class="container">
+        <h1>猛男 UI</h1>
+        <h2>一款基于Vue3、Typescript的UI框架，让开发更简单。</h2>
+        <div class="link">
+            <router-link to="/doc">Getting Started</router-link>
+            <a href="https://github.com/bin000121/fastui" target="_blank">github</a>
         </div>
-        <div style="height: 800px;"></div>
     </div>
+    <div style="height: 800px;"></div>
 </template>
 
 <script lang="ts">

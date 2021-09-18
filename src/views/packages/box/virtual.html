@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>虚拟滚动</title>
+    <style>
+        .content{
+            margin: 200px auto;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #ccc;
+            overflow-y: auto;
+            position: relative;
+        }
+        .list{
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .list ul{
+            background-color: pink;
+            margin: 0;
+            padding: 0;
+        }
+        .list ul li {
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="bg"></div>
+        <div class="list">
+            <ul class="ul"></ul>
+        </div>
+    </div>
+</body>
+<script>
+    const contentDom = document.querySelector('.content')
+    const bgDom = document.querySelector('.bg')
+    const listDom = document.querySelector('.list')
+    const ulDom = listDom.children[0]
+    const viewportHeight = 500
+    const itemHeight = 50
+    const previewNum = 5
+    let startIdx = 0
+    let canSeeItemNum = parseInt(viewportHeight / itemHeight)
+    let end = startIdx + canSeeItemNum
+    let offsetTop = 0
+
+    const renderNode = (start, end) => {
+        ulDom.innerHTML = ''
+        for (let i = start; i < end; i++) {
+            let li = document.createElement('li')
+            li.innerHTML = `我是第 ${i} 个li元素`
+            ulDom.appendChild(li)
+        }
+        listDom.appendChild(ulDom)
+        listDom.style.transform = `translate3d(0, ${offsetTop}px,0)`
+    }
+    startIdx = startIdx - previewNum > 0 ? startIdx - previewNum : startIdx
+    end = end + previewNum
+    renderNode(startIdx, end)
+    contentDom.addEventListener('scroll', e => {
+        let scrollTop = e.target.scrollTop
+        let _startIdx = Math.floor(scrollTop / itemHeight)
+        let _end = _startIdx + canSeeItemNum - 3
+        if (_startIdx <= startIdx + 3 || _end >= end + 3) {
+            offsetTop = _startIdx * itemHeight
+            renderNode(_startIdx, _end)
+        }
+    })
+    bgDom.style.height = (1000 * 50) + 'px'
+</script>
+</html>

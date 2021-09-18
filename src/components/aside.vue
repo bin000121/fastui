@@ -1,17 +1,16 @@
 <template>
     <div class="aside" ref="Aside">
-        <ul>
-            <li
-                v-for="([k, v], idx) in Object.entries(element)"
-                :key="k"
-                :class="{
-                    'active': idx === activeIdx
-                }"
-                @click="activeIdx = idx"
-            >
-                <router-link :to="k">{{v}}</router-link>
-            </li>
-        </ul>
+        <div
+            v-for="([k, v], idx) in Object.entries(element)"
+            :key="k"
+            :class="{
+                'menu-item': true,
+                'active': idx === activeIdx
+            }"
+            @click="handleClick(k, idx)"
+        >
+            {{v}}
+        </div>
     </div>
 </template>
 
@@ -20,9 +19,11 @@ import {
     defineComponent,
     ref
 } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineComponent( {
     setup () {
+        const router = useRouter()
         const element = {
             '/doc/button': 'Button 按钮',
             '/doc/icon': 'Icon 图标',
@@ -63,10 +64,16 @@ export default defineComponent( {
         const Aside = ref(null)
         const activeIdx = ref(-1)
 
+        const handleClick = (to: string, idx: number) => {
+            activeIdx.value = idx
+            router.push(to)
+        }
+
         return {
             activeIdx,
             Aside,
-            element
+            element,
+            handleClick
         }
     }
 })
@@ -74,52 +81,34 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .aside{
-    position: fixed;
-    top: 60px;
-    bottom: 0;
-    width: 220px;
+    width: 250px;
     box-sizing: border-box;
-    border-right: 1px solid #eee;
+    border-right: 1px solid #ccc;
     background-color: #fff;
-    padding: 15px 0 45px 5px;
+    padding-bottom: 40px;
+
     overflow: hidden;
-    z-index: 1;
     &:hover{
         overflow-x: hidden;
         overflow-y: auto;
-    }
-    ul{
-        padding: 0;
     }
 }
 .aside__sticky{
     position: absolute!important;
     top: 0;
 }
-ul{
-    margin: 0;
-    list-style: none;
-    li{
-        height: 45px;
-        line-height: 45px;
-    }
-    li.active{
-        a{
-            color: #3cd0be;
-        }
-        background-color: #3cd0be1a;
-        border-right: 3px solid #3cd0be;
-    }
-    a{
-        color: #999;
-        transition: color .2s;
-        width: 100%;
-        height: 100%;
-        display: inline-block;
-        &:hover{
-            /*color: #58a397;*/
-            color: #3cd0be;
-        }
-    }
+.menu-item{
+    padding-left: 30px;
+    height: 50px;
+    line-height: 50px;
+    margin-top: 10px;
+    transition: all .2s;
+    cursor: pointer;
+    color: #aaa;
+}
+.menu-item.active, .menu-item:hover{
+    color: #3cd0be;
+    background-color: #3cd0be1a;
+    border-right: 3px solid #3cd0be;
 }
 </style>

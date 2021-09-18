@@ -1,22 +1,19 @@
 <template>
     <Header showBorder></Header>
     <div class="doc">
-        <Aside></Aside>
+        <Aside/>
         <div class="content">
-            <router-view v-slot="{ Component }">
-<!--                <transition mode="out-in" name="doc-sliderTo">-->
-<!--                    <keep-alive>-->
+            <div class="content-inner">
+                <router-view v-slot="{ Component }">
                     <component :is="Component" />
-<!--                    </keep-alive>-->
-<!--                </transition>-->
-            </router-view>
-
+                </router-view>
+            </div>
         </div>
         <div
             :class="{
-                    'anchor': true,
-                    'anchor__hide': isAnchorHide,
-                }"
+                'anchor': true,
+                'anchor__hide': isAnchorHide,
+            }"
             v-show="isShowAnchor"
         >
             <a
@@ -142,16 +139,25 @@ export default defineComponent( {
 
 <style scoped lang="scss">
 .doc{
-    position: relative;
-    height: calc(100%);
-    max-width: 992px;
-    margin: 0 auto;
+    width: 100%;
+    height: calc(100% - 60px);
+    display: flex;
+    overflow: hidden;
 }
 
 .content{
-    flex-basis: 850px;
-    padding: 60px 25px 50px 235px;
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    height: 100%;
+    background-color: #fff;
+    padding: 0 30px 100px 30px;
     box-sizing: border-box;
+    .content-inner{
+        width: 800px;
+        max-width: 1000px;
+    }
     & :deep(h3):hover{
         a{
             opacity: 1;
@@ -165,7 +171,7 @@ export default defineComponent( {
     background-color: transparent;
     border-left: 2px solid #eee;
     position: fixed;
-    right: 5px;
+    right: 17px;
     top: 62px;
     transition: right .15s ease-out;
     backdrop-filter: blur(5px);
@@ -236,6 +242,7 @@ export default defineComponent( {
     }
 }
 .anchor__hide{
+    padding-right: 17px;
     right: -90px;
     &:hover{
         right: 0;
