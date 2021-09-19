@@ -637,15 +637,15 @@ export default defineComponent({
 }
 
 .f-cascader__large .f-cascader-input {
-    height: 38px !important;
+    height: 40px !important;
     line-height: 38px !important;
     padding: 6px 24px 6px 12px;
     font-size: 16px;
 }
 
 .f-cascader__small .f-cascader-input {
-    height: 22px !important;
-    line-height: 22px !important;
+    height: 24px !important;
+    line-height: 24px !important;
     font-size: 12px !important;
     padding: 2px 24px 2px 12px;
 }
@@ -668,8 +668,8 @@ export default defineComponent({
     box-sizing: border-box;
     cursor: pointer;
     width: 100%;
-    height: 30px;
-    line-height: 30px;
+    height: 32px;
+    line-height: 32px;
     outline: none;
     border-radius: 5px;
     overflow: hidden;

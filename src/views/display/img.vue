@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="img-display">
         <h2>Img 图片容器</h2>
         <p>经过包装后返回的一的img图片容器，它拓展了一些功能。</p>
 
@@ -304,8 +304,6 @@
                     v-for="src in lazyLoadList"
                     :key="src"
                     :src="src"
-                    width="700px"
-                    height="500px"
                     object-fit="cover"
                     lazy-load
                     lazy-load-distance="250px"
@@ -320,8 +318,6 @@
             v-for="src in lazyLoadList"
             :key="src"
             :src="src"
-            width="700px"
-            height="500px"
             object-fit="cover"
             lazy-load
             lazy-load-distance="250px"
@@ -422,6 +418,9 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.img-display{
+    width: 900px;
+}
 .demo-img{
     overflow: hidden;
     .f-img-container + .f-img-container{

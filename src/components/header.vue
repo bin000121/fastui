@@ -38,7 +38,7 @@ export default defineComponent( {
     display: flex;
     align-items: center;
     padding: 0 5vw;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #eee;
     .title{
         cursor: pointer;
         user-select: none;

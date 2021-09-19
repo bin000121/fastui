@@ -416,6 +416,14 @@ const routes: RouteRecordRaw[] = [
                     '横、纵向偏移量': 'pian_yi_liang',
                     '回调函数': 'hui_diao_han_shu',
                 }
+            },
+            {
+                path: '/doc/rate',
+                name: 'rate',
+                component: () => import('/@/views/display/rate.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
             }
         ]
     },

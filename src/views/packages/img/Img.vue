@@ -156,13 +156,11 @@ export default defineComponent({
         alt: String,
         width: {
             type: String,
-            default: '100%',
-            required: true
+            default: '100%'
         },
         height: {
             type: String,
-            default: '100%',
-            required: true
+            default: '100%'
         },
         clickMaskNotClose: Boolean,
         pressEscNotClose: Boolean,

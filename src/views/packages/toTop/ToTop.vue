@@ -66,46 +66,53 @@ export default defineComponent({
         animate: {
             type: Boolean,
             default: true
+        },
+        container: {
+            type: String,
+            default: 'body'
         }
     },
     name: 'FTop',
-    setup ({ bottom, right, behavior, rounded, scrollTop }, { emit }) {
+    setup (props, { emit }) {
         const fTop = ref(null)
         const isShow = ref(false)
         const showTeleport = ref(false)
-        let fTopDom: HTMLElement | any
+        let fTopDom: HTMLElement
+        let containerDom: HTMLElement
+        let bodyDom: HTMLElement
         const getBottom = computed(() => {
-            if (typeof bottom === 'number') return bottom + 'px'
-            return bottom
+            if (typeof props.bottom === 'number') return props.bottom + 'px'
+            return props.bottom
         })
         const getRight = computed(() => {
-            if (typeof right === 'number') return right + 'px'
-            return right
+            if (typeof props.right === 'number') return props.right + 'px'
+            return props.right
         })
 
         const gotoTop = () => {
-            window.scrollTo({
+            containerDom.scrollTo({
                 top: 0,
-                behavior
+                behavior: props.behavior
             })
             emit('click')
         }
 
         const onScroll = throttle(() => {
-            const body = document.documentElement || document.body as HTMLElement
-            isShow.value = body.scrollTop >= scrollTop
+            isShow.value = containerDom.scrollTop >= props.scrollTop
         }, 50)
 
         onMounted(() => {
-            fTopDom = fTop.value as any
+            fTopDom = fTop.value!
+            bodyDom = document.documentElement || document.body
+            containerDom = document.querySelector(props.container) ?? bodyDom
             onScroll()
-            window.addEventListener('scroll', onScroll)
+            containerDom.addEventListener('scroll', onScroll)
             showTeleport.value = true
             // onScrolling()
         })
 
         onUnmounted(() => {
-            window.removeEventListener('scroll', onScroll)
+            containerDom.removeEventListener('scroll', onScroll)
         })
 
         return{

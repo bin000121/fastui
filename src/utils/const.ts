@@ -48,4 +48,5 @@ export default {
     Collapse: 'fCollapse',
     CollapseItem: 'fCollapseItem',
     Notification: 'fNotification',
+    Rate: 'fRate',
 } as const

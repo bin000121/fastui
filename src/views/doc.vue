@@ -2,12 +2,19 @@
     <Header showBorder></Header>
     <div class="doc">
         <Aside/>
-        <div class="content">
+        <div class="content" ref="content">
             <div class="content-inner">
                 <router-view v-slot="{ Component }">
                     <component :is="Component" />
                 </router-view>
             </div>
+            <f-top
+                :scroll-top="800"
+                v-if="!route.path.includes('/toTop')"
+                container="div.content"
+            >
+                <i class="f-icon-to-top"></i>
+            </f-top>
         </div>
         <div
             :class="{
@@ -28,9 +35,6 @@
                 @click="isActive = i"
             >{{k}}</a>
         </div>
-        <f-top :scroll-top="800" v-if="!route.path.includes('/toTop')">
-            <i class="f-icon-to-top"></i>
-        </f-top>
     </div>
 </template>
 
@@ -57,6 +61,7 @@ export default defineComponent( {
         FTop
     },
     setup () {
+        const content = ref(null)
         const isAnchorHide = ref(false)
         const isShowAnchor = ref(true)
         const tipList = ref([])
@@ -68,17 +73,18 @@ export default defineComponent( {
             updateAList(document.querySelectorAll("a[class^='f-icon']") as any)
         }, 100)
 
+        let contentDom: HTMLElement
         let aOffsetTop: number[] = []
 
         let body = document.documentElement || document.body
 
         const handleClick = (index: number) => {
             isActive.value = index
-            body.scrollTop += 50
+            contentDom.scrollTop += 100
         }
 
         const onScroll = throttle(() => {
-            let scrollTop = body.scrollTop + 60
+            let scrollTop = contentDom.scrollTop + 100
             for (let i = aOffsetTop.length - 1 ; i >= 0; i--) {
                 if (scrollTop < aOffsetTop[0]) {
                     isActive.value = 0
@@ -105,6 +111,7 @@ export default defineComponent( {
         }
 
         onMounted(() => {
+            contentDom = content.value!
             watch(() => route.path, (newV: any) => {
                 if (!newV.includes('/doc/')) return
                 isShowAnchor.value = false
@@ -118,7 +125,7 @@ export default defineComponent( {
             }, { immediate: true})
             onResize()
             window.addEventListener('resize', onResize)
-            window.addEventListener('scroll', onScroll)
+            contentDom.addEventListener('scroll', onScroll)
         })
 
         onUnmounted(() => {
@@ -131,7 +138,8 @@ export default defineComponent( {
             isShowAnchor,
             tipList,
             isActive,
-            route
+            route,
+            content
         }
     }
 })
@@ -155,6 +163,7 @@ export default defineComponent( {
     padding: 0 30px 100px 30px;
     box-sizing: border-box;
     .content-inner{
+        height: fit-content;
         width: 800px;
         max-width: 1000px;
     }
@@ -165,7 +174,7 @@ export default defineComponent( {
     }
 }
 .anchor{
-    font-family: Helvetica;
+    font-family: Helvetica!important;
     width: 120px;
     max-height: 500px;
     background-color: transparent;

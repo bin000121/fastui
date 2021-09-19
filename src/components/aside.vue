@@ -34,6 +34,7 @@ export default defineComponent( {
             '/doc/grid': 'Grid 栅格',
             '/doc/breadcrumb': 'Breadcrumb 面包屑',
             '/doc/dropdowns': 'Dropdowns 下拉菜单',
+            '/doc/rate': 'Rate 评分',
             '/doc/slider': 'Slider 滑块',
             '/doc/input': 'Input 输入框',
             '/doc/input_number': 'InputNumber 步进器',
@@ -83,10 +84,9 @@ export default defineComponent( {
 .aside{
     width: 250px;
     box-sizing: border-box;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid #ddd;
     background-color: #fff;
     padding-bottom: 40px;
-
     overflow: hidden;
     &:hover{
         overflow-x: hidden;
@@ -105,10 +105,11 @@ export default defineComponent( {
     transition: all .2s;
     cursor: pointer;
     color: #aaa;
+    border-right: 4px solid #fff;
 }
 .menu-item.active, .menu-item:hover{
     color: #3cd0be;
     background-color: #3cd0be1a;
-    border-right: 3px solid #3cd0be;
+    border-right: 4px solid #3cd0be;
 }
 </style>
