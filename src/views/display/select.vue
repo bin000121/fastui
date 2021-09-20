@@ -880,7 +880,7 @@ export default defineComponent({
     },
     setup () {
         const data = reactive({
-            select: '',
+            select: 'value-11',
             select2: '',
             select3: ['value-1'],
             select4: [],

@@ -13,9 +13,11 @@
             @after-leave="showStatusChange('closed')"
         >
             <div
+                v-if="!disabled"
                 :class="{
                     'f-tooltip-content': true,
                     ['f-tooltip-content__' + theme]: true,
+                    'f-tooltip_disabled_enter': !allowEntry
                 }"
                 ref="fTooltipContent"
                 v-show="isShow"
@@ -106,6 +108,14 @@ export default defineComponent({
         showArrow: {
             type: Boolean,
             default: true
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        allowEntry: {
+            type: Boolean,
+            default: true
         }
     },
     setup (props, { emit }) {
@@ -119,7 +129,7 @@ export default defineComponent({
         let fTooltipContentDom: HTMLElement
         let fTooltipContentArrowDom: HTMLElement
         let fTooltipContentArrowLightDom: HTMLElement
-        let timer: NodeJS.Timer
+        let timer: NodeJS.Timeout
 
         const getPlacement = computed(() => {
             let placement = props.placement
@@ -145,13 +155,14 @@ export default defineComponent({
 
         // 初始化tooltip的位置
         const initPlacement = () => {
+            if (props.disabled) return false
             const { originP1, originP2, p1, p2, p1IsAtXAxis } = getPlacement.value
             const distance = p1IsAtXAxis ? fTooltipDom.offsetWidth : fTooltipDom.offsetHeight
             const translate = `transform: translate(${p1IsAtXAxis ? '0, -50%' : '-50%, 0'})`
             const yAxis = p1IsAtXAxis? 'top' : 'left'
             const dark = props.theme === 'dark'
             let cssText = `${p1}: ${ distance + (props.showArrow ? 6 : 3) }px;display: none;`
-            let color = dark ? '#272624' : '#fff'
+            let color = dark ? 'rgba(0, 0, 0, .75)' : '#fff'
             let arrowCssText = `${p1}: -10px;border-${originP1}-color: ${color};`
             let lightArrowCssText = `${p1}: -10px;border-${originP1}-color: #333;`
             let str1 = `${originP2}: 0px;`
@@ -170,6 +181,7 @@ export default defineComponent({
         }
 
         const handleMouseenter = () => {
+            if (props.disabled) return false
             clearTimeout(timer)
             timer = setTimeout(() => {
                 isShow.value = true
@@ -177,6 +189,7 @@ export default defineComponent({
         }
 
         const handleMouseleave = () => {
+            if (props.disabled) return false
             clearTimeout(timer)
             timer = setTimeout(() => {
                 isShow.value = false
@@ -225,6 +238,11 @@ export default defineComponent({
     border-radius: 5px;
     transform-origin: bottom;
 }
+
+.f-tooltip_disabled_enter{
+    pointer-events: none;
+}
+
 .f-tooltip-content-arrow, .f-tooltip-content-arrow__light{
     position: absolute;
     width: 0;
@@ -237,7 +255,7 @@ export default defineComponent({
 }
 .f-tooltip-content__dark{
     color: #fff;
-    background-color: rgba(0, 0, 0, .85);
+    background-color: rgba(0, 0, 0, .75);
 }
 .f-tooltip-content__light{
     color: #272624;
