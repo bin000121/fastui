@@ -423,6 +423,8 @@ const routes: RouteRecordRaw[] = [
                 component: () => import('/@/views/display/rate.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',
+                    '自定义': 'zi_ding_yi',
+                    '禁用': 'jin_yong',
                 }
             }
         ]

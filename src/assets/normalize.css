@@ -73,7 +73,7 @@ h3 [class='f-icon-anchor'] {
     vertical-align: bottom;
     font-weight: 700;
     color: #1661abb3;
-    opacity: 0;
+    margin-left: 5px;
 }
 h3 [class='f-icon-anchor']:hover{
     color: #1661ab;

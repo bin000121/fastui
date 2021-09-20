@@ -5,14 +5,15 @@
             'f-rate__disabled': disabled
         }"
         ref="fRate"
+        :id="id"
     >
         <template
-            v-for="num in countNum"
+            v-for="(num, idx) in countNum"
         >
             <f-tooltip
                 :key="num"
                 :disabled="isTooltipDisabled"
-                :tooltip="getTooltip(num - 1)"
+                :tooltip="getTooltip(idx)"
                 :allow-entry="false"
             >
                 <span
@@ -20,11 +21,11 @@
                         [icon]: true,
                         'f-rate-item': true,
                         'f-rate-item__': true,
-                        'f-rate-item__selected': currentShowIdx >= (num -1)
+                        'f-rate-item__selected': currentShowIdx >= idx
                     }"
                     :style="getFs"
-                    @mouseenter="handleMouseenter(num - 1)"
-                    @mouseleave="handleMouseleave(num - 1)"
+                    @mouseenter="handleMouseenter(idx)"
+                    @mouseleave="handleMouseleave(idx)"
                     @click="handleClick(num)"
                 >
             </span>
@@ -34,7 +35,7 @@
             v-if="showLabel"
             class="f-rate-label"
             :style="getFs"
-            ref="label"
+            ref="fRateLabel"
         >
             <template  v-if="$slots.label">
                <slot :label="currentIdx" name="label"/>
@@ -51,11 +52,13 @@
         defineComponent,
         computed,
         ref,
+        watch,
         onMounted
     } from 'vue'
     import type { PropType } from 'vue'
     import FTooltip from '/@/views/packages/tooltip/Tooltip.vue'
     import { isEmpty } from '/@/utils/utils'
+    import { getRandomId } from '/@/utils/getRandomId'
     export default defineComponent({
         components: {
             FTooltip
@@ -69,7 +72,12 @@
                 type: Number,
                 default: 5
             },
-            value: Number,
+            value: {
+                type: Number,
+                required: true,
+                default: 0,
+                validator: (val: number) => val >= 0
+            },
             readonly: {
                 type: Boolean,
                 default: false
@@ -118,7 +126,7 @@
             const fRateLabel = ref(null)
             let fRateDom: HTMLElement
             let fRateLabelDom: HTMLElement
-            const currentIdx = ref(parseInt(props.value as string | undefined || '0'))
+            const currentIdx = ref(props.value || 0)
             const currentShowIdx = ref(currentIdx.value - 1)
             const isTooltipDisabled = isEmpty(props.toolTip)
 
@@ -146,16 +154,47 @@
                 timer = setTimeout(() => emit('update:value', currentNum), 50)
             }
 
-            onMounted(() => {
-                fRateDom = fRate.value!
-                fRateLabelDom = fRateLabel.value!
+            // 初始化样式
+            const initRootPropCss = () => {
                 fRateDom.style.setProperty('--rate-height', getFs.value.fontSize)
                 fRateDom.style.setProperty('--selected-color', props.selectedColor)
                 fRateDom.style.setProperty('--no-selected-color', props.noSelectedColor)
+            }
+
+            // 初始化文本位置
+            const initLabelPlacement = () => {
+                if (!props.showLabel) return false
+                if (props.labelPlacement === 'right') {
+                    fRateLabelDom.classList.add('f-rate-label__right')
+                    fRateLabelDom.classList.remove('f-rate-label__left')
+                    fRateDom.appendChild(fRateLabelDom)
+                } else{
+                    fRateLabelDom.classList.add('f-rate-label__left')
+                    fRateLabelDom.classList.remove('f-rate-label__right')
+                    fRateDom.insertBefore(fRateLabelDom, fRateDom.firstElementChild)
+                }
+            }
+
+            onMounted(() => {
+                fRateDom = fRate.value!
+                fRateLabelDom = fRateLabel.value!
+                initRootPropCss()
+                initLabelPlacement()
             })
+
+            watch(() => props.labelPlacement, () => {
+                initLabelPlacement()
+            })
+
+            watch(() => [props.selectedColor, props.noSelectedColor], () => {
+                initRootPropCss()
+            })
+
             return{
+                id: getRandomId('f-rate'),
                 getFs,
                 fRate,
+                fRateLabel,
                 currentIdx,
                 currentShowIdx,
                 isTooltipDisabled,
@@ -196,7 +235,12 @@
 
 .f-rate-label{
     color: #666;
-    margin-left: calc(.25 * var(--rate-height));
     font-size: calc(var(--rate-height) - 2px) !important;
+}
+.f-rate-label__left{
+    margin-right: calc(.25 * var(--rate-height));
+}
+.f-rate-label__right{
+    margin-left: calc(.25 * var(--rate-height));
 }
 </style>

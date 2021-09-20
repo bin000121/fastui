@@ -96,9 +96,99 @@
             </div>
 
             <div class="desc">
-                使用作用域插槽来自定义文本展示格式 <b>slot='label'</b>。
+                使用作用域插槽来自定义文本展示格式 <b>slot='label'</b>，这时必须设置 <b>show-label</b>。
             </div>
 
+            <div class="demo-rate">
+                <f-rate
+                    v-model:value="rate6"
+                    show-label
+                >
+                    <template #label="scope">
+                       当前评价：{{scope.label.toFixed(1)}} 分
+                    </template>
+                </f-rate>
+            </div>
+
+            <div class="desc">
+                设置属性 <b>count-num</b> 可以自定义评分的数量。
+            </div>
+
+            <div class="demo-rate">
+                <f-rate
+                    v-model:value="rate7"
+                    show-label
+                    :count-num="10"
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-rate
+        v-model:value="rate"
+        show-label
+        disabled
+    />
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                rate: 1,
+            })
+            return{ ...toRefs(data) }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
+
+        <div>
+            <h3 id="jin_yong">禁用
+                <a href="#jin_yong" class="f-icon-anchor"></a>
+            </h3>
+            <p>您不能与rate组件进行交互。</p>
+            <div class="demo-rate">
+                <f-rate
+                    v-model:value="rate"
+                    show-label
+                    disabled
+                />
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<f-rate
+        v-model:value="rate"
+        show-label
+        disabled
+    />
+
+
+    <script lang="ts">
+    import {
+        defineComponent,
+        reactive,
+        toRefs,
+    } from 'vue'
+    export default defineComponent({
+        setup () {
+            const data = reactive({
+                rate: 1,
+            })
+            return{ ...toRefs(data) }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
         </div>
     </div>
 </template>
