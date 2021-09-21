@@ -425,6 +425,8 @@ const routes: RouteRecordRaw[] = [
                     '基本用法': 'ji_ben_yong_fa',
                     '自定义': 'zi_ding_yi',
                     '禁用': 'jin_yong',
+                    '可半选': 'ke_ban_xuan',
+                    '任意字符': 'ren_yi_zi_fu',
                 }
             }
         ]

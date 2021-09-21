@@ -102,7 +102,7 @@ export default defineComponent({
         },
         dotsClassName: String
     },
-    setup (props, { emit, slots }) {
+    setup (props) {
         const id = getRandomId('f-carousel')
         const instanceList: any[] = []
         const orderList: number[] = []

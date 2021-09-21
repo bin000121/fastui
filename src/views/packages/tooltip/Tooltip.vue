@@ -12,35 +12,36 @@
             @after-enter="showStatusChange('opened')"
             @after-leave="showStatusChange('closed')"
         >
-            <div
-                v-if="!disabled"
-                :class="{
-                    'f-tooltip-content': true,
-                    ['f-tooltip-content__' + theme]: true,
-                    'f-tooltip_disabled_enter': !allowEntry
-                }"
-                ref="fTooltipContent"
-                v-show="isShow"
-            >
-                <template v-if="$slots.tooltip">
-                    <slot name="tooltip"></slot>
-                </template>
-                <template v-else>
-                    {{tooltip}}
-                </template>
+            <template v-if="!disabled">
+                <div
+                    :class="{
+                        'f-tooltip-content': true,
+                        ['f-tooltip-content__' + theme]: true,
+                        'f-tooltip_disabled_enter': !allowEntry
+                    }"
+                    ref="fTooltipContent"
+                    v-show="isShow"
+                >
+                    <template v-if="$slots.tooltip">
+                        <slot name="tooltip"></slot>
+                    </template>
+                    <template v-else>
+                        {{tooltip}}
+                    </template>
 
-                <template v-if="showArrow">
-                    <div
-                        class="f-tooltip-content-arrow"
-                        ref="fTooltipContentArrow"
-                    ></div>
-                    <div
-                        class="f-tooltip-content-arrow__light"
-                        ref="fTooltipContentArrowLight"
-                        v-if="theme === 'light'"
-                    ></div>
-                </template>
-            </div>
+                    <template v-if="showArrow">
+                        <div
+                            class="f-tooltip-content-arrow"
+                            ref="fTooltipContentArrow"
+                        ></div>
+                        <div
+                            class="f-tooltip-content-arrow__light"
+                            ref="fTooltipContentArrowLight"
+                            v-if="theme === 'light'"
+                        ></div>
+                    </template>
+                </div>
+            </template>
         </transition>
     </div>
 </template>
@@ -48,12 +49,12 @@
 <script lang="ts">
 import {
     defineComponent,
-    reactive,
-    toRefs,
+    watch,
     computed,
     ref,
     CSSProperties,
     PropType,
+    nextTick,
     onMounted
 } from 'vue'
 import { getRandomId } from '/@/utils/getRandomId'
@@ -139,6 +140,7 @@ export default defineComponent({
                 left: 'right',
                 right: 'left'
             }
+
             if (!placementList.includes(props.placement)) {
                 placement = 'top-center'
                 console.warn('[fast-ui]: error placement property value received!')
@@ -156,6 +158,9 @@ export default defineComponent({
         // 初始化tooltip的位置
         const initPlacement = () => {
             if (props.disabled) return false
+            fTooltipContentDom = fTooltipContent.value!
+            fTooltipContentArrowDom = fTooltipContentArrow.value!
+            fTooltipContentArrowLightDom = fTooltipContentArrowLight.value!
             const { originP1, originP2, p1, p2, p1IsAtXAxis } = getPlacement.value
             const distance = p1IsAtXAxis ? fTooltipDom.offsetWidth : fTooltipDom.offsetHeight
             const translate = `transform: translate(${p1IsAtXAxis ? '0, -50%' : '-50%, 0'})`
@@ -202,10 +207,12 @@ export default defineComponent({
 
         onMounted(() => {
             fTooltipDom = fTooltip.value as any
-            fTooltipContentDom = fTooltipContent.value as any
-            fTooltipContentArrowDom = fTooltipContentArrow.value as any
-            fTooltipContentArrowLightDom = fTooltipContentArrowLight.value as any
             initPlacement()
+        })
+
+        watch(() => props.disabled, () => {
+            nextTick(() => initPlacement())
+            // setTimeout(() => initPlacement())
         })
 
         return{
