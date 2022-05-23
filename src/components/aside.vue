@@ -55,6 +55,7 @@ export default defineComponent( {
             '/doc/timeline': 'Timeline 时间线',
             '/doc/drawer': 'Drawer 抽屉',
             '/doc/toTop': 'ToTop 返回顶部',
+            '/doc/upload': 'Upload 上传',
             '/doc/spin': 'Spin 加载中',
             '/doc/progress': 'Progress 进度条',
             '/doc/badge': 'Badge 徽章',

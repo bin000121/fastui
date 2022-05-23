@@ -4,3 +4,5 @@ node_modules
 dist
 dist-ssr
 *.local
+src/assets/test.js
+src/assets/test2.ts

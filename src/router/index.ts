@@ -428,6 +428,14 @@ const routes: RouteRecordRaw[] = [
                     '可半选': 'ke_ban_xuan',
                     '任意字符': 'ren_yi_zi_fu',
                 }
+            },
+            {
+                path: '/doc/upload',
+                name: 'rate',
+                component: () => import('/@/views/display/upload.vue'),
+                meta: {
+                    '基本用法': 'ji_ben_yong_fa',
+                }
             }
         ]
     },

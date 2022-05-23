@@ -631,7 +631,7 @@ export default defineComponent({
     /*overflow: hidden;*/
     max-height: 240px;
     width: 100%;
-    min-width: 205px;
+    min-width: 200px;
     /*&:hover{*/
         overflow: auto;
         padding: 0;
