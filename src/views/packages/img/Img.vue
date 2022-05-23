@@ -177,6 +177,10 @@ export default defineComponent({
             type: Number,
             default: 0
         },
+        items: {
+            type: Array as PropType<number[]>,
+            default: [1,2,3,4,5,6]
+        }
     },
     setup (props, { emit }) {
         const isLazyLoadShow = ref(!props.lazyLoad)

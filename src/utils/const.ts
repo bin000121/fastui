@@ -39,6 +39,7 @@ export default {
     TimelineItem: 'fTimelineItem',
     Tooltip: 'fTooltip',
     ToTop: 'fToTop',
+    Upload: 'fUpload',
     Menu: 'fMenu',
     SubMenu: 'fSubMenu',
     MenuItem: 'fMenuItem',
@@ -49,4 +50,5 @@ export default {
     CollapseItem: 'fCollapseItem',
     Notification: 'fNotification',
     Rate: 'fRate',
+    DatePicker: 'fDatePicker',
 } as const
