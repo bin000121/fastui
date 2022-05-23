@@ -4,5 +4,5 @@ node_modules
 dist
 dist-ssr
 *.local
-/src/asserts/test.js
-/src/asserts/test2.ts
+src/asserts/test.js
+src/asserts/test2.ts
