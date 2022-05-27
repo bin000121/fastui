@@ -237,15 +237,15 @@ export default defineComponent({
 
         // 初始化dom
         const initRateDom = () => {
+            const slotIconDom = slots.icon?.()[0].el as HTMLElement
             for (let i = 0; i < containerList.length; i++) {
+                // :scope 类似于this，在这里指代 containerList[i]
                 const spanList = containerList[i].querySelectorAll(':scope > span')
                 // 清空之前的span
-                if (spanList.length) {
-                    for (let j = 0; j < spanList.length; j++) spanList[j].parentNode!.removeChild(spanList[j])
-                }
+                if (spanList.length) containerList[i].innerHTML = ''
                 const spanDom: HTMLElement = document.createElement('span')
                 // 处理icon插槽
-                if (iconSlotDom) spanDom.appendChild((slots.icon!()[0].el!).cloneNode(true) as HTMLElement)
+                if (iconSlotDom) spanDom.appendChild(slotIconDom.cloneNode(true))
                 else if (props.icon) spanDom.innerHTML = props.icon
                 else spanDom.classList.add('f-icon-star-filing')
                 spanDom.classList.add('f-rate-item')
@@ -257,24 +257,25 @@ export default defineComponent({
                 containerList[i].appendChild(spanDom)
                 if (!props.allowHalf) continue
                 // 处理半选节点
-                const spanDom2 = spanDom.cloneNode(true) as HTMLElement
-                if (iconSlotDom) spanDom2.appendChild((slots.icon!()[0].el!).cloneNode(true) as HTMLElement)
-                else if (props.icon) spanDom.innerHTML = props.icon
-                else spanDom2.classList.add('f-icon-star-filing')
-                spanDom2.classList.add('f-rate-half')
+                const halfSpanDom = spanDom.cloneNode(true) as HTMLElement
+                halfSpanDom.innerHTML = ''
+                if (iconSlotDom) halfSpanDom.appendChild(slotIconDom.cloneNode(true))
+                else if (props.icon) halfSpanDom.innerHTML = props.icon
+                else halfSpanDom.classList.add('f-icon-star-filing')
+                halfSpanDom.classList.add('f-rate-half')
                 if (
                     currentShowHalfIdx.value === i ||
                     currentShowIdx.value >= i
-                ) spanDom2.classList.add('f-rate-item__selected')
-                spanDom2.addEventListener('mouseenter', () => handleHalfMouseenter(i))
-                spanDom2.addEventListener('mouseleave', () => handleMouseleave())
-                spanDom2.addEventListener('click', () => handleHalfClick(i))
-                spanDom2.style.fontSize = getFs.value.fontSize
-                containerList[i].appendChild(spanDom2)
+                ) halfSpanDom.classList.add('f-rate-item__selected')
+                halfSpanDom.addEventListener('mouseenter', () => handleHalfMouseenter(i))
+                halfSpanDom.addEventListener('mouseleave', () => handleMouseleave())
+                halfSpanDom.addEventListener('click', () => handleHalfClick(i))
+                halfSpanDom.style.fontSize = getFs.value.fontSize
+                containerList[i].appendChild(halfSpanDom)
             }
             isTooltipDisabled.value = isEmpty(props.toolTip)
             // 移除dom
-            iconSlotDom && iconSlotDom.parentNode!.removeChild(iconSlotDom)
+            if (fRateDom.contains(iconSlotDom)) fRateDom.removeChild(iconSlotDom)
         }
 
         // 处理选中、未选中样式，用于鼠标移入、移出、点击等样式切换
@@ -285,12 +286,12 @@ export default defineComponent({
                 if (currentShowIdx.value >= i) spanDom.classList.add('f-rate-item__selected')
                 else spanDom.classList.remove('f-rate-item__selected')
                 if (!props.allowHalf) continue
-                const spanDom2 = spanList[1] as HTMLElement
+                const halfSpanDom = spanList[1] as HTMLElement
                 if (
                     currentShowHalfIdx.value === i ||
                     currentShowIdx.value >= i
-                ) spanDom2.classList.add('f-rate-item__selected')
-                else spanDom2.classList.remove('f-rate-item__selected')
+                ) halfSpanDom.classList.add('f-rate-item__selected')
+                else halfSpanDom.classList.remove('f-rate-item__selected')
             }
         }, 50)
 
@@ -318,6 +319,7 @@ export default defineComponent({
         })
 
         watch(() => [props.allowHalf, props.icon], () => {
+            containerList = fRateDom.querySelectorAll('.f-rate-item-container')
             initRateDom()
         })
 
@@ -349,7 +351,8 @@ export default defineComponent({
     --rate-height: 16px;
     --selected-color: #fd7716;
     --no-selected-color: #ddd;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-left: calc(-.25 * var(--rate-height));
     font-size: 16px;
 }
@@ -360,7 +363,7 @@ export default defineComponent({
     position: relative;
     transition: transform .25s ease;
     &:hover{
-        transform: scale(1.2);
+        transform: translateY(-3px);
     }
 }
 .f-rate-item{
@@ -389,17 +392,12 @@ export default defineComponent({
 }
 
 .f-rate-half{
-    box-sizing: border-box;
-    display: inline-block;
     white-space: nowrap;
     position: absolute;
     top: 0;
     left: 0;
     width: 50%;
-    padding: calc(.25 * var(--rate-height));
-    cursor: pointer;
     overflow: hidden;
     color: transparent;
-    transition: color .15s ease;
 }
 </style>

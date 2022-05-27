@@ -294,6 +294,63 @@
                 </code></pre>
             </div>
         </div>
+
+        <div>
+            <h3 id="xiao_xi_he_bing">消息合并
+                <a href="#xiao_xi_he_bing" class="f-icon-anchor"></a>
+            </h3>
+            <p>将会把message（或template）、type相同的消息合并，并在其右上角显示一个徽标标明已合并数，同时重置其显示时间。</p>
+
+            <div class="desc">
+                设置 <b>merge</b> 属性为 <b>true</b> 即可。
+            </div>
+
+            <div class="demo-message">
+                <f-button
+                    v-for="item in typeArr"
+                    :key="item"
+                    @click="createMergeMsgType(item)"
+                >
+                    {{ item }}
+                </f-button>
+            </div>
+
+            <div v-highlight>
+                <pre><code>
+    {{`<div class="demo-message">
+        <f-button
+            v-for="type in typeArr"
+            :key="type"
+            @click="createMergeMsgType(type)"
+        >
+            \{\{ type \}\}
+        </f-button>
+    </div>
+
+
+    <script lang="ts">
+    import { defineComponent } from 'vue'
+    import $msg from '/@/views/packages/message/message'
+    const typeArr = ['default', 'success', 'error', 'warning', 'info', 'loading']
+    export default defineComponent({
+        setup() {
+            const createMergeMsgType = (type: string) => {
+                $msg({
+                    type,
+                    message: '这条消息将会被合并~',
+                    merge: true
+                })
+            }
+            return {
+                createMergeMsgType,
+                typeArr
+            }
+        }
+    })
+    </script>`}}
+                </code></pre>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -304,6 +361,7 @@ import {
 } from 'vue'
 import fButton from '/@/views/packages/button/Button.vue'
 import $msg from '/@/views/packages/message'
+const typeArr = ['default', 'success', 'error', 'warning', 'info', 'loading']
 export default defineComponent({
     components: {
         fButton,
@@ -358,6 +416,14 @@ export default defineComponent({
         const closeAllMsg = () => {
             $msg.closeAllMsg()
         }
+
+        const createMergeMsgType = (type: string) => {
+            $msg({
+                type,
+                message: '这条消息将会被合并~',
+                merge: true
+            })
+        }
         return {
             openMsg,
             openMsgType,
@@ -366,6 +432,8 @@ export default defineComponent({
             openMsgDuration,
             closeAllMsg,
             createManyMsg,
+            createMergeMsgType,
+            typeArr
         }
     }
 })

@@ -431,7 +431,7 @@ const routes: RouteRecordRaw[] = [
             },
             {
                 path: '/doc/upload',
-                name: 'rate',
+                name: 'upload',
                 component: () => import('/@/views/display/upload.vue'),
                 meta: {
                     '基本用法': 'ji_ben_yong_fa',

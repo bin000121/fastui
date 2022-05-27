@@ -276,6 +276,11 @@
                 <a href="#ke_ban_xuan" class="f-icon-anchor"></a>
             </h3>
             <p>允许您进行半选评分。</p>
+            <div class="desc">
+                此时 f-rate 组件会对传入的分数进行补正:<br/>
+                - 当您传入的值不足 <b>半分</b> 时（例：2.3），不会高亮半选状态，且文本显示为 <b>2.0</b>。<br/>
+                - 当您传入的值超过 <b>半分</b> 且不足 <b>满颗星</b> 的分时（例：2.8），只会高亮半选状态，且文本展示为 <b>2.5</b>。
+            </div>
             <div class="demo-rate">
                 <f-rate
                     v-model:value="rate10"
@@ -291,7 +296,6 @@
         show-label
         allow-half
     />
-
 
     <script lang="ts">
     import {

@@ -7,6 +7,32 @@
                 <router-view v-slot="{ Component }">
                     <component :is="Component" />
                 </router-view>
+
+                <!--                底部的导航条-->
+                <div class="bottom-nav">
+                    <div>
+                        <div
+                            class="prev"
+                            @click="gotoPrev(prev[0])"
+                            v-show="prev.length"
+                            :title="`上一个 ${prev[1]}`"
+                        >
+                            <i class="f-icon-arrow-left-bold" style="font-size: 14px"></i>
+                            <span style="margin-left: 8px;">{{ prev[1] }}</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div
+                            class="next"
+                            @click="gotoPrev(next[0])"
+                            v-show="next.length"
+                            :title="`下一个 ${next[1]}`"
+                        >
+                            <span style="margin-right: 8px;">{{ next[1] }}</span>
+                            <i class="f-icon-arrow-right-bold" style="font-size: 14px"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
             <f-top
                 :scroll-top="800"
@@ -52,8 +78,9 @@ import {
     watch,
     nextTick
 } from 'vue'
-import { useRoute } from 'vue-router'
-
+import { useRoute, useRouter } from 'vue-router'
+import { pathAside as aside } from '/@/utils/aside'
+const pathAsideKeys = Object.keys(aside)
 export default defineComponent( {
     components: {
         Header,
@@ -67,6 +94,9 @@ export default defineComponent( {
         const tipList = ref([])
         const isActive = ref(0)
         const route = useRoute()
+        const router = useRouter()
+        const prev = ref([] as string[])
+        const next = ref([] as string[])
         const onResize = debounce(() => {
             let pageWidth = document.body.offsetWidth
             isAnchorHide.value = pageWidth < 1200
@@ -107,19 +137,28 @@ export default defineComponent( {
                 aOffsetTop.push(arr[i].offsetTop)
             }
             isShowAnchor.value = true
-            if (process.env.NODE_ENV !== 'development') window.scrollTo(0, 0)
+            // if (process.env.NODE_ENV !== 'development') window.scrollTo(0, 0)
+        }
+
+        // 底部导航的跳转处理
+        const gotoPrev = (path: string) => {
+            router.push(path)
         }
 
         onMounted(() => {
             contentDom = content.value!
-            watch(() => route.path, (newV: any) => {
+            watch(() => route.path, (newV: string) => {
                 if (!newV.includes('/doc/')) return
+                const pathIdx = pathAsideKeys.indexOf(newV)
+                const prevKey: string = pathAsideKeys[pathIdx - 1]
+                const nextKey: string = pathAsideKeys[pathIdx + 1]
+                prev.value = prevKey ? [prevKey, aside[prevKey]] : []
+                next.value = nextKey ? [nextKey, aside[nextKey]] : []
                 isShowAnchor.value = false
                 tipList.value = Object.entries(route.meta) as any
-                // setTimeout(() => {
-                //     updateAList(document.querySelectorAll("a[class='f-icon-anchor']") as any)
-                // }, 50)
                 nextTick(() => {
+                    // 切换页面时重置滚动条
+                    contentDom?.scrollTo(0, 0)
                     updateAList(document.querySelectorAll('a[class=\'f-icon-anchor\']') as any)
                 })
             }, { immediate: true})
@@ -134,12 +173,15 @@ export default defineComponent( {
         })
         return {
             handleClick,
+            gotoPrev,
             isAnchorHide,
             isShowAnchor,
             tipList,
             isActive,
             route,
-            content
+            content,
+            prev,
+            next
         }
     }
 })
@@ -160,12 +202,35 @@ export default defineComponent( {
     overflow-y: auto;
     height: 100%;
     background-color: #fff;
-    padding: 0 30px 100px 30px;
+    padding: 0 30px;
     box-sizing: border-box;
     .content-inner{
         height: fit-content;
         width: 800px;
         max-width: 1000px;
+    }
+    .bottom-nav{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 30px 0 100px;
+        .prev,
+        .next{
+            display: inline-block;
+            padding: 15px 25px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .18s;
+            font-size: 14px;
+            &:hover {
+                background-color: var(--primary);
+                color: #fff;
+            }
+        }
+        .next{
+            text-align: right;
+        }
     }
     & :deep(h3):hover{
         a{

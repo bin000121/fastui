@@ -19,7 +19,12 @@
             <span class="f-message-loading" v-if="type === 'loading'"></span>
             <div v-if="template" v-html="template"></div>
             <div v-else>{{message}}</div>
-            <i class="f-icon-close-bold close" v-if="isShowClose" @click.stop="isShow = false"></i>
+            <i class="f-icon-close-bold close" v-if="!isShowClose" @click.stop="isShow = false"></i>
+<!--            开启相同消息合并-->
+            <span
+                class="f-message-merge"
+                v-if="!merge"
+            >6</span>
         </div>
     </transition>
 </template>
@@ -51,7 +56,7 @@ export default defineComponent({
         },
         duration: {
             type: Number,
-            default: 3000
+            default: 300000
         },
         message: {
             type: String,
@@ -68,6 +73,10 @@ export default defineComponent({
         closeMsg: {
             type: Function as PropType<() => void>,
             required: true
+        },
+        merge: {
+            type: Boolean,
+            default: false
         }
     },
     setup (props) {
@@ -128,7 +137,6 @@ export default defineComponent({
     box-shadow: 0 0 3px #ccc;
     border: 1px solid #eee;
     border-radius: 5px;
-    overflow: hidden;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
@@ -169,6 +177,16 @@ export default defineComponent({
     i.close{
         cursor: pointer;
         color: #bbb;
+    }
+    .f-message-merge{
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: var(--error);
+        padding: 2px 5px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #fff;
     }
 }
 [class^='f-message__'] {
